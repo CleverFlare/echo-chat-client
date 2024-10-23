@@ -28,7 +28,7 @@ const connections: Connection[] = [
 export default function Home() {
   return (
     <div className="h-full">
-      <ChatsList connections={connections} />
+      <ChatsList connections={[]} />
     </div>
   );
 }
