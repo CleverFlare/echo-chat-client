@@ -33,8 +33,6 @@ export function ChatsList({ connections = [] }: { connections: Connection[] }) {
 
   const [search, setSearch] = useState<string>("");
 
-  const isEmpty = connections.length < 1;
-
   return (
     <div className="w-[300px] h-full p-4 bg-gray-50 flex flex-col gap-2">
       <h2 className="text-3xl font-bold">Chats</h2>
