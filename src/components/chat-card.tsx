@@ -32,6 +32,7 @@ export function ChatCard({
         "w-full bg-white p-2 rounded-lg shadow flex gap-2 h-max transition-all",
         active && "bg-gray-200 shadow-none",
       )}
+      data-testid="chat-card"
       {...props}
     >
       <Image

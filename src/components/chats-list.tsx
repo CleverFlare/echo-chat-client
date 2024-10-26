@@ -55,7 +55,10 @@ function EmptyState({ connections }: { connections: Connection[] }) {
   if (connections.length > 0) return;
 
   return (
-    <div className="flex flex-col justify-center items-center mt-4">
+    <div
+      className="flex flex-col justify-center items-center mt-4"
+      data-testid="empty-state"
+    >
       <div className="rounded-full p-4 bg-black/5">
         <ChatsCircle size={40} color="#00000080" />
       </div>
@@ -76,6 +79,7 @@ function ChatCards({
   active?: string | null;
   setActive: (value: string) => void;
 }) {
+  if (connections.length <= 0) return;
   return connections.map((connection) => (
     <ChatCard
       key={connection.id}
