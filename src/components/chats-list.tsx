@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Input } from "./ui/input";
 import { ChatCard } from "./chat-card";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { ChatsCircle } from "@phosphor-icons/react";
+import { ChatsCircle, MagnifyingGlass } from "@phosphor-icons/react";
 
 export type Connection = {
   id: string;
@@ -40,15 +40,49 @@ export function ChatsList({ connections = [] }: { connections: Connection[] }) {
         value={search}
         onChange={(e) => setSearch(e.target.value)}
         placeholder="Search..."
+        data-testid="chats-list-search-input"
       />
       <EmptyState connections={connections} />
       <ChatCards
+        search={search}
         connections={connections}
         active={active}
         setActive={setActive}
       />
     </div>
   );
+}
+
+function ChatCards({
+  connections,
+  active,
+  setActive,
+  search = "",
+}: {
+  connections: Connection[];
+  active?: string | null;
+  setActive: (value: string) => void;
+  search: string;
+}) {
+  const isEmptyConnections = connections.length <= 0;
+  if (isEmptyConnections) return;
+
+  const filteredConnections = connections.filter((connection) =>
+    connection.name.toLowerCase().startsWith(search.toLowerCase()),
+  );
+
+  const isEmptySearchResults = filteredConnections.length <= 0;
+
+  if (isEmptySearchResults) return <EmptySearch search={search} />;
+
+  return filteredConnections.map((connection) => (
+    <ChatCard
+      key={connection.id}
+      active={active === connection.id}
+      onClick={() => setActive(connection.id)}
+      {...connection}
+    />
+  ));
 }
 
 function EmptyState({ connections }: { connections: Connection[] }) {
@@ -70,22 +104,22 @@ function EmptyState({ connections }: { connections: Connection[] }) {
   );
 }
 
-function ChatCards({
-  connections,
-  active,
-  setActive,
-}: {
-  connections: Connection[];
-  active?: string | null;
-  setActive: (value: string) => void;
-}) {
-  if (connections.length <= 0) return;
-  return connections.map((connection) => (
-    <ChatCard
-      key={connection.id}
-      active={active === connection.id}
-      onClick={() => setActive(connection.id)}
-      {...connection}
-    />
-  ));
+function EmptySearch({ search }: { search: string }) {
+  const shouldTrancate = search.length > 15;
+  return (
+    <div
+      className="flex flex-col justify-center items-center mt-4"
+      data-testid="empty-search-results"
+    >
+      <div className="rounded-full p-4 bg-black/5">
+        <MagnifyingGlass size={40} color="#00000080" />
+      </div>
+      <p className="font-bold text-lg text-center mt-2">No results</p>
+      <p className="font-bold text-sm text-center text-gray-500">
+        No connection found that matches{" "}
+        {search.match(/^.{1,15}/gi)?.[0]?.trim() ?? ""}
+        {shouldTrancate && "..."}
+      </p>
+    </div>
+  );
 }

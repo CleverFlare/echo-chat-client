@@ -1,6 +1,6 @@
 import { afterEach, beforeAll, describe, expect, test, vi } from "vitest";
 import { ChatsList, Connection } from "./chats-list";
-import { cleanup, render, screen } from "@testing-library/react";
+import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 
 afterEach(cleanup);
 
@@ -25,7 +25,7 @@ const connections: Connection[] = [
   },
   {
     id: "2",
-    name: "Mahmoud Maher",
+    name: "Omaima Maher",
     lastMessage: {
       date: "2024-10-24T19:06:19.763Z",
       state: "sent",
@@ -67,5 +67,45 @@ describe("Empty State", () => {
   test("Rendered empty state", async () => {
     render(<ChatsList connections={[]} />);
     expect(screen.getByTestId("empty-state")).toBeDefined();
+  });
+});
+
+describe("Search functionality", () => {
+  test("Check the results only match the search string", async () => {
+    render(<ChatsList connections={connections} />);
+
+    const searchInput = screen.getByTestId("chats-list-search-input");
+
+    fireEvent.change(searchInput, { target: { value: "Omaima" } });
+
+    expect(screen.queryByText(/^Omaima/gi)).toBeDefined();
+    expect(screen.queryByText(/^Muhammad/gi)).toBeNull();
+  });
+
+  test("Check the empty state of no results", async () => {
+    render(<ChatsList connections={connections} />);
+
+    const searchInput = screen.getByTestId("chats-list-search-input");
+
+    fireEvent.change(searchInput, { target: { value: "Zurbeh" } });
+
+    const allConnections = screen.queryAllByTestId("chat-card");
+
+    const searchEmptyState = screen.getByTestId("empty-search-results");
+
+    expect(allConnections.length).toEqual(0);
+    expect(searchEmptyState).toBeDefined();
+  });
+
+  test("Truncate the search string if it exceeds 15 characters with trailing dots", async () => {
+    render(<ChatsList connections={connections} />);
+
+    const searchInput = screen.getByTestId("chats-list-search-input");
+
+    const searchString = "Zurbeh Mahmoud Abdulhalem";
+
+    fireEvent.change(searchInput, { target: { value: searchString } });
+
+    expect(screen.getByText(/(.*?)Zurbeh Mahmoud\.\.\.$/gi)).toBeDefined();
   });
 });
