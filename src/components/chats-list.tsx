@@ -1,8 +1,7 @@
 "use client";
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import { Input } from "./ui/input";
 import { ChatCard } from "./chat-card";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { ChatsCircle, MagnifyingGlass } from "@phosphor-icons/react";
 
 export type Connection = {
@@ -18,18 +17,7 @@ export type Connection = {
 };
 
 export function ChatsList({ connections = [] }: { connections: Connection[] }) {
-  const searchParams = useSearchParams();
-  const pathname = usePathname();
-  const router = useRouter();
-
-  const active = searchParams.get("active") ?? null;
-  function setActive(value: string) {
-    const params = new URLSearchParams(searchParams);
-
-    params.set("active", value);
-
-    router.replace(`${pathname}?${params.toString()}`);
-  }
+  const [active, setActive] = useState<string>("");
 
   const [search, setSearch] = useState<string>("");
 
@@ -61,7 +49,7 @@ function ChatCards({
 }: {
   connections: Connection[];
   active?: string | null;
-  setActive: (value: string) => void;
+  setActive: Dispatch<SetStateAction<string>>;
   search: string;
 }) {
   const isEmptyConnections = connections.length <= 0;

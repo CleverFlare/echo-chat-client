@@ -1,17 +1,8 @@
-import { afterEach, beforeAll, describe, expect, test, vi } from "vitest";
+import { afterEach, describe, expect, test } from "vitest";
 import { ChatsList, Connection } from "./chats-list";
 import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 
 afterEach(cleanup);
-
-beforeAll(() => {
-  // eslint-disable-next-line
-  vi.mock("next/navigation", () => ({
-    usePathname: () => {},
-    useRouter: () => ({ replace: () => {} }),
-    useSearchParams: () => ({ get: () => {} }),
-  }));
-});
 
 const connections: Connection[] = [
   {
