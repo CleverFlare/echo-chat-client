@@ -3,6 +3,7 @@ import { Dispatch, SetStateAction, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { ChatCard } from "@/components/chat-card";
 import { ChatsCircle, MagnifyingGlass } from "@phosphor-icons/react";
+import UserCard from "@/components/user-card";
 
 export type Connection = {
   id: string;
@@ -39,11 +40,18 @@ export function ChatsList({ connections = [] }: { connections: Connection[] }) {
         />
       </div>
       <EmptyState connections={connections} />
-      <ChatCards
-        search={search}
-        connections={connections}
-        active={active}
-        setActive={setActive}
+      <div className="flex flex-col gap-2 flex-1 overflow-y-auto">
+        <ChatCards
+          search={search}
+          connections={connections}
+          active={active}
+          setActive={setActive}
+        />
+      </div>
+      <UserCard
+        name="Muhammad Maher"
+        image="https://qph.cf2.quoracdn.net/main-qimg-5eb631ae6f587af2631f6d3348047693.webp"
+        username="@flare"
       />
     </div>
   );

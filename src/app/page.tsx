@@ -27,8 +27,9 @@ const connections: Connection[] = [
 
 export default function Home() {
   return (
-    <div className="h-full">
+    <div className="h-full md:grid md:grid-cols-[auto_1fr]">
       <ChatsList connections={connections} />
+      <div className="bg-gray-100 flex-1 my-4 me-4 rounded-2xl"></div>
     </div>
   );
 }

@@ -6,6 +6,7 @@ import { ComponentProps } from "react";
 import { Check, Checks } from "@phosphor-icons/react";
 import moment from "moment";
 import ConditionalRenderer from "@/components/ui/conditional-renderer";
+import { Avatar, AvatarImage } from "./ui/avatar";
 
 type ChatCardProps = {
   image?: string;
@@ -30,21 +31,17 @@ export function ChatCard({
   return (
     <button
       className={cn(
-        "w-full p-2 rounded-lg flex gap-2 h-max transition-all",
-        active && "bg-gray-200 shadow-none",
+        "w-full p-3 rounded-xl flex gap-2 h-max transition-all shadow-none",
+        active && "bg-gray-200",
       )}
       data-testid="chat-card"
       {...props}
     >
-      <Image
-        alt="Avatar"
-        src={image ?? EMPTY_AVATAR_IMAGE}
-        width={40}
-        height={40}
-        className="rounded-full h-full aspect-square object-cover"
-      />
+      <Avatar>
+        <AvatarImage src={image}></AvatarImage>
+      </Avatar>
       <div className="flex flex-col flex-1">
-        <div className="grid grid-cols-[1fr_auto] justify-between w-full">
+        <div className="grid grid-cols-[1fr_auto] justify-between w-full gap-2">
           <p className="font-bold text-sm text-start truncate">{name}</p>
           <ConditionalRenderer shouldRender={lastMessage}>
             <p
