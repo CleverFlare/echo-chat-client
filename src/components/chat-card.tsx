@@ -1,12 +1,11 @@
 "use client";
-import { EMPTY_AVATAR_IMAGE } from "@/constants";
 import { cn } from "@/lib/utils";
-import Image from "next/image";
-import { ComponentProps } from "react";
+import { ComponentProps, useEffect, useState } from "react";
 import { Check, Checks } from "@phosphor-icons/react";
 import moment from "moment";
 import ConditionalRenderer from "@/components/ui/conditional-renderer";
 import { Avatar, AvatarImage } from "./ui/avatar";
+import { formatDistanceToNow } from "date-fns";
 
 type ChatCardProps = {
   image?: string;
@@ -16,7 +15,7 @@ type ChatCardProps = {
   lastMessage?: {
     date: string;
     content: string;
-    state?: "sent" | "read" | null;
+    state?: "sent" | "received" | "read" | null;
   };
 } & ComponentProps<"button">;
 
@@ -28,6 +27,30 @@ export function ChatCard({
   unread,
   ...props
 }: ChatCardProps) {
+  const [timeAgo, setTimeAgo] = useState<string | undefined>(
+    lastMessage?.date &&
+      formatDistanceToNow(lastMessage?.date, { addSuffix: true }),
+  );
+
+  useEffect(() => {
+    if (!lastMessage?.date) return;
+
+    const updateRelativeTime = () => {
+      setTimeAgo(
+        formatDistanceToNow(new Date(lastMessage.date), { addSuffix: true }),
+      );
+    };
+
+    // Initial update
+    updateRelativeTime();
+
+    // Update every 60 seconds
+    const interval = setInterval(updateRelativeTime, 60000);
+
+    // Cleanup interval on component unmount
+    return () => clearInterval(interval);
+  }, [lastMessage?.date]);
+
   return (
     <button
       className={cn(
@@ -43,14 +66,14 @@ export function ChatCard({
       <div className="flex flex-col flex-1">
         <div className="grid grid-cols-[1fr_auto] justify-between w-full gap-2">
           <p className="font-bold text-sm text-start truncate">{name}</p>
-          <ConditionalRenderer shouldRender={lastMessage}>
+          <ConditionalRenderer shouldRender={lastMessage && lastMessage.date}>
             <p
               className={cn(
                 "text-xs text-gray-500",
-                unread && "text-green-600 font-bold",
+                unread && "text-purple-600 font-bold",
               )}
             >
-              {moment(lastMessage?.date).startOf("minute").fromNow()}
+              {timeAgo}
             </p>
           </ConditionalRenderer>
         </div>
@@ -64,6 +87,11 @@ export function ChatCard({
             <ConditionalRenderer shouldRender={lastMessage?.state === "sent"}>
               <Check className="text-gray-500" size={16} />
             </ConditionalRenderer>
+            <ConditionalRenderer
+              shouldRender={lastMessage?.state === "received"}
+            >
+              <Checks className="text-gray-500" size={20} />
+            </ConditionalRenderer>
             <ConditionalRenderer shouldRender={lastMessage?.state === "read"}>
               <Checks className="text-sky-500" size={20} />
             </ConditionalRenderer>
@@ -71,7 +99,7 @@ export function ChatCard({
               {lastMessage?.content}
             </p>
             <ConditionalRenderer shouldRender={unread}>
-              <p className="w-[20px] h-[20px] rounded-full bg-green-600 text-white text-xs flex justify-center items-center">
+              <p className="w-[20px] h-[20px] rounded-full bg-gradient-to-r from-purple-500 to-purple-700 text-white text-xs flex justify-center items-center">
                 {unread}
               </p>
             </ConditionalRenderer>
