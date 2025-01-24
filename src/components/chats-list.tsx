@@ -22,20 +22,20 @@ export function ChatsList({ connections = [] }: { connections: Connection[] }) {
   const [search, setSearch] = useState<string>("");
 
   return (
-    <div className="w-[300px] h-full p-4 bg-gray-50 flex flex-col gap-2">
+    <div className="w-[300px] h-full p-4 flex flex-col gap-2">
       <h2 className="text-3xl font-bold">Chats</h2>
       <div className="relative">
-        <MagnifyingGlass
-          weight="bold"
-          color="#888"
-          className="absolute start-3 top-1/2 -translate-y-1/2 pointer-events-none"
-        />
         <Input
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder="Search..."
-          className="bg-white ps-8"
+          className="pe-8"
           data-testid="chats-list-search-input"
+        />
+        <MagnifyingGlass
+          weight="bold"
+          color="#aaa"
+          className="absolute end-3 top-1/2 -translate-y-1/2 pointer-events-none"
         />
       </div>
       <EmptyState connections={connections} />

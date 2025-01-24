@@ -29,7 +29,7 @@ export function ChatCard({
   return (
     <button
       className={cn(
-        "w-full bg-white p-2 rounded-lg shadow flex gap-2 h-max transition-all",
+        "w-full p-2 rounded-lg flex gap-2 h-max transition-all",
         active && "bg-gray-200 shadow-none",
       )}
       data-testid="chat-card"
@@ -49,7 +49,7 @@ export function ChatCard({
             <p
               className={cn(
                 "text-xs text-gray-500",
-                unread && "text-red-500 font-bold",
+                unread && "text-green-600 font-bold",
               )}
             >
               {moment(lastMessage.date).startOf("minute").fromNow()}
@@ -73,7 +73,7 @@ export function ChatCard({
               {lastMessage.content}
             </p>
             {unread && (
-              <p className="w-[20px] h-[20px] rounded-full bg-red-500 text-white text-xs flex justify-center items-center">
+              <p className="w-[20px] h-[20px] rounded-full bg-green-600 text-white text-xs flex justify-center items-center">
                 {unread}
               </p>
             )}
