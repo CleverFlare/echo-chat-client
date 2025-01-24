@@ -1,4 +1,4 @@
-import { ChatsList, Connection } from "@/components/chats-list";
+import { ChatsList, Connection } from "@/containers/0-molecules/chats-list";
 
 const connections: Connection[] = [
   {

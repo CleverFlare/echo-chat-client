@@ -5,6 +5,7 @@ import Image from "next/image";
 import { ComponentProps } from "react";
 import { Check, Checks } from "@phosphor-icons/react";
 import moment from "moment";
+import ConditionalRenderer from "@/components/ui/conditional-renderer";
 
 type ChatCardProps = {
   image?: string;
@@ -45,40 +46,40 @@ export function ChatCard({
       <div className="flex flex-col flex-1">
         <div className="grid grid-cols-[1fr_auto] justify-between w-full">
           <p className="font-bold text-sm text-start truncate">{name}</p>
-          {lastMessage && (
+          <ConditionalRenderer shouldRender={lastMessage}>
             <p
               className={cn(
                 "text-xs text-gray-500",
                 unread && "text-green-600 font-bold",
               )}
             >
-              {moment(lastMessage.date).startOf("minute").fromNow()}
+              {moment(lastMessage?.date).startOf("minute").fromNow()}
             </p>
-          )}
+          </ConditionalRenderer>
         </div>
-        {lastMessage && (
+        <ConditionalRenderer shouldRender={lastMessage}>
           <div
             className={cn(
               "grid grid-cols-[1fr_auto] gap-1 items-center",
-              lastMessage.state && "grid-cols-[auto_1fr_auto]",
+              lastMessage?.state && "grid-cols-[auto_1fr_auto]",
             )}
           >
-            {lastMessage.state === "sent" && (
+            <ConditionalRenderer shouldRender={lastMessage?.state === "sent"}>
               <Check className="text-gray-500" size={16} />
-            )}
-            {lastMessage.state === "read" && (
+            </ConditionalRenderer>
+            <ConditionalRenderer shouldRender={lastMessage?.state === "read"}>
               <Checks className="text-sky-500" size={20} />
-            )}
+            </ConditionalRenderer>
             <p className="text-sm text-start text-gray-500 truncate">
-              {lastMessage.content}
+              {lastMessage?.content}
             </p>
-            {unread && (
+            <ConditionalRenderer shouldRender={unread}>
               <p className="w-[20px] h-[20px] rounded-full bg-green-600 text-white text-xs flex justify-center items-center">
                 {unread}
               </p>
-            )}
+            </ConditionalRenderer>
           </div>
-        )}
+        </ConditionalRenderer>
       </div>
     </button>
   );

@@ -1,7 +1,7 @@
 "use client";
 import { Dispatch, SetStateAction, useState } from "react";
-import { Input } from "./ui/input";
-import { ChatCard } from "./chat-card";
+import { Input } from "@/components/ui/input";
+import { ChatCard } from "@/components/chat-card";
 import { ChatsCircle, MagnifyingGlass } from "@phosphor-icons/react";
 
 export type Connection = {
