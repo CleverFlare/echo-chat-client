@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 // import localFont from "next/font/local";
 import { Roboto } from "next/font/google";
 import "./globals.css";
+import JotaiProvider from "@/components/utils/jotai-provider";
 
 // const geistSans = localFont({
 //   src: "./fonts/GeistVF.woff",
@@ -20,8 +21,9 @@ const roboto = Roboto({
 });
 
 export const metadata: Metadata = {
-  title: "Echoes",
-  description: "Whatsapp? Discord? No! Echoes has the best of both worlds!",
+  title: "Echo",
+  description:
+    "A next-gen social media app that blends WhatsApp's real-time messaging with Discord's community-driven servers, offering private chats, voice channels, and seamless group interactions—all in one place. 🚀",
 };
 
 export default function RootLayout({
@@ -32,7 +34,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${roboto.className} antialiased h-screen`}>
-        {children}
+        <JotaiProvider>{children}</JotaiProvider>
       </body>
     </html>
   );

@@ -5,9 +5,9 @@ import {
   SpeakerHigh,
   SpeakerSimpleSlash,
 } from "@phosphor-icons/react";
-import { Avatar, AvatarImage } from "./ui/avatar";
+import { Avatar, AvatarImage } from "../ui/avatar";
 import { useState } from "react";
-import ConditionalRenderer from "./ui/conditional-renderer";
+import ConditionalRenderer from "../utils/conditional-renderer";
 import Link from "next/link";
 import { motion } from "motion/react";
 

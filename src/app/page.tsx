@@ -1,6 +1,6 @@
-import ChatWindow from "@/containers/1-organisms/chat-window";
-import { ChatsList } from "@/containers/0-molecules/chats-list";
-import { Connection } from "@/state/use-connections";
+import ChatWindow from "@/layout/chat-window";
+import { ChatsList } from "@/layout/chats-list";
+import { Connection } from "@/state/connections";
 import { Suspense } from "react";
 
 const connections: Record<string, Connection> = {
@@ -21,7 +21,7 @@ const connections: Record<string, Connection> = {
     name: "Omaima Maher",
     image:
       "https://cdn.pixabay.com/photo/2021/06/11/12/26/woman-6328478_960_720.jpg",
-    lastOnline: "current",
+    lastOnline: null,
     unread: 1,
     lastMessage: {
       date: "2024-10-19T21:00:00.000Z",

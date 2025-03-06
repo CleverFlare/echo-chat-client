@@ -2,9 +2,8 @@
 import { cn } from "@/lib/utils";
 import { ComponentProps, useEffect, useState } from "react";
 import { Check, Checks } from "@phosphor-icons/react";
-import moment from "moment";
-import ConditionalRenderer from "@/components/ui/conditional-renderer";
-import { Avatar, AvatarImage } from "./ui/avatar";
+import ConditionalRenderer from "@/components/utils/conditional-renderer";
+import { Avatar, AvatarImage } from "../ui/avatar";
 import { formatDistanceToNow } from "date-fns";
 
 type ChatCardProps = {
@@ -27,18 +26,25 @@ export function ChatCard({
   unread,
   ...props
 }: ChatCardProps) {
-  const [timeAgo, setTimeAgo] = useState<string | undefined>(
-    lastMessage?.date &&
-      formatDistanceToNow(lastMessage?.date, { addSuffix: true }),
+  const hasLastMessageDate = !!lastMessage?.date;
+  const lastMessageRelativeDate =
+    hasLastMessageDate &&
+    formatDistanceToNow(lastMessage?.date, { addSuffix: true });
+
+  const [timeAgo, setTimeAgo] = useState<string | null>(
+    lastMessageRelativeDate || null,
   );
 
   useEffect(() => {
-    if (!lastMessage?.date) return;
+    if (!hasLastMessageDate) return;
+
+    const lastMessageRelativeDate = formatDistanceToNow(
+      new Date(lastMessage.date),
+      { addSuffix: true },
+    );
 
     const updateRelativeTime = () => {
-      setTimeAgo(
-        formatDistanceToNow(new Date(lastMessage.date), { addSuffix: true }),
-      );
+      setTimeAgo(lastMessageRelativeDate);
     };
 
     // Initial update
@@ -49,12 +55,12 @@ export function ChatCard({
 
     // Cleanup interval on component unmount
     return () => clearInterval(interval);
-  }, [lastMessage?.date]);
+  }, [lastMessage?.date, hasLastMessageDate]);
 
   return (
     <button
       className={cn(
-        "w-full p-3 rounded-xl flex gap-2 h-max transition-all shadow-none",
+        "w-full p-3 rounded-xl flex gap-2 h-max transition-all shadow-none bg-white",
         active && "bg-gray-200",
       )}
       data-testid="chat-card"

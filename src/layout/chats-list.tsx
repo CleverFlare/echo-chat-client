@@ -1,33 +1,34 @@
 "use client";
 import { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
-import { ChatCard } from "@/components/chat-card";
+import { ChatCard } from "@/components/container/chat-card";
 import { ChatsCircle, MagnifyingGlass } from "@phosphor-icons/react";
-import UserCard from "@/components/user-card";
-import { useCustomRouter } from "@/hooks/use-custom-router";
-import { useSearchParams } from "next/navigation";
-import ConditionalRenderer from "@/components/ui/conditional-renderer";
+import UserCard from "@/components/container/user-card";
+import ConditionalRenderer from "@/components/utils/conditional-renderer";
 import { AnimatePresence, motion } from "motion/react";
 import { compareDesc, parseISO } from "date-fns";
-import { Connection, useConnections } from "@/state/use-connections";
+import { Connection, connectionsAtom } from "@/state/connections";
+import { useAtom } from "jotai";
+import { activeChatIDAtom } from "@/state/ui";
 
 export function ChatsList({
   connections: connectionsProp = {},
 }: {
-  connections: Record<string, Connection>;
+  connections?: Record<string, Connection>;
 }) {
-  const router = useCustomRouter();
-  const searchParams = useSearchParams();
-  const state = useConnections();
+  const [active, setActive] = useAtom(activeChatIDAtom);
+  const [state, setState] = useAtom(connectionsAtom);
 
   useEffect(() => {
-    if (!state.data) state.setData(connectionsProp);
+    if (!state) setState(connectionsProp);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [connectionsProp]);
 
-  const connections = state.data ?? connectionsProp;
+  const connections = state ?? connectionsProp;
 
   const [search, setSearch] = useState<string>("");
+
+  const isEmpty = Object.keys(connections).length <= 0;
 
   return (
     <div className="w-[300px] h-full flex flex-col gap-2 p-4">
@@ -46,19 +47,22 @@ export function ChatsList({
           className="absolute end-3 top-1/2 -translate-y-1/2 pointer-events-none"
         />
       </div>
-      <ConditionalRenderer shouldRender={Object.keys(connections).length <= 0}>
+      <ConditionalRenderer shouldRender={isEmpty}>
         <EmptyState />
       </ConditionalRenderer>
-      <div className="flex flex-col gap-2 flex-1 overflow-y-auto">
-        <ChatCards
-          search={search}
-          connections={Object.values(connections)}
-          active={searchParams.get("active") ?? ""}
-          onActiveClick={(value: string) =>
-            router.searchParams.set("active", value)
-          }
-        />
-      </div>
+      <ConditionalRenderer shouldRender={!isEmpty}>
+        <div
+          className="flex flex-col gap-2 flex-1 overflow-y-auto"
+          data-testid="chat-card-list"
+        >
+          <ChatCards
+            search={search}
+            connections={Object.values(connections)}
+            active={active}
+            onActiveClick={(value: string) => setActive(value)}
+          />
+        </div>
+      </ConditionalRenderer>
       <UserCard
         name="Muhammad Maher"
         image="https://qph.cf2.quoracdn.net/main-qimg-5eb631ae6f587af2631f6d3348047693.webp"
@@ -112,7 +116,7 @@ function ChatCards({
 function EmptyState() {
   return (
     <div
-      className="flex flex-col justify-center items-center mt-4"
+      className="flex flex-col items-center mt-4 flex-1"
       data-testid="empty-state"
     >
       <div className="rounded-full p-4 bg-black/5">

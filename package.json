@@ -17,23 +17,29 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
+    "jotai": "^2.12.1",
     "lucide-react": "^0.453.0",
     "moment": "^2.30.1",
     "motion": "^12.0.5",
     "next": "14.2.15",
+    "next-router-mock": "^0.9.13",
     "react": "^18",
     "react-dom": "^18",
     "react-textarea-autosize": "^8.5.7",
     "tailwind-merge": "^2.5.4",
-    "tailwindcss-animate": "^1.0.7",
-    "zustand": "^5.0.3"
+    "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {
     "@testing-library/dom": "^10.4.0",
-    "@testing-library/react": "^16.0.1",
+    "@testing-library/react": "^16.2.0",
+    "@testing-library/user-event": "^14.6.1",
+    "@types/jest": "^29.5.14",
+    "@types/jsdom": "^21.1.7",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "@types/testing-library__react": "^10.0.1",
+    "@types/testing-library__user-event": "^4.1.1",
     "@vitejs/plugin-react": "^4.3.3",
     "eslint": "^8",
     "eslint-config-next": "14.2.15",
@@ -42,6 +48,6 @@
     "tailwindcss": "^3.4.1",
     "typescript": "^5",
     "vite-tsconfig-paths": "^5.0.1",
-    "vitest": "^2.1.3"
+    "vitest": "^3.0.7"
   }
 }
