@@ -1,7 +1,7 @@
 import ChatWindow from "@/layout/chat-window";
-import { ChatsList } from "@/layout/chats-list";
 import { Connection } from "@/state/connections";
-import { Suspense } from "react";
+import { render, screen } from "@testing-library/react";
+import { expect, test } from "vitest";
 
 const connections: Record<string, Connection> = {
   "1": {
@@ -31,13 +31,11 @@ const connections: Record<string, Connection> = {
   },
 };
 
-export default function Home() {
-  return (
-    <div className="h-full max-h-screen md:grid md:grid-cols-[auto_1fr]">
-      <Suspense>
-        <ChatsList connections={connections} />
-        <ChatWindow className="my-4 me-4 max-h-full overflow-hidden" />
-      </Suspense>
-    </div>
-  );
-}
+const active = "2";
+
+render(<ChatWindow.UI active={active} connections={connections} />);
+
+test("Correct Data", () => {
+  expect(screen.getByText("Omaima Maher")).toBeDefined();
+  expect(screen.getByText("Online")).toBeDefined();
+});

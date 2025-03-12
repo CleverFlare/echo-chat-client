@@ -13,7 +13,7 @@ export default function ChatStatusBar({ connection }: ChatStatusBarProps) {
     <div className="w-full rounded-2xl bg-white p-4">
       <div className="flex gap-2">
         <Avatar className="size-[40px]">
-          <AvatarImage src={connection.image} />
+          <AvatarImage src={connection.image} alt="avatar" />
         </Avatar>
         <div className="flex flex-col justify-center">
           <p className="font-bold text-sm">{connection.name}</p>

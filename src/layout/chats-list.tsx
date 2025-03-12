@@ -10,6 +10,7 @@ import { compareDesc, parseISO } from "date-fns";
 import { Connection, connectionsAtom } from "@/state/connections";
 import { useAtom } from "jotai";
 import { activeChatIDAtom } from "@/state/ui";
+import { Resizable } from "re-resizable";
 
 export function ChatsList({
   connections: connectionsProp = {},
@@ -31,44 +32,53 @@ export function ChatsList({
   const isEmpty = Object.keys(connections).length <= 0;
 
   return (
-    <div className="w-[300px] h-full flex flex-col gap-2 p-4">
-      <h2 className="text-3xl font-bold">Chats</h2>
-      <div className="relative">
-        <Input
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          placeholder="Search..."
-          className="pe-8"
-          data-testid="chats-list-search-input"
-        />
-        <MagnifyingGlass
-          weight="bold"
-          color="#aaa"
-          className="absolute end-3 top-1/2 -translate-y-1/2 pointer-events-none"
-        />
-      </div>
-      <ConditionalRenderer shouldRender={isEmpty}>
-        <EmptyState />
-      </ConditionalRenderer>
-      <ConditionalRenderer shouldRender={!isEmpty}>
-        <div
-          className="flex flex-col gap-2 flex-1 overflow-y-auto"
-          data-testid="chat-card-list"
-        >
-          <ChatCards
-            search={search}
-            connections={Object.values(connections)}
-            active={active}
-            onActiveClick={(value: string) => setActive(value)}
+    <Resizable
+      defaultSize={{ width: 300 }}
+      enable={{
+        right: true,
+        bottom: false,
+      }}
+      className="min-w-[300px] h-full flex px-4"
+    >
+      <div className="flex-1 py-4 flex flex-col gap-2">
+        <h2 className="text-3xl font-bold">Chats</h2>
+        <div className="relative">
+          <Input
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Search..."
+            className="pe-8"
+            data-testid="chats-list-search-input"
+          />
+          <MagnifyingGlass
+            weight="bold"
+            color="#aaa"
+            className="absolute end-3 top-1/2 -translate-y-1/2 pointer-events-none"
           />
         </div>
-      </ConditionalRenderer>
-      <UserCard
-        name="Muhammad Maher"
-        image="https://qph.cf2.quoracdn.net/main-qimg-5eb631ae6f587af2631f6d3348047693.webp"
-        username="@flare"
-      />
-    </div>
+        <ConditionalRenderer shouldRender={isEmpty}>
+          <EmptyState />
+        </ConditionalRenderer>
+        <ConditionalRenderer shouldRender={!isEmpty}>
+          <div
+            className="flex flex-col gap-2 flex-1 overflow-y-auto"
+            data-testid="chat-card-list"
+          >
+            <ChatCards
+              search={search}
+              connections={Object.values(connections)}
+              active={active}
+              onActiveClick={(value: string) => setActive(value)}
+            />
+          </div>
+        </ConditionalRenderer>
+        <UserCard
+          name="Muhammad Maher"
+          image="https://qph.cf2.quoracdn.net/main-qimg-5eb631ae6f587af2631f6d3348047693.webp"
+          username="@flare"
+        />
+      </div>
+    </Resizable>
   );
 }
 
@@ -87,7 +97,7 @@ function ChatCards({
   if (isEmptyConnections) return;
 
   let connections = connectionsProp.filter((connection) =>
-    connection.name.toLowerCase().startsWith(search.toLowerCase()),
+    connection.name.toLowerCase().includes(search.toLowerCase()),
   );
 
   connections = connections.sort((a, b) =>
