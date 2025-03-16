@@ -3,7 +3,10 @@ import { cn } from "@/lib/utils";
 import { Connection, connectionsAtom } from "@/state/connections";
 import { ComponentProps } from "react";
 import ConditionalRenderer from "@/components/utils/conditional-renderer";
-import ChatStatusBar from "@/components/container/chat-status-bar";
+import ChatStatusBar, {
+  StartSide,
+  UserStatus,
+} from "@/components/container/chat-status-bar";
 import MessageWritingBar from "@/feature/messages/components/container/message-writing-bar";
 import { useAtom } from "jotai";
 import { activeChatIDAtom } from "@/state/ui";
@@ -11,6 +14,8 @@ import Image from "next/image";
 import Messages from "@/feature/messages/components/container/messages";
 import { messagesAtom } from "@/state/message";
 import { userAtom } from "@/state/auth";
+import { Button } from "@/components/ui/button";
+import { ArrowLeft } from "@phosphor-icons/react";
 
 type ChatWindowProps = ComponentProps<"div"> & {
   active: string | null;
@@ -55,7 +60,11 @@ function ChatWindowUI({
             backgroundBlendMode: "overlay",
           }}
         >
-          <ChatStatusBar connection={connection!} />
+          <ChatStatusBar>
+            <StartSide>
+              <UserStatus connection={connection!} />
+            </StartSide>
+          </ChatStatusBar>
           <Messages />
           <MessageWritingBar onSend={pushMessages} />
         </div>
