@@ -1,16 +1,14 @@
 import { cn } from "@/lib/utils";
 import {
+  Message as MessageType,
   MessageDirection,
-  messagesAtom,
   MessageState,
-  SenderInfo,
 } from "@/state/message";
-import { Check, Checks, Clock, WarningCircle } from "@phosphor-icons/react";
 import { cva } from "class-variance-authority";
 import { format } from "date-fns";
 import { ComponentProps } from "react";
-import ConditionalRenderer from "../utils/conditional-renderer";
-import { useAtom } from "jotai";
+import ConditionalRenderer from "../../../../components/utils/conditional-renderer";
+import { MessageStateIcon } from "./message-state-icon";
 
 interface MessageProps extends ComponentProps<"div"> {
   content: string;
@@ -21,11 +19,8 @@ interface MessageProps extends ComponentProps<"div"> {
   contentProps?: ComponentProps<"p">;
   timestampProps?: ComponentProps<"p">;
   footerProps?: ComponentProps<"div">;
-  replyTo?: {
-    id: string | number;
-    content: string;
-    sender: SenderInfo;
-  };
+  replyTo?: MessageType;
+  mediaUrl?: string;
   edited?: boolean;
 }
 
@@ -45,23 +40,6 @@ const messageVariants = cva(
   },
 );
 
-export function State({ state }: { state: MessageState }) {
-  switch (state) {
-    case "pending":
-      return <Clock size={16} />;
-    case "sent":
-      return <Check size={16} />;
-    case "delivered":
-      return <Checks size={20} />;
-    case "read":
-      return <Checks className="text-sky-400" size={20} />;
-    case "failed":
-      return <WarningCircle weight="fill" className="text-red-500" size={20} />;
-    default:
-      return null;
-  }
-}
-
 export default function Message({
   content,
   timestamp,
@@ -74,6 +52,8 @@ export default function Message({
   state = "pending",
   replyTo,
   edited,
+  // eslint-disable-next-line
+  mediaUrl,
   ...props
 }: MessageProps) {
   const containerClassName = containerProps?.className;
@@ -85,11 +65,7 @@ export default function Message({
   const isFailedMessage = state === "failed";
   const isReplying = !!replyTo;
 
-  const [messages] = useAtom(messagesAtom);
-
-  const reply = isReplying
-    ? messages.find((message) => message.id === replyTo.id)
-    : null;
+  const reply = isReplying ? replyTo : null;
 
   return (
     <div
@@ -124,7 +100,10 @@ export default function Message({
           </button>
         </ConditionalRenderer>
         <p
-          className={cn("text-sm [unicode-bidi:plaintext]", contentClassName)}
+          className={cn(
+            "text-sm [unicode-bidi:plaintext] whitespace-pre-line",
+            contentClassName,
+          )}
           {...contentProps}
         >
           {content}
@@ -148,7 +127,7 @@ export default function Message({
             {format(timestamp, "h:m aaa")}
           </p>
           <ConditionalRenderer shouldRender={isOutgoing}>
-            <State state={state} />
+            <MessageStateIcon state={state} />
           </ConditionalRenderer>
         </div>
       </div>

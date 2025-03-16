@@ -17,12 +17,14 @@ export default function MessageWritingBar({ onSend }: MessageWritingBarProps) {
         e.preventDefault();
         if (!message) return;
 
+        setMessage("");
+
         onSend(message);
       }}
     >
       <TextareaAutosize
         maxRows={5}
-        className="border-none resize-none outline-none py-4 flex-1 px-4 font-[inherit]"
+        className="border-none resize-none outline-none py-4 flex-1 px-4 font-[inherit] [unicode-bidi:plaintext]"
         value={message}
         onChange={(e) => setMessage(e.target.value)}
         onKeyDown={(e) => {

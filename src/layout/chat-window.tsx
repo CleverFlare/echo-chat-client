@@ -4,21 +4,25 @@ import { Connection, connectionsAtom } from "@/state/connections";
 import { ComponentProps } from "react";
 import ConditionalRenderer from "@/components/utils/conditional-renderer";
 import ChatStatusBar from "@/components/container/chat-status-bar";
-import MessageWritingBar from "@/components/container/message-writing-bar";
+import MessageWritingBar from "@/feature/messages/components/container/message-writing-bar";
 import { useAtom } from "jotai";
 import { activeChatIDAtom } from "@/state/ui";
 import Image from "next/image";
-import Messages from "@/components/container/messages";
+import Messages from "@/feature/messages/components/container/messages";
+import { messagesAtom } from "@/state/message";
+import { userAtom } from "@/state/auth";
 
 type ChatWindowProps = ComponentProps<"div"> & {
   active: string | null;
   connections: Record<string, Connection> | null;
+  pushMessages: (message: string) => void;
 };
 
 function ChatWindowUI({
   className,
   active,
   connections,
+  pushMessages,
   ...props
 }: ChatWindowProps) {
   const connection = connections?.[active!] ?? null;
@@ -32,7 +36,8 @@ function ChatWindowUI({
             alt="Logo"
             width={200}
             height={200}
-            className="opacity-50 mb-4"
+            priority
+            className="opacity-50 mb-4 h-auto"
           />
           <p className="text-4xl font-medium opacity-50">EchoApp Web</p>
           <p className="w-[500px] text-center text-balance opacity-30">
@@ -52,7 +57,7 @@ function ChatWindowUI({
         >
           <ChatStatusBar connection={connection!} />
           <Messages />
-          <MessageWritingBar onSend={(value) => console.log(value)} />
+          <MessageWritingBar onSend={pushMessages} />
         </div>
       </ConditionalRenderer>
     </div>
@@ -62,7 +67,31 @@ function ChatWindowUI({
 function ChatWindow({ ...props }: ComponentProps<"div">) {
   const [active] = useAtom(activeChatIDAtom);
   const [connections] = useAtom(connectionsAtom);
-  return <ChatWindowUI active={active} connections={connections} {...props} />;
+  const [user] = useAtom(userAtom);
+  const [messages, setMessages] = useAtom(messagesAtom);
+
+  function pushMessages(message: string) {
+    setMessages([
+      ...messages,
+      {
+        id: crypto.randomUUID(),
+        type: "text",
+        sender: { id: user.id, name: user.name, avatarUrl: user.avatarUrl },
+        state: "read",
+        direction: "outgoing",
+        content: message,
+        timestamp: new Date().toISOString(),
+      },
+    ]);
+  }
+  return (
+    <ChatWindowUI
+      active={active}
+      connections={connections}
+      pushMessages={pushMessages}
+      {...props}
+    />
+  );
 }
 
 ChatWindow.UI = ChatWindowUI;

@@ -7,7 +7,7 @@ export type User = {
   avatarUrl?: string;
 };
 
-export const userAtom = atom<User | null>({
+export const userAtom = atom<User>({
   id: "1",
   name: "Muhammad Maher",
   username: "flare",

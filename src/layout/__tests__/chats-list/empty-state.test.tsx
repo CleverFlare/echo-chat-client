@@ -1,6 +1,6 @@
 import { expect, test, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
-import { ChatsList } from "@/layout/chats-list";
+import ChatsList from "@/layout/chats-list";
 
 vi.mock("next/navigation", () => ({
   usePathname: () => "/mocked-path",
@@ -12,7 +12,7 @@ vi.mock("next/navigation", () => ({
   }),
 }));
 
-render(<ChatsList connections={{}} />);
+render(<ChatsList.UI connections={{}} />);
 
 test("Amount of rendered elements", () => {
   const chatCards = screen.queryAllByTestId("chat-card");

@@ -1,4 +1,6 @@
 import { atom } from "jotai";
+import { activeChatIDAtom } from "./ui";
+import { cache } from "react";
 
 export type MessageState = "pending" | "sent" | "delivered" | "read" | "failed";
 
@@ -17,7 +19,6 @@ export type Message = {
   content: string;
   sender: SenderInfo;
   direction: MessageDirection;
-  receiverId: string;
   timestamp: string;
   state: MessageState;
   type: MessageType;
@@ -30,7 +31,7 @@ export type Message = {
   edited?: boolean;
 };
 
-export const messagesAtom = atom<Message[]>([
+const messages: Message[] = [
   {
     id: "msg-001",
     content: "Hey, how's it going?",
@@ -40,7 +41,6 @@ export const messagesAtom = atom<Message[]>([
       avatarUrl: "https://example.com/alice.jpg",
     },
     direction: "outgoing",
-    receiverId: "user-456",
     timestamp: "2025-03-11T10:05:00Z",
     state: "read",
     type: "text",
@@ -54,7 +54,6 @@ export const messagesAtom = atom<Message[]>([
       avatarUrl: "https://example.com/bob.jpg",
     },
     direction: "incoming",
-    receiverId: "user-123",
     timestamp: "2025-03-11T10:06:30Z",
     state: "read",
     type: "text",
@@ -68,9 +67,8 @@ export const messagesAtom = atom<Message[]>([
       avatarUrl: "https://example.com/alice.jpg",
     },
     direction: "outgoing",
-    receiverId: "user-456",
     timestamp: "2025-03-11T10:08:00Z",
-    state: "delivered",
+    state: "read",
     type: "image",
     mediaUrl: "https://example.com/photo.jpg",
   },
@@ -83,9 +81,8 @@ export const messagesAtom = atom<Message[]>([
       avatarUrl: "https://example.com/bob.jpg",
     },
     direction: "incoming",
-    receiverId: "user-123",
     timestamp: "2025-03-11T10:09:15Z",
-    state: "sent",
+    state: "read",
     type: "text",
     replyTo: {
       id: "msg-003",
@@ -102,7 +99,6 @@ export const messagesAtom = atom<Message[]>([
       avatarUrl: "https://example.com/alice.jpg",
     },
     direction: "outgoing",
-    receiverId: "user-456",
     timestamp: "2025-03-11T10:10:45Z",
     state: "pending",
     type: "text",
@@ -121,7 +117,6 @@ export const messagesAtom = atom<Message[]>([
       avatarUrl: "https://example.com/bob.jpg",
     },
     direction: "incoming",
-    receiverId: "user-123",
     timestamp: "2025-03-11T10:12:00Z",
     state: "failed",
     type: "audio",
@@ -136,9 +131,8 @@ export const messagesAtom = atom<Message[]>([
       avatarUrl: "https://example.com/bob.jpg",
     },
     direction: "incoming",
-    receiverId: "user-123",
     timestamp: "2025-03-11T10:12:45Z",
-    state: "sent",
+    state: "read",
     type: "text",
   },
   {
@@ -150,9 +144,8 @@ export const messagesAtom = atom<Message[]>([
       avatarUrl: "https://example.com/alice.jpg",
     },
     direction: "outgoing",
-    receiverId: "user-456",
     timestamp: "2025-03-11T10:13:30Z",
-    state: "delivered",
+    state: "read",
     type: "text",
   },
   {
@@ -164,9 +157,8 @@ export const messagesAtom = atom<Message[]>([
       avatarUrl: "https://example.com/bob.jpg",
     },
     direction: "incoming",
-    receiverId: "user-123",
     timestamp: "2025-03-11T10:14:00Z",
-    state: "sent",
+    state: "read",
     type: "audio",
     mediaUrl: "https://example.com/voice_resend.mp3",
   },
@@ -179,7 +171,6 @@ export const messagesAtom = atom<Message[]>([
       avatarUrl: "https://example.com/alice.jpg",
     },
     direction: "outgoing",
-    receiverId: "user-456",
     timestamp: "2025-03-11T10:15:20Z",
     state: "read",
     type: "text",
@@ -193,9 +184,8 @@ export const messagesAtom = atom<Message[]>([
       avatarUrl: "https://example.com/bob.jpg",
     },
     direction: "incoming",
-    receiverId: "user-123",
     timestamp: "2025-03-11T10:16:10Z",
-    state: "delivered",
+    state: "read",
     type: "text",
   },
   {
@@ -207,7 +197,6 @@ export const messagesAtom = atom<Message[]>([
       avatarUrl: "https://example.com/alice.jpg",
     },
     direction: "outgoing",
-    receiverId: "user-456",
     timestamp: "2025-03-11T10:17:00Z",
     state: "read",
     type: "text",
@@ -221,9 +210,8 @@ export const messagesAtom = atom<Message[]>([
       avatarUrl: "https://example.com/bob.jpg",
     },
     direction: "incoming",
-    receiverId: "user-123",
     timestamp: "2025-03-11T10:18:30Z",
-    state: "sent",
+    state: "read",
     type: "file",
     mediaUrl: "https://example.com/document.pdf",
   },
@@ -236,7 +224,6 @@ export const messagesAtom = atom<Message[]>([
       avatarUrl: "https://example.com/alice.jpg",
     },
     direction: "outgoing",
-    receiverId: "user-456",
     timestamp: "2025-03-11T10:20:00Z",
     state: "read",
     type: "text",
@@ -250,11 +237,65 @@ export const messagesAtom = atom<Message[]>([
       avatarUrl: "https://example.com/bob.jpg",
     },
     direction: "incoming",
-    receiverId: "user-123",
     timestamp: "2025-03-11T10:21:15Z",
-    state: "read",
+    state: "delivered",
     type: "text",
   },
-] as Message[]);
+];
+
+export type CachedMessages = Record<string, Message[]>;
+
+export const cachedMessagesAtom = atom<CachedMessages>({
+  "1": [],
+  "2": [...messages],
+});
+
+export const messagesAtom = atom(
+  (get) => {
+    const id = get(activeChatIDAtom);
+    const cachedMessages = get(cachedMessagesAtom);
+
+    return id ? (cachedMessages?.[id] ?? []) : [];
+  },
+  (get, set, messages: Message[]) => {
+    const cachedMessages: CachedMessages = { ...get(cachedMessagesAtom) };
+
+    const id = get(activeChatIDAtom);
+
+    if (id) cachedMessages[id] = messages;
+
+    set(cachedMessagesAtom, cachedMessages);
+  },
+);
+
+export const readMessagesAtom = atom(null, (get, set, id: string) => {
+  const cachedMessages = { ...get(cachedMessagesAtom) };
+
+  const idMessages = [...cachedMessages[id]].map(
+    (message) => ({ ...message, state: "read" }) as Message,
+  );
+
+  cachedMessages[id] = idMessages;
+
+  console.log("Cached Messages", cachedMessages);
+  console.log("ID Messages", idMessages);
+
+  set(cachedMessagesAtom, cachedMessages);
+});
+
+export const missedMessagesAtom = atom((get) => {
+  const cachedMessages: CachedMessages = { ...get(cachedMessagesAtom) };
+  const result: Record<string, number> = {};
+
+  Object.keys(cachedMessages).map((key) => {
+    const missedMessages = cachedMessages[key].filter(
+      (message) => message.state === "delivered",
+    );
+
+    result[key] = missedMessages.length;
+  });
+
+  return result;
+});
 
 export const messagesLoadingAtom = atom<boolean>(false);

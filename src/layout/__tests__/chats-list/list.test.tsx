@@ -1,6 +1,6 @@
 import { expect, test, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
-import { ChatsList } from "@/layout/chats-list";
+import ChatsList from "@/layout/chats-list";
 import { Connection } from "@/state/connections";
 import { formatDistanceToNow } from "date-fns";
 
@@ -41,7 +41,7 @@ const connections: Record<string, Connection> = {
   },
 };
 
-render(<ChatsList connections={connections} />);
+render(<ChatsList.UI connections={connections} />);
 
 test("Rendered correctly", () => {
   const chatCards = screen.queryAllByTestId("chat-card");

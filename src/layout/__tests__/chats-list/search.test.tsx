@@ -1,6 +1,6 @@
 import { expect, test, vi } from "vitest";
-import { fireEvent, render, screen } from "@testing-library/react";
-import { ChatsList } from "@/layout/chats-list";
+import { render, screen } from "@testing-library/react";
+import ChatsList from "@/layout/chats-list";
 import { Connection } from "@/state/connections";
 import userEvent from "@testing-library/user-event";
 
@@ -41,7 +41,7 @@ const connections: Record<string, Connection> = {
   },
 };
 
-render(<ChatsList connections={connections} />);
+render(<ChatsList.UI connections={connections} />);
 
 test("Search results", () => {
   const searchInput = screen.getByTestId("chats-list-search-input");
