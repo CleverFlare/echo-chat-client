@@ -1,6 +1,5 @@
 import { atom } from "jotai";
 import { activeChatIDAtom } from "./ui";
-import { cache } from "react";
 
 export type MessageState = "pending" | "sent" | "delivered" | "read" | "failed";
 

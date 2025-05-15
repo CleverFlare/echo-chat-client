@@ -86,7 +86,7 @@ export default function Message({
           >
             <p
               className={cn(
-                "text-xs font-bold truncate w-full",
+                "text-xs font-semibold truncate w-full",
                 isOutgoing ? "text-purple-200" : "text-purple-500",
               )}
             >

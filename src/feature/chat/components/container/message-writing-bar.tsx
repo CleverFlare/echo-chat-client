@@ -12,7 +12,7 @@ export default function MessageWritingBar({ onSend }: MessageWritingBarProps) {
 
   return (
     <form
-      className="w-full rounded-2xl bg-white overflow-hidden flex"
+      className="w-full rounded-2xl bg-white overflow-hidden flex z-20"
       onSubmit={(e) => {
         e.preventDefault();
         if (!message) return;

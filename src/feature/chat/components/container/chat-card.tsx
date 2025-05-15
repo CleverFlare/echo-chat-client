@@ -52,7 +52,7 @@ export function ChatCard({
     <button
       className={cn(
         "w-full p-3 rounded-xl flex gap-2 h-max transition-all shadow-none bg-white",
-        active && "bg-gray-200",
+        active && "bg-muted",
       )}
       data-testid="chat-card"
       onClick={(...args) => {
@@ -67,12 +67,12 @@ export function ChatCard({
       </Avatar>
       <div className="flex flex-col flex-1">
         <div className="grid grid-cols-[1fr_auto] justify-between w-full gap-2">
-          <p className="font-bold text-sm text-start truncate">{name}</p>
+          <p className="font-semibold text-sm text-start truncate">{name}</p>
           <ConditionalRenderer shouldRender={doesLastMessageTimestampExist}>
             <p
               className={cn(
                 "text-xs text-gray-500",
-                unreadNumber && "text-purple-600 font-bold",
+                unreadNumber && "text-purple-600 font-semibold",
               )}
             >
               {formatDistanceToNow(

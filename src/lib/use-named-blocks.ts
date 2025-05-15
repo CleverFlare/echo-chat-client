@@ -1,7 +1,7 @@
 import React, { ReactNode, ReactElement } from "react";
 
 export function useNamedBlocks(children: ReactNode) {
-  const arr = React.Children.toArray(children) as ReactElement[];
+  const arr = React.Children.toArray(children) as ReactElement<any>[];
 
   return <T extends React.ElementType>(
     Component: T,

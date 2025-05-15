@@ -1,4 +1,4 @@
-import Message from "@/feature/messages/components/ui/message";
+import Message from "@/feature/chat/components/ui/message";
 import { messagesAtom, readMessagesAtom } from "@/state/message";
 import { useAtom } from "jotai";
 import { useEffect, useRef, useState } from "react";
@@ -26,7 +26,7 @@ export default function Messages() {
   }, [active, readMessages]);
 
   return (
-    <ScrollAreaPrimitive.Root className="relative overflow-hidden">
+    <ScrollAreaPrimitive.Root className="relative overflow-hidden z-20">
       <ScrollAreaPrimitive.Viewport
         className="h-full w-full rounded-[inherit]"
         onScroll={(e) => {

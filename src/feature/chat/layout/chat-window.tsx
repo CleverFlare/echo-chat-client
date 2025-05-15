@@ -7,11 +7,11 @@ import ChatStatusBar, {
   StartSide,
   UserStatus,
 } from "@/components/container/chat-status-bar";
-import MessageWritingBar from "@/feature/messages/components/container/message-writing-bar";
+import MessageWritingBar from "@/feature/chat/components/container/message-writing-bar";
 import { useAtom } from "jotai";
 import { activeChatIDAtom } from "@/state/ui";
 import Image from "next/image";
-import Messages from "@/feature/messages/components/container/messages";
+import Messages from "@/feature/chat/components/container/messages";
 import { messagesAtom } from "@/state/message";
 import { userAtom } from "@/state/auth";
 import { Button } from "@/components/ui/button";
@@ -32,10 +32,13 @@ function ChatWindowUI({
 }: ChatWindowProps) {
   const connection = connections?.[active!] ?? null;
 
+  // eslint-disable-next-line
+  const [_, setActiveChat] = useAtom(activeChatIDAtom);
+
   return (
     <div className={cn("flex", className)} {...props}>
       <ConditionalRenderer shouldRender={!connection}>
-        <div className="w-full row-span-3 h-full flex flex-col justify-center items-center gap-4">
+        <div className="w-full row-span-3 h-full flex flex-col justify-center items-center gap-4 md:rounded-2xl bg-muted">
           <Image
             src="/echoes-logo.png"
             alt="Logo"
@@ -52,16 +55,25 @@ function ChatWindowUI({
         </div>
       </ConditionalRenderer>
       <ConditionalRenderer shouldRender={connection}>
-        <div
-          className="h-full w-full rounded-2xl p-4 grid grid-rows-[auto_1fr_auto] relative"
-          style={{
-            backgroundImage: `url("/social-media-wallpaper-pattern.png")`,
-            backgroundSize: "30%",
-            backgroundBlendMode: "overlay",
-          }}
-        >
-          <ChatStatusBar>
-            <StartSide>
+        <div className="h-full w-full md:rounded-2xl p-4 grid grid-rows-[auto_1fr_auto] relative bg-muted overflow-hidden">
+          <div
+            className="absolute top-0 left-0 w-full h-full opacity-20 z-10"
+            style={{
+              backgroundImage: `url("/social-media-wallpaper-pattern-transparent.png")`,
+              backgroundSize: "30%",
+              backgroundBlendMode: "overlay",
+            }}
+          />
+          <ChatStatusBar className="z-20">
+            <StartSide className="flex gap-2">
+              <Button
+                size="icon"
+                variant="outline"
+                className="md:hidden"
+                onClick={() => setActiveChat(null)}
+              >
+                <ArrowLeft />
+              </Button>
               <UserStatus connection={connection!} />
             </StartSide>
           </ChatStatusBar>

@@ -46,7 +46,7 @@ export function ChatCards({
     <AnimatePresence>
       {/* eslint-disable-next-line */}
       {connections.map(({ lastOnline: _, ...connection }) => (
-        <motion.div key={connection.id} layout>
+        <motion.div key={connection.id} layout initial={false}>
           <ChatCard
             active={active === connection.id}
             onClick={() => onActiveClick(connection.id)}

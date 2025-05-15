@@ -26,7 +26,7 @@ export default function UserCard({
     <motion.div
       initial="initial"
       whileHover="hovered"
-      className="w-full p-3 rounded-xl grid grid-cols-[auto_1fr_auto] gap-2 h-max transition-all bg-gray-100 hover:bg-gray-200"
+      className="w-full p-3 rounded-xl grid grid-cols-[auto_1fr_auto] gap-2 h-max transition-all bg-muted"
     >
       <button>
         <Avatar>
@@ -34,7 +34,7 @@ export default function UserCard({
         </Avatar>
       </button>
       <div className="flex-1 flex flex-col max-w-full truncate">
-        <button className="font-bold text-sm text-start truncate">
+        <button className="font-semibold text-sm text-start truncate">
           {name}
         </button>
         <div className="w-full truncate overflow-y-hidden relative">

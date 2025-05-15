@@ -9,8 +9,8 @@ export function EmptyChatState() {
       <div className="rounded-full p-4 bg-black/5">
         <ChatsCircle size={40} color="#00000080" />
       </div>
-      <p className="font-bold text-lg text-center mt-2">No chats, yet.</p>
-      <p className="font-bold text-sm text-center text-gray-500">
+      <p className="font-semibold text-lg text-center mt-2">No chats, yet.</p>
+      <p className="font-semibold text-sm text-center text-gray-500">
         Here, you&apos;ll find all your chat history.
       </p>
     </div>
