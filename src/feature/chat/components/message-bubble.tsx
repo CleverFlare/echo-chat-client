@@ -1,31 +1,29 @@
 import { cn } from "@/lib/utils";
-import {
-  Message as MessageType,
-  MessageDirection,
-  MessageState,
-} from "@/state/message";
+import { Message as MessageType, MessageDirection } from "@/store/message";
 import { cva } from "class-variance-authority";
 import { format } from "date-fns";
 import { ComponentProps } from "react";
-import ConditionalRenderer from "../../../../components/utils/conditional-renderer";
-import { MessageStateIcon } from "./message-state-icon";
+import ConditionalRenderer from "../../../components/utils/conditional-renderer";
+import { MessageStatusIcon } from "./message-status-icon";
+import { MessageStatus } from "@/store/chat";
 
 interface MessageProps extends ComponentProps<"div"> {
   content: string;
   timestamp: string;
-  direction?: MessageDirection;
-  state?: MessageState;
+  direction: MessageDirection;
+  status: MessageStatus;
   containerProps?: ComponentProps<"div">;
   contentProps?: ComponentProps<"p">;
   timestampProps?: ComponentProps<"p">;
   footerProps?: ComponentProps<"div">;
   replyTo?: MessageType;
   mediaUrl?: string;
-  edited?: boolean;
+  edited: boolean;
+  id: string;
 }
 
 const messageVariants = cva(
-  "min-w-[200px] p-2 rounded-lg h-max flex flex-col shadow-sm",
+  "min-w-[200px] p-2 rounded-xl h-max flex flex-col shadow-sm",
   {
     variants: {
       direction: {
@@ -40,7 +38,7 @@ const messageVariants = cva(
   },
 );
 
-export default function Message({
+export default function MessageBubble({
   content,
   timestamp,
   direction = "outgoing",
@@ -49,7 +47,7 @@ export default function Message({
   contentProps,
   timestampProps,
   footerProps,
-  state = "pending",
+  status = "pending",
   replyTo,
   edited,
   // eslint-disable-next-line
@@ -62,7 +60,7 @@ export default function Message({
   const footerClassName = footerProps?.className;
 
   const isOutgoing = direction === "outgoing";
-  const isFailedMessage = state === "failed";
+  const isFailedMessage = status === "failed";
   const isReplying = !!replyTo;
 
   const reply = isReplying ? replyTo : null;
@@ -120,14 +118,11 @@ export default function Message({
               edited
             </p>
           </ConditionalRenderer>
-          <p
-            className={cn("text-xs font-medium", timestampClassName)}
-            {...timestampProps}
-          >
+          <p className={cn("text-xs", timestampClassName)} {...timestampProps}>
             {format(timestamp, "h:m aaa")}
           </p>
           <ConditionalRenderer shouldRender={isOutgoing}>
-            <MessageStateIcon state={state} />
+            <MessageStatusIcon state={status} />
           </ConditionalRenderer>
         </div>
       </div>

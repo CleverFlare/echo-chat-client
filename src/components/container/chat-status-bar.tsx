@@ -1,13 +1,13 @@
 import { Avatar, AvatarImage } from "../ui/avatar";
 import { format } from "date-fns";
 import ConditionalRenderer from "../utils/conditional-renderer";
-import { Connection } from "@/state/connections";
 import { ComponentProps } from "react";
 import { useNamedBlocks } from "@/lib/use-named-blocks";
 import { cn } from "@/lib/utils";
+import { Contact } from "@/store/contacts";
 
 interface UserStatusProps {
-  connection: Connection;
+  contact: Contact;
 }
 
 export const StartSide = (props: ComponentProps<"div">) => <div {...props} />;
@@ -30,22 +30,23 @@ export default function ChatStatusBar({
   );
 }
 
-export const UserStatus = ({ connection }: UserStatusProps) => {
-  const isCurrentlyOnline = connection.lastOnline === null;
+export const UserStatus = ({ contact }: UserStatusProps) => {
   return (
     <div className="flex gap-2 z-20">
       <Avatar className="size-[40px]">
-        <AvatarImage src={connection.image} alt="avatar" />
+        <AvatarImage src={contact.avatarUrl} alt="avatar" />
       </Avatar>
       <div className="flex flex-col justify-center">
-        <p className="font-semibold text-sm">{connection.name}</p>
-        <ConditionalRenderer shouldRender={!isCurrentlyOnline}>
+        <p className="font-semibold text-sm">
+          {contact.firstName} {contact.lastName}
+        </p>
+        <ConditionalRenderer shouldRender={!contact.online}>
           <p className="text-xs text-gray-500">
-            {format(new Date().toString()!, "d MMM, yy")}
+            {format(new Date().toISOString()!, "d MMM, yy")}
           </p>
         </ConditionalRenderer>
-        <ConditionalRenderer shouldRender={isCurrentlyOnline}>
-          <p className="text-purple-500 text-xs font-semibold">Online</p>
+        <ConditionalRenderer shouldRender={contact.online}>
+          <p className="text-purple-500 text-xs font-medium">Online</p>
         </ConditionalRenderer>
       </div>
     </div>

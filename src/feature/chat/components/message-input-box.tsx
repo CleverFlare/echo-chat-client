@@ -3,11 +3,11 @@ import { PaperPlaneRight } from "@phosphor-icons/react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 
-interface MessageWritingBarProps {
+interface MessageInputBoxProps {
   onSend: (value: string) => void;
 }
 
-export default function MessageWritingBar({ onSend }: MessageWritingBarProps) {
+export default function MessageInputBox({ onSend }: MessageInputBoxProps) {
   const [message, setMessage] = useState<string>("");
 
   return (

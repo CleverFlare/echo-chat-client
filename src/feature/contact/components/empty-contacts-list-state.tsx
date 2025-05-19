@@ -1,6 +1,6 @@
 import { ChatsCircle } from "@phosphor-icons/react";
 
-export function EmptyChatState() {
+export function EmptyContactsListState() {
   return (
     <div
       className="flex flex-col items-center mt-4 flex-1"

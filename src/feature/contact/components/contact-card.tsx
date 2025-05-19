@@ -1,52 +1,44 @@
 "use client";
 import { cn } from "@/lib/utils";
 import { ComponentProps } from "react";
-import { Avatar, AvatarImage } from "../../../../components/ui/avatar";
-import { useAtom } from "jotai";
-import {
-  CachedMessages,
-  cachedMessagesAtom,
-  Message,
-  missedMessagesAtom,
-} from "@/state/message";
+import { Avatar, AvatarImage } from "../../../components/ui/avatar";
 import { formatDistanceToNow } from "date-fns";
-import ConditionalRenderer from "../../../../components/utils/conditional-renderer";
+import ConditionalRenderer from "../../../components/utils/conditional-renderer";
 import { Check, Checks } from "@phosphor-icons/react";
-import { userAtom } from "@/state/auth";
+import { useAuthStore } from "@/store/auth";
+import { Message, useChatStore } from "@/store/chat";
+import { Contact } from "@/store/contacts";
 
-type ChatCardProps = {
-  image?: string;
+type ContactCardProps = {
+  avatarUrl?: string;
   name: string;
   active?: boolean;
   id: string;
+  unread: number;
 } & ComponentProps<"button">;
 
-export function ChatCard({
-  image,
+export function ContactCard({
+  avatarUrl,
   name,
   active = false,
+  // eslint-disable-next-line
   id,
+  unread,
   onClick,
   ...props
-}: ChatCardProps) {
-  const [user] = useAtom(userAtom);
-  const [cachedMessages]: [CachedMessages, unknown] =
-    useAtom(cachedMessagesAtom);
-  const [missedMessages] = useAtom(missedMessagesAtom);
+}: ContactCardProps) {
+  const { user } = useAuthStore();
+  const { messages } = useChatStore();
 
-  const unreadNumber = missedMessages[id];
+  const lastMessage: Message = messages[id]
+    ? Object.values(messages[id])?.[0]?.[0]
+    : ({} as Message);
 
-  const messages: Message[] = cachedMessages[id];
+  const areYouTheSender = lastMessage?.sender?.id === user!.id;
 
-  const lastMessage = messages.at(-1);
-
-  const doesLastMessageTimestampExist = lastMessage?.timestamp;
-
-  const areYouTheSender = lastMessage?.sender.id === user.id;
-
-  const isLastMessageSent = lastMessage?.state === "sent";
-  const isLastMessageDelivered = lastMessage?.state === "delivered";
-  const isLastMessageRead = lastMessage?.state === "read";
+  const isLastMessageSent = lastMessage?.status === "sent";
+  const isLastMessageDelivered = lastMessage?.status === "delivered";
+  const isLastMessageRead = lastMessage?.status === "read";
 
   return (
     <button
@@ -55,24 +47,20 @@ export function ChatCard({
         active && "bg-muted",
       )}
       data-testid="chat-card"
-      onClick={(...args) => {
-        if (onClick) onClick(...args);
-
-        // router.push("/chat");
-      }}
+      onClick={onClick}
       {...props}
     >
       <Avatar>
-        <AvatarImage src={image}></AvatarImage>
+        <AvatarImage src={avatarUrl}></AvatarImage>
       </Avatar>
       <div className="flex flex-col flex-1">
         <div className="grid grid-cols-[1fr_auto] justify-between w-full gap-2">
           <p className="font-semibold text-sm text-start truncate">{name}</p>
-          <ConditionalRenderer shouldRender={doesLastMessageTimestampExist}>
+          <ConditionalRenderer shouldRender={!!lastMessage?.timestamp}>
             <p
               className={cn(
-                "text-xs text-gray-500",
-                unreadNumber && "text-purple-600 font-semibold",
+                "text-xs font-medium text-gray-500",
+                unread && "text-purple-600",
               )}
             >
               {formatDistanceToNow(
@@ -84,7 +72,7 @@ export function ChatCard({
         <div
           className={cn(
             "grid grid-cols-[1fr_auto] gap-1 items-center",
-            lastMessage?.state && "grid-cols-[auto_1fr_auto]",
+            lastMessage?.status && "grid-cols-[auto_1fr_auto]",
           )}
         >
           <ConditionalRenderer shouldRender={lastMessage}>
@@ -100,11 +88,11 @@ export function ChatCard({
               </ConditionalRenderer>
             </ConditionalRenderer>
             <p className="text-sm text-start text-gray-500 truncate">
-              {lastMessage?.content}
+              {lastMessage?.content ?? "..."}
             </p>
-            <ConditionalRenderer shouldRender={unreadNumber}>
+            <ConditionalRenderer shouldRender={unread}>
               <p className="w-[20px] h-[20px] rounded-full bg-gradient-to-r from-purple-500 to-purple-700 text-white text-xs flex justify-center items-center ms-auto">
-                {unreadNumber}
+                {unread}
               </p>
             </ConditionalRenderer>
           </ConditionalRenderer>

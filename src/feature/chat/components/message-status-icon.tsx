@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { MessageState } from "@/state/message";
+import { MessageStatus } from "@/store/chat";
 import {
   Check,
   Checks,
@@ -8,13 +8,13 @@ import {
   WarningCircle,
 } from "@phosphor-icons/react";
 
-export function MessageStateIcon({
+export function MessageStatusIcon({
   state,
   size,
   className,
   weight,
   ...props
-}: { state: MessageState } & IconProps) {
+}: { state: MessageStatus } & IconProps) {
   switch (state) {
     case "pending":
       return <Clock size={size ?? 16} {...props} />;

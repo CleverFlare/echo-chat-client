@@ -1,6 +1,6 @@
 import { MagnifyingGlass } from "@phosphor-icons/react";
 
-export function EmptySearchState({ search }: { search: string }) {
+export function EmptyContactsListSearchState({ search }: { search: string }) {
   const shouldTrancate = search.length > 15;
   return (
     <div

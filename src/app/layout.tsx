@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Rubik } from "next/font/google";
 import "./globals.css";
-import JotaiProvider from "@/components/utils/jotai-provider";
 
 export const metadata: Metadata = {
   title: "Echo",
@@ -22,7 +21,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${font.className} antialiased h-[100svh]`}>
-        <JotaiProvider>{children}</JotaiProvider>
+        {children}
       </body>
     </html>
   );

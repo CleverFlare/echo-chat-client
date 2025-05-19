@@ -1,43 +1,51 @@
 "use client";
 import { cn } from "@/lib/utils";
-import { Connection, connectionsAtom } from "@/state/connections";
 import { ComponentProps } from "react";
 import ConditionalRenderer from "@/components/utils/conditional-renderer";
 import ChatStatusBar, {
   StartSide,
   UserStatus,
 } from "@/components/container/chat-status-bar";
-import MessageWritingBar from "@/feature/chat/components/container/message-writing-bar";
-import { useAtom } from "jotai";
-import { activeChatIDAtom } from "@/state/ui";
 import Image from "next/image";
-import Messages from "@/feature/chat/components/container/messages";
-import { messagesAtom } from "@/state/message";
-import { userAtom } from "@/state/auth";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "@phosphor-icons/react";
+import { useAuthStore } from "@/store/auth";
+import MessageInputBox from "./message-input-box";
+import { useChatStore } from "@/store/chat";
+import { useContactsStore } from "@/store/contacts";
+import MessagesList from "./messages-list";
+import { toLocalISOString } from "@/lib/to-local-iso-string";
 
-type ChatWindowProps = ComponentProps<"div"> & {
-  active: string | null;
-  connections: Record<string, Connection> | null;
-  pushMessages: (message: string) => void;
-};
+type ChatWindowProps = ComponentProps<"div"> & {};
 
-function ChatWindowUI({
-  className,
-  active,
-  connections,
-  pushMessages,
-  ...props
-}: ChatWindowProps) {
-  const connection = connections?.[active!] ?? null;
-
+function ChatRoom({ className, ...props }: ChatWindowProps) {
   // eslint-disable-next-line
-  const [_, setActiveChat] = useAtom(activeChatIDAtom);
+  const { activeChatId, setActiveChat, addMessage } = useChatStore();
+  const { user } = useAuthStore();
+  const { getContact } = useContactsStore();
+
+  function pushMessages(message: string) {
+    addMessage(activeChatId!, toLocalISOString().split("T")[0], {
+      id: crypto.randomUUID(),
+      sender: {
+        id: user!.id,
+        firstName: user!.firstName,
+        lastName: user!.firstName,
+        avatarUrl: user!.avatarUrl,
+        username: user!.username,
+      },
+      isEdited: false,
+      status: "read",
+      content: message,
+      timestamp: toLocalISOString(),
+    });
+  }
+
+  const activeContact = getContact(activeChatId!);
 
   return (
     <div className={cn("flex", className)} {...props}>
-      <ConditionalRenderer shouldRender={!connection}>
+      <ConditionalRenderer shouldRender={!activeContact}>
         <div className="w-full row-span-3 h-full flex flex-col justify-center items-center gap-4 md:rounded-2xl bg-muted">
           <Image
             src="/echoes-logo.png"
@@ -54,13 +62,13 @@ function ChatWindowUI({
           </p>
         </div>
       </ConditionalRenderer>
-      <ConditionalRenderer shouldRender={connection}>
+      <ConditionalRenderer shouldRender={!!activeChatId}>
         <div className="h-full w-full md:rounded-2xl p-4 grid grid-rows-[auto_1fr_auto] relative bg-muted overflow-hidden">
           <div
             className="absolute top-0 left-0 w-full h-full opacity-20 z-10"
             style={{
               backgroundImage: `url("/social-media-wallpaper-pattern-transparent.png")`,
-              backgroundSize: "30%",
+              backgroundSize: "clamp(300px, 30%, 500px) auto",
               backgroundBlendMode: "overlay",
             }}
           />
@@ -74,47 +82,15 @@ function ChatWindowUI({
               >
                 <ArrowLeft />
               </Button>
-              <UserStatus connection={connection!} />
+              <UserStatus contact={activeContact!} />
             </StartSide>
           </ChatStatusBar>
-          <Messages />
-          <MessageWritingBar onSend={pushMessages} />
+          <MessagesList />
+          <MessageInputBox onSend={pushMessages} />
         </div>
       </ConditionalRenderer>
     </div>
   );
 }
 
-function ChatWindow({ ...props }: ComponentProps<"div">) {
-  const [active] = useAtom(activeChatIDAtom);
-  const [connections] = useAtom(connectionsAtom);
-  const [user] = useAtom(userAtom);
-  const [messages, setMessages] = useAtom(messagesAtom);
-
-  function pushMessages(message: string) {
-    setMessages([
-      ...messages,
-      {
-        id: crypto.randomUUID(),
-        type: "text",
-        sender: { id: user.id, name: user.name, avatarUrl: user.avatarUrl },
-        state: "read",
-        direction: "outgoing",
-        content: message,
-        timestamp: new Date().toISOString(),
-      },
-    ]);
-  }
-  return (
-    <ChatWindowUI
-      active={active}
-      connections={connections}
-      pushMessages={pushMessages}
-      {...props}
-    />
-  );
-}
-
-ChatWindow.UI = ChatWindowUI;
-
-export default ChatWindow;
+export default ChatRoom;
