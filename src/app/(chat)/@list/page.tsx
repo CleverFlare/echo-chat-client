@@ -9,7 +9,7 @@ import { EmptyContactsListState } from "@/feature/contact/components/empty-conta
 import { FilteredContactList } from "@/feature/contact/components/filtered-contact-list";
 import { useMediaQuery } from "@uidotdev/usehooks";
 import { useContactsStore } from "@/store/contacts";
-import { AddNewContactDialog } from "./add-new-contact-dialog";
+import { AddNewContactDialog } from "@/feature/contact/components/add-new-contact-dialog";
 import { useParams } from "next/navigation";
 
 function ContactsList() {

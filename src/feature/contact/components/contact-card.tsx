@@ -7,7 +7,6 @@ import ConditionalRenderer from "../../../components/utils/conditional-renderer"
 import { Check, Checks } from "@phosphor-icons/react";
 import { useAuthStore } from "@/store/auth";
 import { Message, useChatStore } from "@/store/chat";
-import { Contact } from "@/store/contacts";
 
 type ContactCardProps = {
   avatarUrl?: string;

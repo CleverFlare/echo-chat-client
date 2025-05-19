@@ -1,6 +1,6 @@
-import { Avatar, AvatarImage } from "../ui/avatar";
+import { Avatar, AvatarImage } from "../../../components/ui/avatar";
 import { format } from "date-fns";
-import ConditionalRenderer from "../utils/conditional-renderer";
+import ConditionalRenderer from "../../../components/utils/conditional-renderer";
 import { ComponentProps } from "react";
 import { useNamedBlocks } from "@/lib/use-named-blocks";
 import { cn } from "@/lib/utils";

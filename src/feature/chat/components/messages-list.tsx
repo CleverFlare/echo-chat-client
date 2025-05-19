@@ -9,10 +9,11 @@ import { getRelativeDayLabel } from "@/lib/get-relative-day-label";
 import { useAuthStore } from "@/store/auth";
 import { useContactsStore } from "@/store/contacts";
 import MessageBubble from "@/feature/chat/components/message-bubble";
+import { useParams } from "next/navigation";
 
 export default function MessagesList() {
   const { user } = useAuthStore();
-  const { activeChatId } = useChatStore();
+  const { chat: activeChatId } = useParams<{ chat: string }>();
   const messages = useChatStore((state) => state.messages[activeChatId!]);
   // eslint-disable-next-line
   const { readAllMessages } = useContactsStore();
@@ -37,7 +38,10 @@ export default function MessagesList() {
   useEffect(() => {
     if (activeChatId) readAllMessages(activeChatId);
 
-    setIsAtBottom(true);
+    if (scrollAreaRef.current)
+      scrollAreaRef.current?.scrollIntoView({
+        block: "end",
+      });
   }, [activeChatId, readAllMessages]);
 
   const activeChatMessages = messages ? Object.keys(messages) : [];

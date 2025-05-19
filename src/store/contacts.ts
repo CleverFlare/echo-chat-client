@@ -5,6 +5,7 @@ export type Contact = {
   id: string;
   firstName: string;
   lastName: string;
+  username: string;
   avatarUrl?: string;
   unread: number;
   online: boolean;

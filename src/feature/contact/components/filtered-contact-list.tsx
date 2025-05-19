@@ -3,6 +3,7 @@ import { ContactCard } from "./contact-card";
 import { EmptyContactsListSearchState } from "./empty-contacts-list-search-state";
 import { Contact } from "@/store/contacts";
 import { Message, useChatStore } from "@/store/chat";
+import { useRouter } from "next/navigation";
 
 export function FilteredContactList({
   contacts: contactsProp,
@@ -13,17 +14,20 @@ export function FilteredContactList({
   active?: string | null;
   search: string;
 }) {
+  const router = useRouter();
   const isEmptyContacts = contactsProp.length <= 0;
-  const { setActiveChat, messages } = useChatStore();
+  const { messages } = useChatStore();
   // const messages = useChatStore((state) => state.messages);
 
   if (isEmptyContacts) return null;
 
   const contacts: Contact[] = contactsProp
-    .filter((contact) =>
-      (contact.firstName + " " + contact.lastName)
-        .toLowerCase()
-        .includes(search.toLowerCase()),
+    .filter(
+      (contact) =>
+        (contact.firstName + " " + contact.lastName)
+          .toLowerCase()
+          .includes(search.toLowerCase()) ||
+        contact.username.toLowerCase().includes(search.toLowerCase()),
     )
     .sort((a, b) => {
       const getLastTimestamp = (
@@ -65,7 +69,9 @@ export function FilteredContactList({
         >
           <ContactCard
             active={active === contact.id}
-            onClick={() => setActiveChat(contact.id)}
+            onClick={() => {
+              router.push(contact.id);
+            }}
             avatarUrl={contact.avatarUrl}
             id={contact.id}
             unread={contact.unread}

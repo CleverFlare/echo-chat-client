@@ -2,23 +2,28 @@
 
 import { useIsClient, useMediaQuery } from "@uidotdev/usehooks";
 import { cn } from "@/lib/utils";
-import ChatRoom from "./chat-room";
-import ContactsList from "../../contact/components/contacts-list";
 import { useChatStore } from "@/store/chat";
+import { ReactNode } from "react";
+import { useParams } from "next/navigation";
 
-export default function ChatPage() {
+type Props = {
+  children: ReactNode;
+  list: ReactNode;
+};
+
+export default function Layout(props: Props) {
   const isClient = useIsClient();
 
   if (!isClient) return null;
 
-  return <ChatPageUI />;
+  return <LayoutUI {...props} />;
 }
 
-export function ChatPageUI() {
+function LayoutUI({ children, list }: Props) {
   // eslint-disable-next-line
   const isSmall = useMediaQuery("only screen and (max-width: 768px)");
 
-  const { activeChatId } = useChatStore();
+  const { chat: activeChatId } = useParams();
 
   return (
     <div className="h-full max-h-[100vh] max-w-[100vw] overflow-hidden">
@@ -28,8 +33,8 @@ export function ChatPageUI() {
           activeChatId && isSmall ? "-translate-x-full" : "",
         )}
       >
-        <ContactsList />
-        <ChatRoom className="md:p-4 max-h-full overflow-hidden" />
+        {list}
+        <div className="flex md:p-4 max-h-full overflow-hidden">{children}</div>
       </div>
     </div>
   );

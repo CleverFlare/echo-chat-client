@@ -23,9 +23,7 @@ export type Message = {
 };
 
 export type ChatState = {
-  activeChatId: string | null;
   messages: Record<string, Record<string, Message[]>>; // chatId -> messages
-  setActiveChat: (chatId: string | null) => void;
   addMessage: (chatId: string, date: string, message: Message) => void;
   setMessages: (chatId: string, messages: Record<string, Message[]>) => void;
   setMessageStatus: (
@@ -43,11 +41,9 @@ export type ChatState = {
 };
 
 export const useChatStore = create<ChatState>((set) => ({
-  activeChatId: null,
   messages: {
     ...dummyMessagesData,
   },
-  setActiveChat: (chatId) => set({ activeChatId: chatId }),
   addMessage: (chatId, date, message) =>
     set((state) => {
       const isChatIdAbsent = !state.messages?.[chatId];
