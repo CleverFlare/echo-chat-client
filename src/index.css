@@ -1,7 +1,12 @@
+@import url("https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap");
 @import "tailwindcss";
 @import "tw-animate-css";
 
 @custom-variant dark (&:is(.dark *));
+
+@theme {
+  --font-display: "Rubik", "sans-serif";
+}
 
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);
@@ -112,7 +117,7 @@
 
 @layer base {
   * {
-    @apply border-border outline-ring/50;
+    @apply border-border outline-ring/50 font-display;
   }
   body {
     @apply bg-background text-foreground;

@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { User } from "./auth";
+import { type User } from "./auth";
 import { dummyMessagesData } from "@/constants/dummy-messages-data";
 
 // pending -> awaiting network connection to send
@@ -23,6 +23,8 @@ export type Message = {
 };
 
 export type ChatState = {
+  activeChatId: string | null;
+  setActiveChat: (chatId: string | null) => void;
   messages: Record<string, Record<string, Message[]>>; // chatId -> messages
   addMessage: (chatId: string, date: string, message: Message) => void;
   setMessages: (chatId: string, messages: Record<string, Message[]>) => void;
@@ -41,6 +43,8 @@ export type ChatState = {
 };
 
 export const useChatStore = create<ChatState>((set) => ({
+  activeChatId: null,
+  setActiveChat: (chatId) => set({ activeChatId: chatId }),
   messages: {
     ...dummyMessagesData,
   },

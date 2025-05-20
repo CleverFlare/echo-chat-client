@@ -1,4 +1,4 @@
-import { Message } from "@/store/chat";
+import { type Message } from "@/store/chat";
 
 export const dummyMessagesData: Record<string, Record<string, Message[]>> = {
   "2": {

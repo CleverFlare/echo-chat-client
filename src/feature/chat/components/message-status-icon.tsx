@@ -1,10 +1,10 @@
 import { cn } from "@/lib/utils";
-import { MessageStatus } from "@/store/chat";
+import { type MessageStatus } from "@/store/chat";
 import {
   Check,
   Checks,
   Clock,
-  IconProps,
+  type IconProps,
   WarningCircle,
 } from "@phosphor-icons/react";
 

@@ -1,9 +1,8 @@
 import { AnimatePresence, motion } from "motion/react";
 import { ContactCard } from "./contact-card";
 import { EmptyContactsListSearchState } from "./empty-contacts-list-search-state";
-import { Contact } from "@/store/contacts";
-import { Message, useChatStore } from "@/store/chat";
-import { useRouter } from "next/navigation";
+import { type Contact } from "@/store/contacts";
+import { type Message, useChatStore } from "@/store/chat";
 
 export function FilteredContactList({
   contacts: contactsProp,
@@ -14,9 +13,9 @@ export function FilteredContactList({
   active?: string | null;
   search: string;
 }) {
-  const router = useRouter();
+  // const router = useRouter();
   const isEmptyContacts = contactsProp.length <= 0;
-  const { messages } = useChatStore();
+  const { messages, setActiveChat } = useChatStore();
   // const messages = useChatStore((state) => state.messages);
 
   if (isEmptyContacts) return null;
@@ -58,7 +57,6 @@ export function FilteredContactList({
 
   return (
     <AnimatePresence initial={false}>
-      {/* eslint-disable-next-line */}
       {contacts.map((contact) => (
         <motion.div
           key={contact.id}
@@ -70,7 +68,8 @@ export function FilteredContactList({
           <ContactCard
             active={active === contact.id}
             onClick={() => {
-              router.push(contact.id);
+              // router.navigate(contact.id);
+              setActiveChat(contact.id);
             }}
             avatarUrl={contact.avatarUrl}
             id={contact.id}

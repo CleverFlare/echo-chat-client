@@ -1,10 +1,10 @@
 import { Avatar, AvatarImage } from "../../../components/ui/avatar";
 import { format } from "date-fns";
 import ConditionalRenderer from "../../../components/utils/conditional-renderer";
-import { ComponentProps } from "react";
+import { type ComponentProps } from "react";
 import { useNamedBlocks } from "@/lib/use-named-blocks";
 import { cn } from "@/lib/utils";
-import { Contact } from "@/store/contacts";
+import { type Contact } from "@/store/contacts";
 
 interface UserStatusProps {
   contact: Contact;

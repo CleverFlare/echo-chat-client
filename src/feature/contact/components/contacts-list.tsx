@@ -1,4 +1,3 @@
-"use client";
 import { cloneElement, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { MagnifyingGlass } from "@phosphor-icons/react";
@@ -10,11 +9,11 @@ import { FilteredContactList } from "@/feature/contact/components/filtered-conta
 import { useMediaQuery } from "@uidotdev/usehooks";
 import { useContactsStore } from "@/store/contacts";
 import { AddNewContactDialog } from "./add-new-contact-dialog";
-import { useParams } from "next/navigation";
+import { useChatStore } from "@/store/chat";
 
 function ContactsList() {
   const { contacts } = useContactsStore();
-  const { chat: activeChatId } = useParams<{ chat: string }>();
+  const { activeChatId } = useChatStore();
   const [search, setSearch] = useState<string>("");
 
   const isEmpty = contacts ? contacts.length <= 0 : false;

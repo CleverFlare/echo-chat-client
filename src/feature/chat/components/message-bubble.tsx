@@ -1,22 +1,21 @@
 import { cn } from "@/lib/utils";
-import { Message as MessageType, MessageDirection } from "@/store/message";
 import { cva } from "class-variance-authority";
 import { format } from "date-fns";
-import { ComponentProps } from "react";
+import { type ComponentProps } from "react";
 import ConditionalRenderer from "../../../components/utils/conditional-renderer";
 import { MessageStatusIcon } from "./message-status-icon";
-import { MessageStatus } from "@/store/chat";
+import { type MessageStatus } from "@/store/chat";
 
 interface MessageProps extends ComponentProps<"div"> {
   content: string;
   timestamp: string;
-  direction: MessageDirection;
+  direction: "incoming" | "outgoing";
   status: MessageStatus;
   containerProps?: ComponentProps<"div">;
   contentProps?: ComponentProps<"p">;
   timestampProps?: ComponentProps<"p">;
   footerProps?: ComponentProps<"div">;
-  replyTo?: MessageType;
+  // replyTo?: MessageType;
   mediaUrl?: string;
   edited: boolean;
   id: string;
@@ -48,7 +47,7 @@ export default function MessageBubble({
   timestampProps,
   footerProps,
   status = "pending",
-  replyTo,
+  // replyTo,
   edited,
   // eslint-disable-next-line
   mediaUrl,
@@ -61,9 +60,9 @@ export default function MessageBubble({
 
   const isOutgoing = direction === "outgoing";
   const isFailedMessage = status === "failed";
-  const isReplying = !!replyTo;
+  // const isReplying = !!replyTo;
 
-  const reply = isReplying ? replyTo : null;
+  // const reply = isReplying ? replyTo : null;
 
   return (
     <div
@@ -75,28 +74,28 @@ export default function MessageBubble({
       {...containerProps}
     >
       <div className={cn(messageVariants({ direction, className }))} {...props}>
-        <ConditionalRenderer shouldRender={isReplying}>
-          <button
-            className={cn(
-              "p-2 rounded-lg flex flex-col gap-1 w-full mb-2 justify-start text-start border-l-[4px] border-purple-300",
-              isOutgoing ? "bg-white/20" : "bg-purple-500/10",
-            )}
-          >
-            <p
-              className={cn(
-                "text-xs font-semibold truncate w-full",
-                isOutgoing ? "text-purple-200" : "text-purple-500",
-              )}
-            >
-              {reply?.sender?.name ?? replyTo?.sender.name ?? "Unknown"}
-            </p>
-            <p className="text-xs truncate w-full">
-              {reply?.content ??
-                replyTo?.content ??
-                "Could not load the message"}
-            </p>
-          </button>
-        </ConditionalRenderer>
+        {/* <ConditionalRenderer shouldRender={isReplying}> */}
+        {/*   <button */}
+        {/*     className={cn( */}
+        {/*       "p-2 rounded-lg flex flex-col gap-1 w-full mb-2 justify-start text-start border-l-[4px] border-purple-300", */}
+        {/*       isOutgoing ? "bg-white/20" : "bg-purple-500/10", */}
+        {/*     )} */}
+        {/*   > */}
+        {/*     <p */}
+        {/*       className={cn( */}
+        {/*         "text-xs font-semibold truncate w-full", */}
+        {/*         isOutgoing ? "text-purple-200" : "text-purple-500", */}
+        {/*       )} */}
+        {/*     > */}
+        {/*       {reply?.sender?.name ?? replyTo?.sender.name ?? "Unknown"} */}
+        {/*     </p> */}
+        {/*     <p className="text-xs truncate w-full"> */}
+        {/*       {reply?.content ?? */}
+        {/*         replyTo?.content ?? */}
+        {/*         "Could not load the message"} */}
+        {/*     </p> */}
+        {/*   </button> */}
+        {/* </ConditionalRenderer> */}
         <p
           className={cn(
             "text-sm [unicode-bidi:plaintext] whitespace-pre-line",

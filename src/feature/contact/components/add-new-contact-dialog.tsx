@@ -1,6 +1,5 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { UserPlus } from "@phosphor-icons/react";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { Loader2, XIcon } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
@@ -8,6 +7,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { UserPlus } from "@phosphor-icons/react";
 
 const schema = yup.object({
   username: yup.string().required().min(3).label("Username"),
@@ -50,7 +50,7 @@ export function AddNewContactDialog() {
         {open && (
           <DialogPrimitive.Portal forceMount>
             <DialogPrimitive.Overlay
-              className="bg-black/50 fixed top-0 left-0 right-0 bottom-0 backdrop-blur-lg"
+              className="bg-black/50 fixed top-0 left-0 right-0 bottom-0 backdrop-blur-lg z-50"
               asChild
             >
               <motion.div

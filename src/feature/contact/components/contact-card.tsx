@@ -1,12 +1,11 @@
-"use client";
 import { cn } from "@/lib/utils";
-import { ComponentProps } from "react";
+import { type ComponentProps } from "react";
 import { Avatar, AvatarImage } from "../../../components/ui/avatar";
 import { formatDistanceToNow } from "date-fns";
 import ConditionalRenderer from "../../../components/utils/conditional-renderer";
 import { Check, Checks } from "@phosphor-icons/react";
 import { useAuthStore } from "@/store/auth";
-import { Message, useChatStore } from "@/store/chat";
+import { type Message, useChatStore } from "@/store/chat";
 
 type ContactCardProps = {
   avatarUrl?: string;
@@ -20,7 +19,7 @@ export function ContactCard({
   avatarUrl,
   name,
   active = false,
-  // eslint-disable-next-line
+   
   id,
   unread,
   onClick,

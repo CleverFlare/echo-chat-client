@@ -1,6 +1,5 @@
-"use client";
 import { cn } from "@/lib/utils";
-import { ComponentProps } from "react";
+import { type ComponentProps } from "react";
 import ChatStatusBar, {
   StartSide,
   UserStatus,
@@ -13,14 +12,11 @@ import { useChatStore } from "@/store/chat";
 import { useContactsStore } from "@/store/contacts";
 import MessagesList from "./messages-list";
 import { toLocalISOString } from "@/lib/to-local-iso-string";
-import { useParams, useRouter } from "next/navigation";
 
 type ChatWindowProps = ComponentProps<"div"> & {};
 
 function ChatRoom({ className, ...props }: ChatWindowProps) {
-  // eslint-disable-next-line
-  const { addMessage } = useChatStore();
-  const { chat: activeChatId } = useParams<{ chat: string }>();
+  const { addMessage, activeChatId, setActiveChat } = useChatStore();
   const { user } = useAuthStore();
   const { getContact } = useContactsStore();
 
@@ -43,7 +39,24 @@ function ChatRoom({ className, ...props }: ChatWindowProps) {
 
   const activeContact = getContact(activeChatId!);
 
-  const router = useRouter();
+  if (!activeContact) {
+    return (
+      <div className="w-full row-span-3 h-full flex flex-col justify-center items-center gap-4 md:rounded-2xl bg-muted">
+        <img
+          src="/echoes-logo.png"
+          alt="Logo"
+          width={200}
+          height={200}
+          className="opacity-50 mb-4 h-auto"
+        />
+        <p className="text-4xl font-medium opacity-50">EchoApp Web</p>
+        <p className="w-[500px] text-center text-balance opacity-30">
+          Bringing the best of real-time messaging and dynamic communities
+          together—connect, chat, and grow, all in one seamless experience. 🚀
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div
@@ -67,7 +80,9 @@ function ChatRoom({ className, ...props }: ChatWindowProps) {
             size="icon"
             variant="outline"
             className="md:hidden"
-            onClick={() => router.push("/")}
+            onClick={() => {
+              setActiveChat(null);
+            }}
           >
             <ArrowLeft />
           </Button>

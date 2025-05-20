@@ -1,4 +1,3 @@
-"use client";
 import { useEffect, useRef, useState } from "react";
 import { ArrowDown } from "@phosphor-icons/react";
 import { cn } from "@/lib/utils";
@@ -9,13 +8,13 @@ import { getRelativeDayLabel } from "@/lib/get-relative-day-label";
 import { useAuthStore } from "@/store/auth";
 import { useContactsStore } from "@/store/contacts";
 import MessageBubble from "@/feature/chat/components/message-bubble";
-import { useParams } from "next/navigation";
 
 export default function MessagesList() {
   const { user } = useAuthStore();
-  const { chat: activeChatId } = useParams<{ chat: string }>();
+  const { activeChatId } = useChatStore();
+
   const messages = useChatStore((state) => state.messages[activeChatId!]);
-  // eslint-disable-next-line
+
   const { readAllMessages } = useContactsStore();
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const [isAtBottom, setIsAtBottom] = useState<boolean>(true);

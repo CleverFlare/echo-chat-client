@@ -1,4 +1,4 @@
-import { Contact } from "@/store/contacts";
+import { type Contact } from "@/store/contacts";
 
 export const dummyContactsData: Contact[] = [
   {

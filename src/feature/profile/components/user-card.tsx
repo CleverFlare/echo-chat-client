@@ -10,7 +10,6 @@ import {
 import { Avatar, AvatarImage } from "../../../components/ui/avatar";
 import { useState } from "react";
 import ConditionalRenderer from "../../../components/utils/conditional-renderer";
-import Link from "next/link";
 import { motion } from "motion/react";
 import { useAuthStore } from "@/store/auth";
 import {
@@ -20,6 +19,7 @@ import {
 } from "../../../components/ui/tooltip";
 import { useCopyToClipboard } from "@uidotdev/usehooks";
 import { cn } from "@/lib/utils";
+import { Link } from "@tanstack/react-router";
 
 export default function UserCard() {
   const { user } = useAuthStore();
@@ -124,7 +124,7 @@ export default function UserCard() {
             <SpeakerSimpleSlash size={20} weight="duotone" color="red" />
           </ConditionalRenderer>
         </button>
-        <Link href="/settings">
+        <Link to="/">
           <Gear size={20} weight="duotone" />
         </Link>
       </div>
