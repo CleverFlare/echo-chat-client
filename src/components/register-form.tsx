@@ -42,7 +42,7 @@ export function RegisterForm({
           <Label htmlFor="email-input">Email</Label>
           <Input
             id="email-input"
-            type="text"
+            type="email"
             placeholder="email@example.com"
             required
           />
@@ -79,7 +79,7 @@ export function RegisterForm({
               fill="currentColor"
             />
           </svg>
-          Login with Google
+          Register with Google
         </Button>
       </div>
       <div className="text-center text-sm">

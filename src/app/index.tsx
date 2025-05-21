@@ -1,8 +1,18 @@
 import { LoginForm } from "@/components/login-form";
-import { createFileRoute } from "@tanstack/react-router";
+import { useAuthStore } from "@/store/auth";
+import { createFileRoute, redirect } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/")({
   component: RouteComponent,
+  beforeLoad: () => {
+    const { token } = useAuthStore.getState();
+
+    if (token) {
+      throw redirect({
+        to: "/chat",
+      });
+    }
+  },
 });
 
 function RouteComponent() {

@@ -14,7 +14,7 @@ export function LoginForm({
       <div className="flex flex-col items-center gap-2 text-center">
         <h1 className="text-2xl font-bold">Login to your account</h1>
         <p className="text-muted-foreground text-sm text-balance">
-          Enter your email below to login to your account
+          Enter your username below to login
         </p>
       </div>
       <div className="grid gap-6">
@@ -41,7 +41,6 @@ export function LoginForm({
             <PasswordInput.Input placeholder="••••••••" id="password-input" />
             <PasswordInput.ShowHideButton />
           </PasswordInput.Root>
-          {/* <Input id="password" type="password" required /> */}
         </div>
         <Button type="submit" className="w-full">
           Login
