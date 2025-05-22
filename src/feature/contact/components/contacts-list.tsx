@@ -1,6 +1,6 @@
-import { cloneElement, useState } from "react";
+import { cloneElement, useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
-import { MagnifyingGlass } from "@phosphor-icons/react";
+import { MagnifyingGlassIcon } from "@phosphor-icons/react";
 import UserCard from "@/feature/profile/components/user-card";
 import ConditionalRenderer from "@/components/utils/conditional-renderer";
 import { Resizable } from "re-resizable";
@@ -10,13 +10,26 @@ import { useMediaQuery } from "@uidotdev/usehooks";
 import { useContactsStore } from "@/store/contacts";
 import { AddNewContactDialog } from "./add-new-contact-dialog";
 import { useChatStore } from "@/store/chat";
+import { ContactsLoadingSkeleton } from "./contacts-loading-skeleton";
+import { useQuery } from "@tanstack/react-query";
+import { getUserContacts } from "@/queries/contacts";
 
 function ContactsList() {
-  const { contacts } = useContactsStore();
+  const { contacts, setContacts } = useContactsStore();
   const { activeChatId } = useChatStore();
   const [search, setSearch] = useState<string>("");
 
-  const isEmpty = contacts ? contacts.length <= 0 : false;
+  const { isPending, data } = useQuery({
+    queryKey: ["contacts"],
+    queryFn: () => getUserContacts(),
+  });
+
+  useEffect(() => {
+    if (!isPending && data) setContacts(data);
+    // eslint-disable-next-line
+  }, [isPending, data]);
+
+  const isEmpty = contacts.length <= 0;
 
   const isSmall = useMediaQuery("only screen and (max-width: 768px)");
 
@@ -51,26 +64,30 @@ function ContactsList() {
           className="pe-8"
           data-testid="chats-list-search-input"
         />
-        <MagnifyingGlass
+        <MagnifyingGlassIcon
           weight="bold"
           color="#aaa"
           className="absolute end-3 top-1/2 -translate-y-1/2 pointer-events-none"
         />
       </div>
-      <ConditionalRenderer shouldRender={isEmpty}>
-        <EmptyContactsListState />
-      </ConditionalRenderer>
-      <ConditionalRenderer shouldRender={!isEmpty}>
-        <div
-          className="flex flex-col flex-1 overflow-y-auto"
-          data-testid="chat-card-list"
-        >
-          <FilteredContactList
-            search={search}
-            contacts={contacts ?? []}
-            active={activeChatId}
-          />
+      <ConditionalRenderer shouldRender={isPending}>
+        <div className="flex flex-col flex-1 overflow-y-auto">
+          <ContactsLoadingSkeleton />
         </div>
+      </ConditionalRenderer>
+      <ConditionalRenderer shouldRender={!isPending}>
+        <ConditionalRenderer shouldRender={isEmpty}>
+          <EmptyContactsListState />
+        </ConditionalRenderer>
+        <ConditionalRenderer shouldRender={!isEmpty}>
+          <div className="flex flex-col flex-1 overflow-y-auto">
+            <FilteredContactList
+              search={search}
+              contacts={contacts ?? []}
+              active={activeChatId}
+            />
+          </div>
+        </ConditionalRenderer>
       </ConditionalRenderer>
       <UserCard />
     </div>,

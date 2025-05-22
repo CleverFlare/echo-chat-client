@@ -1,4 +1,3 @@
-import { dummyContactsData } from "@/constants/dummy-contacts-data";
 import { create } from "zustand";
 
 export type Contact = {
@@ -20,7 +19,7 @@ export type ContactsState = {
 };
 
 export const useContactsStore = create<ContactsState>((set, get) => ({
-  contacts: dummyContactsData,
+  contacts: [],
   readAllMessages: (contactId) =>
     set((state) => {
       const mutableState = { ...state };
@@ -34,6 +33,8 @@ export const useContactsStore = create<ContactsState>((set, get) => ({
     }),
   getContact: (contactId: string) => {
     const state = get();
+    if (state.contacts === null) return;
+
     return state.contacts.find((contact) => contact.id == contactId);
   },
   setContacts: (contacts) => set({ contacts }),

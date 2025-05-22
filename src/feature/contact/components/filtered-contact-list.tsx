@@ -16,7 +16,6 @@ export function FilteredContactList({
   // const router = useRouter();
   const isEmptyContacts = contactsProp.length <= 0;
   const { messages, setActiveChat } = useChatStore();
-  // const messages = useChatStore((state) => state.messages);
 
   if (isEmptyContacts) return null;
 

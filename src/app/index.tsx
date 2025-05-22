@@ -1,6 +1,7 @@
 import { LoginForm } from "@/components/login-form";
 import { useAuthStore } from "@/store/auth";
 import { createFileRoute, redirect } from "@tanstack/react-router";
+import { z } from "zod";
 
 export const Route = createFileRoute("/")({
   component: RouteComponent,
@@ -13,6 +14,8 @@ export const Route = createFileRoute("/")({
       });
     }
   },
+  validateSearch: (search) =>
+    z.object({ redirect: z.string().optional() }).parse(search),
 });
 
 function RouteComponent() {

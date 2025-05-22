@@ -1,4 +1,4 @@
-import { MagnifyingGlass } from "@phosphor-icons/react";
+import { MagnifyingGlassIcon } from "@phosphor-icons/react";
 
 export function EmptyContactsListSearchState({ search }: { search: string }) {
   const shouldTrancate = search.length > 15;
@@ -8,7 +8,7 @@ export function EmptyContactsListSearchState({ search }: { search: string }) {
       data-testid="empty-search-results"
     >
       <div className="rounded-full p-4 bg-black/5">
-        <MagnifyingGlass size={40} color="#00000080" />
+        <MagnifyingGlassIcon size={40} color="#00000080" />
       </div>
       <p className="font-semibold text-lg text-center mt-2">No results</p>
       <p className="font-semibold text-sm text-center text-gray-500">

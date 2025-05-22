@@ -5,13 +5,14 @@ import ChatStatusBar, {
   UserStatus,
 } from "@/feature/chat/components/chat-status-bar";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft } from "@phosphor-icons/react";
+import { ArrowLeftIcon } from "@phosphor-icons/react";
 import { useAuthStore } from "@/store/auth";
 import MessageInputBox from "./message-input-box";
 import { useChatStore } from "@/store/chat";
 import { useContactsStore } from "@/store/contacts";
 import MessagesList from "./messages-list";
 import { toLocalISOString } from "@/lib/to-local-iso-string";
+import { useQuery } from "@tanstack/react-query";
 
 type ChatWindowProps = ComponentProps<"div"> & {};
 
@@ -19,27 +20,15 @@ function ChatRoom({ className, ...props }: ChatWindowProps) {
   const { addMessage, activeChatId, setActiveChat } = useChatStore();
   const { user } = useAuthStore();
   const { getContact } = useContactsStore();
-
-  function pushMessages(message: string) {
-    addMessage(activeChatId!, toLocalISOString().split("T")[0], {
-      id: crypto.randomUUID(),
-      sender: {
-        id: user!.id,
-        firstName: user!.firstName,
-        lastName: user!.firstName,
-        avatarUrl: user!.avatarUrl,
-        username: user!.username,
-      },
-      isEdited: false,
-      status: "read",
-      content: message,
-      timestamp: toLocalISOString(),
-    });
-  }
+  const { isPending } = useQuery({
+    queryKey: ["user"],
+    queryFn: () => {},
+    enabled: false,
+  });
 
   const activeContact = getContact(activeChatId!);
 
-  if (!activeContact) {
+  if (!activeContact || (isPending && !user)) {
     return (
       <div className="w-full row-span-3 h-full flex flex-col justify-center items-center gap-4 md:rounded-2xl bg-muted">
         <img
@@ -57,6 +46,23 @@ function ChatRoom({ className, ...props }: ChatWindowProps) {
       </div>
     );
   }
+
+  const pushMessages = (message: string) => {
+    addMessage(activeChatId!, toLocalISOString().split("T")[0], {
+      id: crypto.randomUUID(),
+      sender: {
+        id: user!.id,
+        firstName: user!.firstName,
+        lastName: user!.firstName,
+        avatarUrl: user!.avatarUrl,
+        username: user!.username,
+      },
+      isEdited: false,
+      status: "read",
+      content: message,
+      timestamp: toLocalISOString(),
+    });
+  };
 
   return (
     <div
@@ -84,7 +90,7 @@ function ChatRoom({ className, ...props }: ChatWindowProps) {
               setActiveChat(null);
             }}
           >
-            <ArrowLeft />
+            <ArrowLeftIcon />
           </Button>
           <UserStatus contact={activeContact!} />
         </StartSide>

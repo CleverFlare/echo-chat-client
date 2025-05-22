@@ -1,11 +1,11 @@
 import { cn } from "@/lib/utils";
 import { type MessageStatus } from "@/store/chat";
 import {
-  Check,
-  Checks,
-  Clock,
+  CheckIcon,
+  ChecksIcon,
+  ClockIcon,
   type IconProps,
-  WarningCircle,
+  WarningCircleIcon,
 } from "@phosphor-icons/react";
 
 export function MessageStatusIcon({
@@ -17,14 +17,14 @@ export function MessageStatusIcon({
 }: { state: MessageStatus } & IconProps) {
   switch (state) {
     case "pending":
-      return <Clock size={size ?? 16} {...props} />;
+      return <ClockIcon size={size ?? 16} {...props} />;
     case "sent":
-      return <Check size={size ?? 16} {...props} />;
+      return <CheckIcon size={size ?? 16} {...props} />;
     case "delivered":
-      return <Checks size={size ?? 20} {...props} />;
+      return <ChecksIcon size={size ?? 20} {...props} />;
     case "read":
       return (
-        <Checks
+        <ChecksIcon
           className={cn("text-sky-400", className)}
           size={size ?? 20}
           {...props}
@@ -32,7 +32,7 @@ export function MessageStatusIcon({
       );
     case "failed":
       return (
-        <WarningCircle
+        <WarningCircleIcon
           weight={weight ?? "fill"}
           className={cn("text-red-500", className)}
           size={size ?? 20}

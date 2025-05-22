@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { ArrowDown } from "@phosphor-icons/react";
+import { ArrowDownIcon } from "@phosphor-icons/react";
 import { cn } from "@/lib/utils";
 import * as ScrollAreaPrimitive from "@radix-ui/react-scroll-area";
 import { ScrollBar } from "@/components/ui/scroll-area";
@@ -12,7 +12,6 @@ import MessageBubble from "@/feature/chat/components/message-bubble";
 export default function MessagesList() {
   const { user } = useAuthStore();
   const { activeChatId } = useChatStore();
-
   const messages = useChatStore((state) => state.messages[activeChatId!]);
 
   const { readAllMessages } = useContactsStore();
@@ -99,7 +98,7 @@ export default function MessagesList() {
             });
           }}
         >
-          <ArrowDown color="white" size={20} />
+          <ArrowDownIcon color="white" size={20} />
         </button>
       </ScrollAreaPrimitive.Viewport>
       <ScrollBar />
