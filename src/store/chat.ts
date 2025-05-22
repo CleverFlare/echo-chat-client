@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { type User } from "./auth";
-import { dummyMessagesData } from "@/constants/dummy-messages-data";
+import { useContactsStore } from "./contacts";
 
 // pending -> awaiting network connection to send
 // sent -> awaiting the contact to received it
@@ -45,14 +45,14 @@ export type ChatState = {
 export const useChatStore = create<ChatState>((set) => ({
   activeChatId: null,
   setActiveChat: (chatId) => set({ activeChatId: chatId }),
-  messages: {
-    ...dummyMessagesData,
-  },
+  messages: {},
   addMessage: (chatId, date, message) =>
     set((state) => {
       const isChatIdAbsent = !state.messages?.[chatId];
 
       const isDateAbsent = !state.messages?.[chatId]?.[date];
+
+      useContactsStore.getState().updateLastMessage(chatId, message);
 
       return {
         ...state,

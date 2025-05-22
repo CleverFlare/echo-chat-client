@@ -30,8 +30,6 @@ export function AddNewContactDialog() {
   function onSubmit(data: Schema) {
     setPending(true);
 
-    console.log("USERNAME", data.username);
-
     setTimeout(() => {
       setPending(false);
       reset();

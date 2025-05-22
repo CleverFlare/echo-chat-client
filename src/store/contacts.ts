@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import type { Message } from "./chat";
 
 export type Contact = {
   id: string;
@@ -6,8 +7,10 @@ export type Contact = {
   lastName: string;
   username: string;
   avatarUrl?: string;
+  chatId: string;
   unread: number;
   online: boolean;
+  lastMessage: Message | undefined;
 };
 
 export type ContactsState = {
@@ -16,6 +19,7 @@ export type ContactsState = {
   setContacts: (contacts: Contact[]) => void;
   updateStatus: (id: string, status: boolean) => void;
   readAllMessages: (contactId: string) => void;
+  updateLastMessage: (contactId: string, message: Message) => void;
 };
 
 export const useContactsStore = create<ContactsState>((set, get) => ({
@@ -49,5 +53,17 @@ export const useContactsStore = create<ContactsState>((set, get) => ({
       mutableState.contacts[contactIndex].online = status;
 
       return mutableState;
+    }),
+  updateLastMessage: (chatId, message) =>
+    set((state) => {
+      const mutableContacts = [...state.contacts];
+
+      const contactIndex = state.contacts.findIndex(
+        (contact) => contact.chatId === chatId,
+      );
+
+      mutableContacts[contactIndex].lastMessage = message;
+
+      return { contacts: [...mutableContacts] };
     }),
 }));

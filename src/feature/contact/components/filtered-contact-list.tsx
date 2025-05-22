@@ -67,9 +67,9 @@ export function FilteredContactList({
           <ContactCard
             active={active === contact.id}
             onClick={() => {
-              // router.navigate(contact.id);
-              setActiveChat(contact.id);
+              setActiveChat(contact.chatId);
             }}
+            lastMessage={contact.lastMessage}
             avatarUrl={contact.avatarUrl}
             id={contact.id}
             unread={contact.unread}

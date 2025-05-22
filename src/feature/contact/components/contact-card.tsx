@@ -3,9 +3,9 @@ import { type ComponentProps } from "react";
 import { Avatar, AvatarImage } from "../../../components/ui/avatar";
 import { formatDistanceToNow } from "date-fns";
 import ConditionalRenderer from "../../../components/utils/conditional-renderer";
-import { Check, Checks } from "@phosphor-icons/react";
+import { CheckIcon, ChecksIcon } from "@phosphor-icons/react";
 import { useAuthStore } from "@/store/auth";
-import { type Message, useChatStore } from "@/store/chat";
+import { type Message } from "@/store/chat";
 
 type ContactCardProps = {
   avatarUrl?: string;
@@ -13,24 +13,20 @@ type ContactCardProps = {
   active?: boolean;
   id: string;
   unread: number;
+  lastMessage: Message | undefined;
 } & ComponentProps<"button">;
 
 export function ContactCard({
   avatarUrl,
   name,
   active = false,
-   
+  lastMessage,
   id,
   unread,
   onClick,
   ...props
 }: ContactCardProps) {
   const { user } = useAuthStore();
-  const { messages } = useChatStore();
-
-  const lastMessage: Message = messages[id]
-    ? Object.values(messages[id])?.[0]?.[0]
-    : ({} as Message);
 
   const areYouTheSender = lastMessage?.sender?.id === user!.id;
 
@@ -70,24 +66,27 @@ export function ContactCard({
         <div
           className={cn(
             "grid grid-cols-[1fr_auto] gap-1 items-center",
-            lastMessage?.status && "grid-cols-[auto_1fr_auto]",
+            areYouTheSender && "grid-cols-[auto_1fr_auto]",
           )}
         >
           <ConditionalRenderer shouldRender={lastMessage}>
             <ConditionalRenderer shouldRender={areYouTheSender}>
-              <ConditionalRenderer shouldRender={isLastMessageSent}>
-                <Check className="text-gray-500" size={16} />
-              </ConditionalRenderer>
-              <ConditionalRenderer shouldRender={isLastMessageDelivered}>
-                <Checks className="text-gray-500" size={20} />
-              </ConditionalRenderer>
-              <ConditionalRenderer shouldRender={isLastMessageRead}>
-                <Checks className="text-sky-500" size={20} />
-              </ConditionalRenderer>
+              <p className="text-sm text-start text-gray-500 truncate">You:</p>
             </ConditionalRenderer>
             <p className="text-sm text-start text-gray-500 truncate">
               {lastMessage?.content ?? "..."}
             </p>
+            <ConditionalRenderer shouldRender={areYouTheSender}>
+              <ConditionalRenderer shouldRender={isLastMessageSent}>
+                <CheckIcon className="text-gray-500" size={16} />
+              </ConditionalRenderer>
+              <ConditionalRenderer shouldRender={isLastMessageDelivered}>
+                <ChecksIcon className="text-gray-500" size={20} />
+              </ConditionalRenderer>
+              <ConditionalRenderer shouldRender={isLastMessageRead}>
+                <ChecksIcon className="text-sky-500" size={20} />
+              </ConditionalRenderer>
+            </ConditionalRenderer>
             <ConditionalRenderer shouldRender={unread}>
               <p className="w-[20px] h-[20px] rounded-full bg-gradient-to-r from-purple-500 to-purple-700 text-white text-xs flex justify-center items-center ms-auto">
                 {unread}

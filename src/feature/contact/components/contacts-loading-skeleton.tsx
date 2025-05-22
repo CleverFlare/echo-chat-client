@@ -5,7 +5,7 @@ export function ContactsLoadingSkeleton() {
   return (
     <div className="flex flex-col">
       {range(6).map((i) => (
-        <div key={i} className="flex w-full p-3 gap-2">
+        <div key={`Contact Skeleton ${i}`} className="flex w-full p-3 gap-2">
           <Skeleton className="size-10 aspect-square rounded-full" />
           <div className="flex flex-col flex-1 justify-center gap-2">
             <Skeleton className="h-3 w-full rounded-lg" />
