@@ -28,7 +28,7 @@ function ChatRoom({ className, ...props }: ChatWindowProps) {
 
   const activeContact = getContact(activeChatId!);
 
-  if (!activeContact || (isPending && !user)) {
+  if (!activeContact || isPending || !user) {
     return (
       <div className="w-full row-span-3 h-full flex flex-col justify-center items-center gap-4 md:rounded-2xl bg-muted">
         <img

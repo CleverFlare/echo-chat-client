@@ -6,13 +6,14 @@ import ConditionalRenderer from "../../../components/utils/conditional-renderer"
 import { CheckIcon, ChecksIcon } from "@phosphor-icons/react";
 import { useAuthStore } from "@/store/auth";
 import { type Message } from "@/store/chat";
+import type { ContactLastMessage } from "@/store/contacts";
 
 type ContactCardProps = {
   avatarUrl?: string;
   name: string;
   active?: boolean;
   unread: number;
-  lastMessage: Message | undefined;
+  lastMessage: ContactLastMessage | undefined;
 } & ComponentProps<"button">;
 
 export function ContactCard({
@@ -28,7 +29,7 @@ export function ContactCard({
 
   if (!user) return null;
 
-  const areYouTheSender = lastMessage?.sender?.id === user!.id;
+  const areYouTheSender = lastMessage?.senderId === user!.id;
 
   const isLastMessageSent = lastMessage?.status === "sent";
   const isLastMessageDelivered = lastMessage?.status === "delivered";

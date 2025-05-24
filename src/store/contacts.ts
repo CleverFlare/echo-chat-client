@@ -25,7 +25,6 @@ export type ContactsState = {
   addContact: (contact: Contact) => void;
   getContact: (contactsId: string) => Contact | undefined;
   setContacts: (contacts: Contact[]) => void;
-  updateStatus: (id: string, status: boolean) => void;
   readAllMessages: (contactId: string) => void;
   updateLastMessage: (contactId: string, message: Message) => void;
 };
@@ -46,7 +45,7 @@ export const useContactsStore = create<ContactsState>((set, get) => ({
     set((state) => {
       const mutableState = { ...state };
       const contactIndex = mutableState.contacts.findIndex(
-        (contact) => contact.id === contactId,
+        (contact) => contact.chatId === contactId,
       );
 
       mutableState.contacts[contactIndex].unread = 0;
@@ -57,21 +56,9 @@ export const useContactsStore = create<ContactsState>((set, get) => ({
     const state = get();
     if (state.contacts === null) return;
 
-    return state.contacts.find((contact) => contact.id == contactId);
+    return state.contacts.find((contact) => contact.chatId == contactId);
   },
   setContacts: (contacts) => set({ contacts }),
-  updateStatus: (id, status) =>
-    set((state) => {
-      const mutableState = { ...state };
-
-      const contactIndex = mutableState.contacts.findIndex(
-        (contact) => contact.id === id,
-      );
-
-      mutableState.contacts[contactIndex].online = status;
-
-      return mutableState;
-    }),
   updateLastMessage: (chatId, message) =>
     set((state) => {
       const mutableContacts = [...state.contacts];

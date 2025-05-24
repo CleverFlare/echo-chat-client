@@ -11,7 +11,7 @@ import { useContactsStore } from "@/store/contacts";
 import { AddNewContactDialog } from "./add-new-contact-dialog";
 import { useChatStore } from "@/store/chat";
 import { ContactsLoadingSkeleton } from "./contacts-loading-skeleton";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { getUserContacts } from "@/queries/contacts";
 
 function ContactsList() {
@@ -45,10 +45,6 @@ function ContactsList() {
       className="min-w-[300px] h-full flex px-4 max-md:w-full border-border"
     />
   );
-
-  const { isPending: isPendingAddContact } = useMutation({
-    queryKey: ["contacts"],
-  });
 
   return cloneElement(
     Component,

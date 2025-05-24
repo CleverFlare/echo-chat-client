@@ -69,7 +69,7 @@ export function FilteredContactList({
             onClick={() => {
               setActiveChat(contact.chatId);
             }}
-            lastMessage={contact.lastMessage}
+            lastMessage={contact?.lastMessage}
             avatarUrl={contact.avatarUrl}
             unread={contact.unread}
             name={contact.firstName + " " + contact.lastName}
