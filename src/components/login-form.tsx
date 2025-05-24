@@ -13,6 +13,7 @@ import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { useAuthStore } from "@/store/auth";
 import { GoogleLogoIcon } from "@phosphor-icons/react";
+import type { AxiosError } from "axios";
 
 const getApi = getRouteApi("/");
 
@@ -56,7 +57,7 @@ export function LoginForm({
       await mutateAsync(data);
       reset();
     } catch (error) {
-      toast.error((error as Error)?.message ?? "Failed to login");
+      toast.error((error as Error).message);
     }
   }
 

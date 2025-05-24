@@ -71,7 +71,6 @@ export function FilteredContactList({
             }}
             lastMessage={contact.lastMessage}
             avatarUrl={contact.avatarUrl}
-            id={contact.id}
             unread={contact.unread}
             name={contact.firstName + " " + contact.lastName}
           />

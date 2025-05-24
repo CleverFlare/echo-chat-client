@@ -11,7 +11,6 @@ type ContactCardProps = {
   avatarUrl?: string;
   name: string;
   active?: boolean;
-  id: string;
   unread: number;
   lastMessage: Message | undefined;
 } & ComponentProps<"button">;
@@ -21,12 +20,13 @@ export function ContactCard({
   name,
   active = false,
   lastMessage,
-  id,
   unread,
   onClick,
   ...props
 }: ContactCardProps) {
   const { user } = useAuthStore();
+
+  if (!user) return null;
 
   const areYouTheSender = lastMessage?.sender?.id === user!.id;
 

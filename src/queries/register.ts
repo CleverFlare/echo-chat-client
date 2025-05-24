@@ -1,4 +1,5 @@
-import { sleep } from "@/lib/sleep";
+import { axiosInstance } from "@/lib/axios";
+import { AxiosError, isAxiosError } from "axios";
 
 type RegisterData = {
   firstName: string;
@@ -8,13 +9,19 @@ type RegisterData = {
   password: string;
 };
 export async function register(data: RegisterData) {
-  if (data.username === "error") {
-    throw new Error("Incorrect username or password");
+  try {
+    const response = await axiosInstance.post<{ token: string }>(
+      "/register",
+      data,
+    );
+
+    return response.data.token;
+  } catch (err) {
+    if (isAxiosError(err))
+      throw new Error(
+        (err as AxiosError<{ message: string }>).response?.data.message,
+      );
+
+    throw err;
   }
-  await sleep(2000);
-
-  const token =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwidXNlcm5hbWUiOiJmbGFyZSIsImlkIjoiMSIsImlhdCI6MTUxNjIzOTAyMn0.vu53uY6ZiUFovGiLDBFEcVekKjNjCnsRdcVMSPDT_-s";
-
-  return token;
 }

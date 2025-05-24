@@ -13,6 +13,7 @@ import { useMutation } from "@tanstack/react-query";
 import { register as registerCall } from "@/queries/register";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
+import type { AxiosError } from "axios";
 
 const getApi = getRouteApi("/register");
 
@@ -59,7 +60,7 @@ export function RegisterForm({
       await mutateAsync(data);
       reset();
     } catch (error) {
-      toast.error((error as Error)?.message ?? "Failed to register");
+      toast.error((error as Error).message ?? "Failed to register");
     }
   }
 
