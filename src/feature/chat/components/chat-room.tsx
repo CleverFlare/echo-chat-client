@@ -52,10 +52,6 @@ function ChatRoom({ className, ...props }: ChatWindowProps) {
       id: crypto.randomUUID(),
       sender: {
         id: user!.id,
-        firstName: user!.firstName,
-        lastName: user!.firstName,
-        avatarUrl: user!.avatarUrl,
-        username: user!.username,
       },
       isEdited: false,
       status: "read",

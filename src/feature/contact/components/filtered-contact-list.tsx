@@ -65,7 +65,7 @@ export function FilteredContactList({
           exit={{ height: 0, opacity: 0 }}
         >
           <ContactCard
-            active={active === contact.id}
+            active={active === contact.chatId}
             onClick={() => {
               setActiveChat(contact.chatId);
             }}

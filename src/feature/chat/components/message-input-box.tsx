@@ -1,5 +1,5 @@
 import TextareaAutosize from "react-textarea-autosize";
-import { PaperPlaneRight } from "@phosphor-icons/react";
+import { PaperPlaneRightIcon } from "@phosphor-icons/react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 
@@ -43,7 +43,7 @@ export default function MessageInputBox({ onSend }: MessageInputBoxProps) {
       />
       <div className="flex justify-center items-center h-full px-2">
         <Button className="h-10 w-10 bg-gradient-to-r from-purple-500 to-purple-700">
-          <PaperPlaneRight weight="fill" />
+          <PaperPlaneRightIcon weight="fill" />
         </Button>
       </div>
     </form>

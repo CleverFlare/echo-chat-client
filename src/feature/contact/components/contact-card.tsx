@@ -5,7 +5,6 @@ import { formatDistanceToNow } from "date-fns";
 import ConditionalRenderer from "../../../components/utils/conditional-renderer";
 import { CheckIcon, ChecksIcon } from "@phosphor-icons/react";
 import { useAuthStore } from "@/store/auth";
-import { type Message } from "@/store/chat";
 import type { ContactLastMessage } from "@/store/contacts";
 
 type ContactCardProps = {

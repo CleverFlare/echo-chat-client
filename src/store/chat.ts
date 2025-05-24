@@ -1,5 +1,4 @@
 import { create } from "zustand";
-import { type User } from "./auth";
 import { useContactsStore } from "./contacts";
 
 // pending -> awaiting network connection to send
@@ -13,11 +12,15 @@ export type MessageStatus =
   | "read"
   | "failed";
 
+export type MessageSender = {
+  id: string;
+};
+
 export type Message = {
   id: string;
   content: string;
   timestamp: string;
-  sender: User;
+  sender: MessageSender;
   status: MessageStatus;
   isEdited: boolean;
 };
