@@ -6,7 +6,7 @@ export type User = {
   firstName: string;
   lastName: string;
   username: string;
-  avatarUrl?: string;
+  avatarUrl?: string | null;
 };
 
 export type AuthState = {

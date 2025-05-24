@@ -1,14 +1,23 @@
-import { sleep } from "@/lib/sleep";
+import { axiosInstance } from "@/lib/axios";
+import { AxiosError, isAxiosError } from "axios";
 
 export async function getProfile() {
-  await sleep(2000);
+  try {
+    const response = await axiosInstance.get<{
+      id: string;
+      firstName: string;
+      lastName: string;
+      username: string;
+      avatarUrl: string | null;
+    }>("/profile");
 
-  return {
-    id: "1",
-    firstName: "Muhammad",
-    lastName: "Maher",
-    username: "flare",
-    avatarUrl:
-      "https://qph.cf2.quoracdn.net/main-qimg-5eb631ae6f587af2631f6d3348047693.webp",
-  };
+    return response.data;
+  } catch (err) {
+    if (isAxiosError(err))
+      throw new Error(
+        (err as AxiosError<{ message: string }>).response?.data.message,
+      );
+
+    throw err;
+  }
 }

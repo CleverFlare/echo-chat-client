@@ -7,7 +7,11 @@ import {
   SpeakerHighIcon,
   SpeakerSimpleSlashIcon,
 } from "@phosphor-icons/react";
-import { Avatar, AvatarImage } from "../../../components/ui/avatar";
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from "../../../components/ui/avatar";
 import { useEffect, useState } from "react";
 import ConditionalRenderer from "../../../components/utils/conditional-renderer";
 import { motion } from "motion/react";
@@ -25,6 +29,7 @@ import { logout } from "@/queries/logout";
 import { Loader2 } from "lucide-react";
 import { getProfile } from "@/queries/profile";
 import { Skeleton } from "@/components/ui/skeleton";
+import { EMPTY_AVATAR_IMAGE } from "@/constants";
 
 export default function UserCard() {
   const { user, reset, setUser } = useAuthStore();
@@ -66,6 +71,7 @@ export default function UserCard() {
         <ConditionalRenderer shouldRender={!isProfilePending}>
           <Avatar>
             <AvatarImage src={user?.avatarUrl ?? ""} />
+            <AvatarFallback>{user?.firstName[0]}</AvatarFallback>
           </Avatar>
         </ConditionalRenderer>
         <ConditionalRenderer shouldRender={isProfilePending}>
