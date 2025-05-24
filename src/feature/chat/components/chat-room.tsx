@@ -19,14 +19,14 @@ type ChatWindowProps = ComponentProps<"div"> & {};
 function ChatRoom({ className, ...props }: ChatWindowProps) {
   const { addMessage, activeChatId, setActiveChat } = useChatStore();
   const { user } = useAuthStore();
-  const { getContact } = useContactsStore();
+  const { getContactByChatId } = useContactsStore();
   const { isPending } = useQuery({
     queryKey: ["user"],
     queryFn: () => {},
     enabled: false,
   });
 
-  const activeContact = getContact(activeChatId!);
+  const activeContact = getContactByChatId(activeChatId!);
 
   if (!activeContact || isPending || !user) {
     return (
@@ -50,9 +50,7 @@ function ChatRoom({ className, ...props }: ChatWindowProps) {
   const pushMessages = (message: string) => {
     addMessage(activeChatId!, toLocalISOString().split("T")[0], {
       id: crypto.randomUUID(),
-      sender: {
-        id: user!.id,
-      },
+      senderId: user.id,
       isEdited: false,
       status: "read",
       content: message,

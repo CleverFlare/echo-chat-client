@@ -23,9 +23,9 @@ export type Contact = {
 export type ContactsState = {
   contacts: Contact[];
   addContact: (contact: Contact) => void;
-  getContact: (contactsId: string) => Contact | undefined;
+  getContactByChatId: (chatId: string) => Contact | undefined;
   setContacts: (contacts: Contact[]) => void;
-  readAllMessages: (contactId: string) => void;
+  resetUnread: (contactId: string) => void;
   updateLastMessage: (contactId: string, message: Message) => void;
 };
 
@@ -41,7 +41,7 @@ export const useContactsStore = create<ContactsState>((set, get) => ({
 
       return { contacts: [...state.contacts, contact] };
     }),
-  readAllMessages: (contactId) =>
+  resetUnread: (contactId) =>
     set((state) => {
       const mutableState = { ...state };
       const contactIndex = mutableState.contacts.findIndex(
@@ -52,11 +52,11 @@ export const useContactsStore = create<ContactsState>((set, get) => ({
 
       return mutableState;
     }),
-  getContact: (contactId: string) => {
+  getContactByChatId: (chatId: string) => {
     const state = get();
     if (state.contacts === null) return;
 
-    return state.contacts.find((contact) => contact.chatId == contactId);
+    return state.contacts.find((contact) => contact.chatId == chatId);
   },
   setContacts: (contacts) => set({ contacts }),
   updateLastMessage: (chatId, message) =>
@@ -71,7 +71,7 @@ export const useContactsStore = create<ContactsState>((set, get) => ({
         id: message.id,
         status: message.status,
         content: message.content,
-        senderId: message.sender.id,
+        senderId: message.senderId,
         timestamp: message.timestamp,
       };
 

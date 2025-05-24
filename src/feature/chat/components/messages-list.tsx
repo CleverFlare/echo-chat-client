@@ -15,13 +15,12 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { range } from "@/lib/range";
 
 export default function MessagesList() {
-  const { user } = useAuthStore();
-  const { activeChatId } = useChatStore();
+  const user = useAuthStore((state) => state.user);
+  const { activeChatId, setMessages } = useChatStore();
   const messages = useChatStore((state) => state.messages[activeChatId!]);
-  const { setMessages } = useChatStore();
   const allMessages = useChatStore((state) => state.messages);
+  const { resetUnread } = useContactsStore();
 
-  const { readAllMessages } = useContactsStore();
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const [isAtBottom, setIsAtBottom] = useState<boolean>(true);
 
@@ -41,13 +40,13 @@ export default function MessagesList() {
   }, []);
 
   useEffect(() => {
-    if (activeChatId) readAllMessages(activeChatId);
+    if (activeChatId) resetUnread(activeChatId);
 
     if (scrollAreaRef.current)
       scrollAreaRef.current?.scrollIntoView({
         block: "end",
       });
-  }, [activeChatId, readAllMessages]);
+  }, [activeChatId, resetUnread]);
 
   const { isPending, data } = useQuery({
     queryKey: ["chat", activeChatId!],
@@ -141,7 +140,7 @@ export default function MessagesList() {
                     timestamp={message.timestamp}
                     content={message.content}
                     direction={
-                      message.sender.id === user?.id ? "outgoing" : "incoming"
+                      message.senderId === user?.id ? "outgoing" : "incoming"
                     }
                     status={message.status}
                   />

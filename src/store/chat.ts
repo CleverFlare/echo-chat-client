@@ -12,15 +12,11 @@ export type MessageStatus =
   | "read"
   | "failed";
 
-export type MessageSender = {
-  id: string;
-};
-
 export type Message = {
   id: string;
   content: string;
   timestamp: string;
-  sender: MessageSender;
+  senderId: string;
   status: MessageStatus;
   isEdited: boolean;
 };
@@ -51,42 +47,22 @@ export const useChatStore = create<ChatState>((set) => ({
   messages: {},
   addMessage: (chatId, date, message) =>
     set((state) => {
+      const mutableMessages = { ...state.messages };
       const isChatIdAbsent = !state.messages?.[chatId];
-
-      const isDateAbsent = !state.messages?.[chatId]?.[date];
 
       useContactsStore.getState().updateLastMessage(chatId, message);
 
-      return {
-        ...state,
-        messages: {
-          ...state.messages,
-          ...(isChatIdAbsent
-            ? {
-                [chatId]: {
-                  ...(isDateAbsent
-                    ? {
-                        [date]: [message],
-                      }
-                    : {
-                        [date]: [...state.messages[chatId][date], message],
-                      }),
-                },
-              }
-            : {
-                [chatId]: {
-                  ...state.messages[chatId],
-                  ...(isDateAbsent
-                    ? {
-                        [date]: [message],
-                      }
-                    : {
-                        [date]: [...state.messages[chatId][date], message],
-                      }),
-                },
-              }),
-        },
-      };
+      if (isChatIdAbsent) {
+        mutableMessages[chatId] = {};
+        mutableMessages[chatId][date] = [];
+      }
+
+      mutableMessages[chatId][date] = [
+        ...mutableMessages[chatId][date],
+        message,
+      ];
+
+      return { ...state, messages: { ...mutableMessages } };
     }),
   setMessages: (chatId, messages) =>
     set((state) => ({ messages: { ...state.messages, [chatId]: messages } })),
