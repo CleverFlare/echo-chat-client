@@ -1,8 +1,35 @@
-import { dummyContactsData } from "@/constants/dummy-contacts-data";
-import { sleep } from "@/lib/sleep";
+import { axiosInstance } from "@/lib/axios";
+import type { Contact } from "@/store/contacts";
+import { AxiosError, isAxiosError } from "axios";
 
 export async function getUserContacts() {
-  await sleep(2000);
+  try {
+    const response = await axiosInstance.get("/contacts");
 
-  return dummyContactsData;
+    return response.data;
+  } catch (err) {
+    if (isAxiosError(err))
+      throw new Error(
+        (err as AxiosError<{ message: string }>).response?.data.message,
+      );
+
+    throw err;
+  }
+}
+
+export async function addContact(username: string) {
+  try {
+    const response = await axiosInstance.post<Contact>("/add-contact", {
+      username,
+    });
+
+    return response.data;
+  } catch (err) {
+    if (isAxiosError(err))
+      throw new Error(
+        (err as AxiosError<{ message: string }>).response?.data.message,
+      );
+
+    throw err;
+  }
 }

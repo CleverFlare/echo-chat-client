@@ -3,11 +3,15 @@ import { Input } from "@/components/ui/input";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { Loader2, XIcon } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { UserPlus } from "@phosphor-icons/react";
+import { UserPlusIcon } from "@phosphor-icons/react";
+import { useMutation } from "@tanstack/react-query";
+import { addContact as addBackendContact } from "@/queries/contacts";
+import { useContactsStore } from "@/store/contacts";
+import { toast } from "sonner";
 
 const schema = yup.object({
   username: yup.string().required().min(3).label("Username"),
@@ -25,23 +29,37 @@ export function AddNewContactDialog() {
     resolver: yupResolver(schema),
   });
   const [open, setOpen] = useState<boolean>(false);
-  const [pending, setPending] = useState<boolean>(false);
 
-  function onSubmit(data: Schema) {
-    setPending(true);
+  const { addContact } = useContactsStore();
 
-    setTimeout(() => {
-      setPending(false);
+  const { mutateAsync, isPending } = useMutation({
+    mutationKey: ["contact"],
+    mutationFn: (username: string) => addBackendContact(username),
+  });
+
+  async function submit(data: Schema) {
+    try {
+      const contact = await mutateAsync(data.username);
+
+      addContact(contact);
       reset();
       setOpen(false);
-    }, 1000);
+    } catch (err) {
+      toast.error((err as Error).message);
+    }
   }
+
+  useEffect(() => {
+    reset();
+
+    // eslint-disable-next-line
+  }, [open]);
 
   return (
     <DialogPrimitive.Root open={open} onOpenChange={setOpen}>
       <DialogPrimitive.Trigger asChild>
         <Button size="icon">
-          <UserPlus size={20} />
+          <UserPlusIcon size={20} />
         </Button>
       </DialogPrimitive.Trigger>
       <AnimatePresence>
@@ -66,7 +84,7 @@ export function AddNewContactDialog() {
                 initial={{ opacity: 0, scale: 0.5 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.5 }}
-                onSubmit={handleSubmit(onSubmit)}
+                onSubmit={handleSubmit(submit)}
               >
                 <DialogPrimitive.Title className="text-2xl font-bold">
                   Add New Contact
@@ -79,8 +97,8 @@ export function AddNewContactDialog() {
                       placeholder="Username"
                       {...register("username")}
                     />
-                    <Button disabled={pending}>
-                      {pending && <Loader2 className="animate-spin" />}
+                    <Button disabled={isPending}>
+                      {isPending && <Loader2 className="animate-spin" />}
                       Add
                     </Button>
                   </div>
@@ -88,7 +106,10 @@ export function AddNewContactDialog() {
                     {errors.username?.message}
                   </p>
                 </div>
-                <DialogPrimitive.Close className="ring-offset-background focus:ring-ring data-[state=open]:bg-accent data-[state=open]:text-muted-foreground absolute top-4 right-4 rounded-xs opacity-70 transition-opacity hover:opacity-100 focus:ring-2 focus:ring-offset-2 focus:outline-hidden disabled:pointer-events-none [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4">
+                <DialogPrimitive.Close
+                  type="button"
+                  className="ring-offset-background focus:ring-ring data-[state=open]:bg-accent data-[state=open]:text-muted-foreground absolute top-4 right-4 rounded-xs opacity-70 transition-opacity hover:opacity-100 focus:ring-2 focus:ring-offset-2 focus:outline-hidden disabled:pointer-events-none [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4"
+                >
                   <XIcon />
                   <span className="sr-only">Close</span>
                 </DialogPrimitive.Close>

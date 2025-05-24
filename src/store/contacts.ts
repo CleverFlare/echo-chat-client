@@ -1,5 +1,13 @@
 import { create } from "zustand";
-import type { Message } from "./chat";
+import type { Message, MessageStatus } from "./chat";
+
+export type ContactLastMessage = {
+  id: string;
+  senderId: string;
+  content: string;
+  status: MessageStatus;
+  timestamp: string;
+};
 
 export type Contact = {
   id: string;
@@ -9,12 +17,12 @@ export type Contact = {
   avatarUrl?: string;
   chatId: string;
   unread: number;
-  online: boolean;
-  lastMessage: Message | undefined;
+  lastMessage?: ContactLastMessage;
 };
 
 export type ContactsState = {
   contacts: Contact[];
+  addContact: (contact: Contact) => void;
   getContact: (contactsId: string) => Contact | undefined;
   setContacts: (contacts: Contact[]) => void;
   updateStatus: (id: string, status: boolean) => void;
@@ -24,6 +32,16 @@ export type ContactsState = {
 
 export const useContactsStore = create<ContactsState>((set, get) => ({
   contacts: [],
+  addContact: (contact: Contact) =>
+    set((state) => {
+      const preexistingContact = state.contacts.find(
+        (contactItem) => contactItem.id === contact.id,
+      );
+
+      if (preexistingContact) return state;
+
+      return { contacts: [...state.contacts, contact] };
+    }),
   readAllMessages: (contactId) =>
     set((state) => {
       const mutableState = { ...state };
@@ -62,7 +80,13 @@ export const useContactsStore = create<ContactsState>((set, get) => ({
         (contact) => contact.chatId === chatId,
       );
 
-      mutableContacts[contactIndex].lastMessage = message;
+      mutableContacts[contactIndex].lastMessage = {
+        id: message.id,
+        status: message.status,
+        content: message.content,
+        senderId: message.sender.id,
+        timestamp: message.timestamp,
+      };
 
       return { contacts: [...mutableContacts] };
     }),

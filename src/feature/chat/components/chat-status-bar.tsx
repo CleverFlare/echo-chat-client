@@ -1,6 +1,5 @@
 import { Avatar, AvatarImage } from "../../../components/ui/avatar";
 import { format } from "date-fns";
-import ConditionalRenderer from "../../../components/utils/conditional-renderer";
 import { type ComponentProps } from "react";
 import { useNamedBlocks } from "@/lib/use-named-blocks";
 import { cn } from "@/lib/utils";
@@ -40,14 +39,11 @@ export const UserStatus = ({ contact }: UserStatusProps) => {
         <p className="font-semibold text-sm">
           {contact.firstName} {contact.lastName}
         </p>
-        <ConditionalRenderer shouldRender={!contact.online}>
-          <p className="text-xs text-gray-500">
-            {format(new Date().toISOString()!, "d MMM, yy")}
-          </p>
-        </ConditionalRenderer>
-        <ConditionalRenderer shouldRender={contact.online}>
-          <p className="text-purple-500 text-xs font-medium">Online</p>
-        </ConditionalRenderer>
+        <p className="text-xs text-gray-500">
+          {contact?.lastMessage?.timestamp
+            ? format(contact?.lastMessage?.timestamp, "d MMM, yy")
+            : "You haven't started chatting yet"}
+        </p>
       </div>
     </div>
   );
