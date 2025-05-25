@@ -64,6 +64,8 @@ export const useChatStore = create<ChatState>((set, get) => {
         const mutableMessage = { ...state.messages };
 
         for (const chatId of chatIds) {
+          if (chatId in mutableMessage) continue;
+
           mutableMessage[chatId] = {};
         }
 
@@ -85,7 +87,7 @@ export const useChatStore = create<ChatState>((set, get) => {
           );
 
         const mutableMessages = { ...state.messages };
-        const isChatIdAbsent = chatId in state.messages;
+        const isChatIdAbsent = chatId in state.messages === false;
 
         useContactsStore.getState().updateLastMessage(chatId, message);
 

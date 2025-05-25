@@ -15,7 +15,7 @@ export function FilteredContactList({
 }) {
   // const router = useRouter();
   const isEmptyContacts = contactsProp.length <= 0;
-  const { messages, setActiveChat } = useChatStore();
+  const setActiveChat = useChatStore((state) => state.setActiveChat);
 
   if (isEmptyContacts) return null;
 
@@ -28,25 +28,13 @@ export function FilteredContactList({
         contact.username.toLowerCase().includes(search.toLowerCase()),
     )
     .sort((a, b) => {
-      const getLastTimestamp = (
-        msgs: Record<string, Message[]> | undefined,
-      ) => {
-        if (!msgs) return null;
+      if (!a?.lastMessage?.timestamp) return 1;
+      if (!b?.lastMessage?.timestamp) return -1;
 
-        const allMessages = Object.values(msgs).flat();
-        const last = allMessages.at(-1);
-        return last?.timestamp ? new Date(last.timestamp).getTime() : null;
-      };
-
-      const aTime = getLastTimestamp(messages?.[a.id]);
-      const bTime = getLastTimestamp(messages?.[b.id]);
-
-      if (!aTime && !bTime) return 0;
-      if (!aTime) return 1;
-      if (!bTime) return -1;
-
-      // More recent timestamps come first (descending)
-      return bTime - aTime;
+      return (
+        new Date(b!.lastMessage!.timestamp!).getTime() -
+        new Date(a!.lastMessage!.timestamp!).getTime()
+      );
     });
 
   const isEmptySearchResults = contacts.length <= 0;
