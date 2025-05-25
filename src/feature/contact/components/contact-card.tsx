@@ -66,16 +66,10 @@ export function ContactCard({
         <div
           className={cn(
             "grid grid-cols-[1fr_auto] gap-1 items-center",
-            areYouTheSender && "grid-cols-[auto_1fr_auto]",
+            areYouTheSender && "grid-cols-[auto_auto_1fr_auto]",
           )}
         >
           <ConditionalRenderer shouldRender={lastMessage}>
-            <ConditionalRenderer shouldRender={areYouTheSender}>
-              <p className="text-sm text-start text-gray-500 truncate">You:</p>
-            </ConditionalRenderer>
-            <p className="text-sm text-start text-gray-500 truncate">
-              {lastMessage?.content ?? "..."}
-            </p>
             <ConditionalRenderer shouldRender={areYouTheSender}>
               <ConditionalRenderer shouldRender={isLastMessageSent}>
                 <CheckIcon className="text-gray-500" size={16} />
@@ -87,6 +81,12 @@ export function ContactCard({
                 <ChecksIcon className="text-sky-500" size={20} />
               </ConditionalRenderer>
             </ConditionalRenderer>
+            <ConditionalRenderer shouldRender={areYouTheSender}>
+              <p className="text-sm text-start text-gray-500 truncate">You:</p>
+            </ConditionalRenderer>
+            <p className="text-sm text-start text-gray-500 truncate">
+              {lastMessage?.content ?? "..."}
+            </p>
             <ConditionalRenderer shouldRender={unread}>
               <p className="w-[20px] h-[20px] rounded-full bg-gradient-to-r from-purple-500 to-purple-700 text-white text-xs flex justify-center items-center ms-auto">
                 {unread}
