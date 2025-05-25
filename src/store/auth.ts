@@ -1,5 +1,4 @@
 import { create } from "zustand";
-import cookies from "browser-cookies";
 
 export type User = {
   id: string;
@@ -19,7 +18,7 @@ export type AuthState = {
 
 export const useAuthStore = create<AuthState>((set) => ({
   user: null,
-  token: cookies.get("OutSiteJWT") ?? null,
+  token: localStorage.getItem("OutSiteJWT") ?? null,
   reset: () => {
     set({ user: null, token: null });
   },

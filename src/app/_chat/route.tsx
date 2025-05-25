@@ -1,3 +1,4 @@
+import { SocketProvider } from "@/components/socket-provider";
 import ContactsList from "@/feature/contact/components/contacts-list";
 import { cn } from "@/lib/utils";
 import { useAuthStore } from "@/store/auth";
@@ -26,18 +27,20 @@ function RouteComponent() {
 
   const { activeChatId } = useChatStore();
   return (
-    <div className="h-full max-h-[100vh] max-w-[100vw] overflow-hidden">
-      <div
-        className={cn(
-          "grid md:grid-cols-[auto_1fr] grid-cols-[100vw_100vw] h-full transition-transform ease",
-          activeChatId && isSmall ? "-translate-x-full" : "",
-        )}
-      >
-        <ContactsList />
-        <div className="flex md:p-4 max-h-full overflow-hidden">
-          <Outlet />
+    <SocketProvider>
+      <div className="h-full max-h-[100vh] max-w-[100vw] overflow-hidden">
+        <div
+          className={cn(
+            "grid md:grid-cols-[auto_1fr] grid-cols-[100vw_100vw] h-full transition-transform ease",
+            activeChatId && isSmall ? "-translate-x-full" : "",
+          )}
+        >
+          <ContactsList />
+          <div className="flex md:p-4 max-h-full overflow-hidden">
+            <Outlet />
+          </div>
         </div>
       </div>
-    </div>
+    </SocketProvider>
   );
 }

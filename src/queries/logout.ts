@@ -1,15 +1,16 @@
-import { axiosInstance } from "@/lib/axios";
-import { AxiosError, isAxiosError } from "axios";
+import { useAuthStore } from "@/store/auth";
 
 export async function logout() {
-  try {
-    await axiosInstance.get("/logout");
-  } catch (err) {
-    if (isAxiosError(err))
-      throw new Error(
-        (err as AxiosError<{ message: string }>)?.response?.data.message,
-      );
-
-    throw err;
-  }
+  useAuthStore.getState().reset();
+  localStorage.removeItem("OutSiteJWT");
+  // try {
+  //   await axiosInstance.get("/logout");
+  // } catch (err) {
+  //   if (isAxiosError(err))
+  //     throw new Error(
+  //       (err as AxiosError<{ message: string }>)?.response?.data.message,
+  //     );
+  //
+  //   throw err;
+  // }
 }

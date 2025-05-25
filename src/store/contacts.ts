@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import type { Message, MessageStatus } from "./chat";
+import { useChatStore, type Message, type MessageStatus } from "./chat";
 
 export type ContactLastMessage = {
   id: string;
@@ -31,7 +31,9 @@ export type ContactsState = {
 
 export const useContactsStore = create<ContactsState>((set, get) => ({
   contacts: [],
-  addContact: (contact: Contact) =>
+  addContact: (contact: Contact) => {
+    useChatStore.getState().prepareChatIds([contact.chatId]);
+
     set((state) => {
       const preexistingContact = state.contacts.find(
         (contactItem) => contactItem.id === contact.id,
@@ -40,7 +42,8 @@ export const useContactsStore = create<ContactsState>((set, get) => ({
       if (preexistingContact) return state;
 
       return { contacts: [...state.contacts, contact] };
-    }),
+    });
+  },
   resetUnread: (contactId) =>
     set((state) => {
       const mutableState = { ...state };
@@ -58,7 +61,13 @@ export const useContactsStore = create<ContactsState>((set, get) => ({
 
     return state.contacts.find((contact) => contact.chatId == chatId);
   },
-  setContacts: (contacts) => set({ contacts }),
+  setContacts: (contacts) => {
+    useChatStore
+      .getState()
+      .prepareChatIds(contacts.map((contact) => contact.chatId));
+
+    set({ contacts });
+  },
   updateLastMessage: (chatId, message) =>
     set((state) => {
       const mutableContacts = [...state.contacts];

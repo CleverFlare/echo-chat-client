@@ -51,13 +51,10 @@ export default function MessagesList() {
   const { isPending, data } = useQuery({
     queryKey: ["chat", activeChatId!],
     queryFn: () => getMessages(activeChatId!),
-    enabled: !Object.keys(allMessages).includes(activeChatId!),
   });
 
   useEffect(() => {
-    if (!isPending && data)
-      if (!Object.keys(allMessages).includes(activeChatId!))
-        setMessages(activeChatId!, data);
+    if (!isPending && data) setMessages(activeChatId!, data);
 
     // eslint-disable-next-line
   }, [isPending, data, activeChatId]);

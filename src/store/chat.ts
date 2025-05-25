@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { useContactsStore } from "./contacts";
+import { socket } from "@/lib/socket";
 
 // pending -> awaiting network connection to send
 // sent -> awaiting the contact to received it
@@ -25,7 +26,12 @@ export type ChatState = {
   activeChatId: string | null;
   setActiveChat: (chatId: string | null) => void;
   messages: Record<string, Record<string, Message[]>>; // chatId -> messages
-  addMessage: (chatId: string, date: string, message: Message) => void;
+  addMessage: (
+    chatId: string,
+    date: string,
+    message: Message,
+    isSocket?: boolean,
+  ) => void;
   setMessages: (chatId: string, messages: Record<string, Message[]>) => void;
   setMessageStatus: (
     chatId: string,
@@ -33,6 +39,7 @@ export type ChatState = {
     messageId: string,
     status: MessageStatus,
   ) => void;
+  prepareChatIds: (chatIds: string[]) => void;
   editMessage: (
     chatId: string,
     date: string,
@@ -41,52 +48,83 @@ export type ChatState = {
   ) => void;
 };
 
-export const useChatStore = create<ChatState>((set) => ({
-  activeChatId: null,
-  setActiveChat: (chatId) => set({ activeChatId: chatId }),
-  messages: {},
-  addMessage: (chatId, date, message) =>
-    set((state) => {
-      const mutableMessages = { ...state.messages };
-      const isChatIdAbsent = !state.messages?.[chatId];
+export const useChatStore = create<ChatState>((set, get) => {
+  socket.on("receive-message", (message: Message & { chatId: string }) => {
+    const { chatId, timestamp } = message;
 
-      useContactsStore.getState().updateLastMessage(chatId, message);
+    get().addMessage(chatId, timestamp.split("T")[0], message, true);
+  });
 
-      if (isChatIdAbsent) {
-        mutableMessages[chatId] = {};
-        mutableMessages[chatId][date] = [];
-      }
+  return {
+    activeChatId: null,
+    setActiveChat: (chatId) => set({ activeChatId: chatId }),
+    messages: {},
+    prepareChatIds: (chatIds) =>
+      set((state) => {
+        const mutableMessage = { ...state.messages };
 
-      mutableMessages[chatId][date] = [
-        ...mutableMessages[chatId][date],
-        message,
-      ];
+        for (const chatId of chatIds) {
+          mutableMessage[chatId] = {};
+        }
 
-      return { ...state, messages: { ...mutableMessages } };
-    }),
-  setMessages: (chatId, messages) =>
-    set((state) => ({ messages: { ...state.messages, [chatId]: messages } })),
-  setMessageStatus: (chatId, date, messageId, status) =>
-    set((state) => {
-      const mutableState = { ...state };
-      const messageIndex = state.messages[chatId][date].findIndex(
-        (message) => message.id === messageId,
-      );
+        return { ...state, messages: { ...state.messages, ...mutableMessage } };
+      }),
+    addMessage: (chatId, date, message, isSocket = false) =>
+      set((state) => {
+        if (!isSocket)
+          socket.emit(
+            "send-message",
+            useContactsStore
+              .getState()
+              .contacts.find((contact) => contact.chatId === get().activeChatId)
+              ?.id,
+            {
+              ...message,
+              chatId,
+            },
+          );
 
-      mutableState.messages[chatId][date][messageIndex].status = status;
+        const mutableMessages = { ...state.messages };
+        const isChatIdAbsent = chatId in state.messages;
 
-      return { ...mutableState };
-    }),
-  editMessage: (chatId, date, messageId, content) =>
-    set((state) => {
-      const mutableState = { ...state };
-      const messageIndex = state.messages[chatId][date].findIndex(
-        (message) => message.id === messageId,
-      );
+        useContactsStore.getState().updateLastMessage(chatId, message);
 
-      mutableState.messages[chatId][date][messageIndex].content = content;
-      mutableState.messages[chatId][date][messageIndex].isEdited = true;
+        if (isChatIdAbsent) {
+          mutableMessages[chatId] = {};
+          mutableMessages[chatId][date] = [];
+        }
 
-      return { ...mutableState };
-    }),
-}));
+        mutableMessages[chatId][date] = [
+          ...mutableMessages[chatId][date],
+          message,
+        ];
+
+        return { ...state, messages: mutableMessages };
+      }),
+    setMessages: (chatId, messages) =>
+      set((state) => ({ messages: { ...state.messages, [chatId]: messages } })),
+    setMessageStatus: (chatId, date, messageId, status) =>
+      set((state) => {
+        const mutableState = { ...state };
+        const messageIndex = state.messages[chatId][date].findIndex(
+          (message) => message.id === messageId,
+        );
+
+        mutableState.messages[chatId][date][messageIndex].status = status;
+
+        return { ...mutableState };
+      }),
+    editMessage: (chatId, date, messageId, content) =>
+      set((state) => {
+        const mutableState = { ...state };
+        const messageIndex = state.messages[chatId][date].findIndex(
+          (message) => message.id === messageId,
+        );
+
+        mutableState.messages[chatId][date][messageIndex].content = content;
+        mutableState.messages[chatId][date][messageIndex].isEdited = true;
+
+        return { ...mutableState };
+      }),
+  };
+});

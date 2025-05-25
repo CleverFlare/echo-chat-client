@@ -3,6 +3,7 @@ import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 import path from "path";
 import { TanStackRouterVite } from "@tanstack/router-plugin/vite";
+// import { readFileSync } from "fs";
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -18,6 +19,22 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
+    },
+  },
+  server: {
+    allowedHosts: ["myapp.local"],
+    host: "0.0.0.0",
+    // https: {
+    //   key: readFileSync(path.resolve(__dirname, "key.pem")),
+    //   cert: readFileSync(path.resolve(__dirname, "cert.pem")),
+    // },
+    proxy: {
+      "/api": {
+        target: "http://192.168.1.9:3000",
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, ""),
+        secure: false,
+      },
     },
   },
 });

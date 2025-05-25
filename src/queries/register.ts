@@ -15,6 +15,8 @@ export async function register(data: RegisterData) {
       data,
     );
 
+    localStorage.setItem("OutSiteJWT", response.data.token);
+
     return response.data.token;
   } catch (err) {
     if (isAxiosError(err))

@@ -23,6 +23,8 @@ export async function addContact(username: string) {
       username,
     });
 
+    console.log("RESPONSE", response.data);
+
     return response.data;
   } catch (err) {
     if (isAxiosError(err))

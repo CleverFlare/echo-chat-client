@@ -1,6 +1,36 @@
-import axios from "axios";
+import { useAuthStore } from "@/store/auth";
+import axios, { AxiosError, HttpStatusCode, type AxiosResponse } from "axios";
 
 export const axiosInstance = axios.create({
-  baseURL: import.meta.env.VITE_SERVER_URL,
+  baseURL: "/api",
   withCredentials: true,
 });
+
+axiosInstance.interceptors.request.use((config) => {
+  const token = localStorage.getItem("OutSiteJWT");
+
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+
+  return config;
+});
+
+axiosInstance.interceptors.response.use(
+  (
+    response: AxiosResponse<unknown, unknown>,
+  ): AxiosResponse<unknown, unknown> => {
+    return response;
+  },
+  (error: AxiosError) => {
+    const isUnauthenticated =
+      error.response?.status === HttpStatusCode.Unauthorized;
+
+    if (isUnauthenticated) {
+      localStorage.removeItem("OutSiteJWT");
+      useAuthStore.getState().reset();
+    }
+
+    throw error;
+  },
+);

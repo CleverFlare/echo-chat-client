@@ -13,6 +13,8 @@ export async function login(data: LoginData) {
       data,
     );
 
+    localStorage.setItem("OutSiteJWT", response.data.token);
+
     return response.data.token;
   } catch (err) {
     if (isAxiosError(err))

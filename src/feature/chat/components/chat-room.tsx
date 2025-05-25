@@ -49,7 +49,7 @@ function ChatRoom({ className, ...props }: ChatWindowProps) {
 
   const pushMessages = (message: string) => {
     addMessage(activeChatId!, toLocalISOString().split("T")[0], {
-      id: crypto.randomUUID(),
+      id: Date.now().toString(36) + Math.random().toString(36).substring(2, 15),
       senderId: user.id,
       isEdited: false,
       status: "read",
