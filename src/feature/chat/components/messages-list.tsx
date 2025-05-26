@@ -17,9 +17,11 @@ import { range } from "@/lib/range";
 export default function MessagesList() {
   const user = useAuthStore((state) => state.user);
   const { activeChatId, setMessages } = useChatStore();
-  const messages = useChatStore((state) => state.messages[activeChatId!]);
   const allMessages = useChatStore((state) => state.messages);
+  const messages = allMessages[activeChatId!];
   const { resetUnread } = useContactsStore();
+
+  console.log("MESSAGES", messages);
 
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const [isAtBottom, setIsAtBottom] = useState<boolean>(true);

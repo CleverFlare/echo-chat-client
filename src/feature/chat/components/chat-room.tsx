@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { type ComponentProps } from "react";
+import { useEffect, type ComponentProps } from "react";
 import ChatStatusBar, {
   StartSide,
   UserStatus,
@@ -26,6 +26,14 @@ function ChatRoom({ className, ...props }: ChatWindowProps) {
     enabled: false,
   });
 
+  useEffect(() => {
+    return () => {
+      setActiveChat(null);
+    };
+
+    // eslint-disable-next-line
+  }, []);
+
   const activeContact = getContactByChatId(activeChatId!);
 
   if (!activeContact || isPending || !user) {
@@ -48,7 +56,8 @@ function ChatRoom({ className, ...props }: ChatWindowProps) {
   }
 
   const pushMessages = (message: string) => {
-    addMessage(activeChatId!, toLocalISOString().split("T")[0], {
+    const currentDate = toLocalISOString().split("T")[0];
+    addMessage(activeChatId!, currentDate, {
       id: Date.now().toString(36) + Math.random().toString(36).substring(2, 15),
       senderId: user.id,
       isEdited: false,

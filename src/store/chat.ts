@@ -93,6 +93,11 @@ export const useChatStore = create<ChatState>((set, get) => {
 
         if (isChatIdAbsent) {
           mutableMessages[chatId] = {};
+        }
+
+        const isDateAbsent = !Array.isArray(mutableMessages[chatId][date]);
+
+        if (isDateAbsent) {
           mutableMessages[chatId][date] = [];
         }
 
