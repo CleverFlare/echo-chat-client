@@ -22,7 +22,7 @@ export default defineConfig({
     },
   },
   server: {
-    allowedHosts: ["myapp.local"],
+    allowedHosts: true,
     host: "0.0.0.0",
     // https: {
     //   key: readFileSync(path.resolve(__dirname, "key.pem")),
