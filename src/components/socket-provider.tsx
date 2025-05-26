@@ -13,6 +13,8 @@ export const SocketProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     if (token) socket.connect();
 
+    if (!token && socket.connected) socket.disconnect();
+
     return () => {
       socket.disconnect();
     };
