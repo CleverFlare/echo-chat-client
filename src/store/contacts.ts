@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { useChatStore, type Message, type MessageStatus } from "./chat";
+import { socket } from "@/lib/socket";
 
 export type ContactLastMessage = {
   id: string;
@@ -29,61 +30,67 @@ export type ContactsState = {
   updateLastMessage: (contactId: string, message: Message) => void;
 };
 
-export const useContactsStore = create<ContactsState>((set, get) => ({
-  contacts: [],
-  addContact: (contact: Contact) => {
-    useChatStore.getState().prepareChatIds([contact.chatId]);
+export const useContactsStore = create<ContactsState>((set, get) => {
+  socket.on("new-contact", (contact: Contact) => {
+    get().addContact(contact);
+  });
 
-    set((state) => {
-      const preexistingContact = state.contacts.find(
-        (contactItem) => contactItem.id === contact.id,
-      );
+  return {
+    contacts: [],
+    addContact: (contact: Contact) => {
+      useChatStore.getState().prepareChatIds([contact.chatId]);
 
-      if (preexistingContact) return state;
+      set((state) => {
+        const preexistingContact = state.contacts.find(
+          (contactItem) => contactItem.id === contact.id,
+        );
 
-      return { contacts: [...state.contacts, contact] };
-    });
-  },
-  resetUnread: (contactId) =>
-    set((state) => {
-      const mutableState = { ...state };
-      const contactIndex = mutableState.contacts.findIndex(
-        (contact) => contact.chatId === contactId,
-      );
+        if (preexistingContact) return state;
 
-      mutableState.contacts[contactIndex].unread = 0;
+        return { contacts: [...state.contacts, contact] };
+      });
+    },
+    resetUnread: (contactId) =>
+      set((state) => {
+        const mutableState = { ...state };
+        const contactIndex = mutableState.contacts.findIndex(
+          (contact) => contact.chatId === contactId,
+        );
 
-      return mutableState;
-    }),
-  getContactByChatId: (chatId: string) => {
-    const state = get();
-    if (state.contacts === null) return;
+        mutableState.contacts[contactIndex].unread = 0;
 
-    return state.contacts.find((contact) => contact.chatId == chatId);
-  },
-  setContacts: (contacts) => {
-    useChatStore
-      .getState()
-      .prepareChatIds(contacts.map((contact) => contact.chatId));
+        return mutableState;
+      }),
+    getContactByChatId: (chatId: string) => {
+      const state = get();
+      if (state.contacts === null) return;
 
-    set({ contacts });
-  },
-  updateLastMessage: (chatId, message) =>
-    set((state) => {
-      const mutableContacts = [...state.contacts];
+      return state.contacts.find((contact) => contact.chatId == chatId);
+    },
+    setContacts: (contacts) => {
+      useChatStore
+        .getState()
+        .prepareChatIds(contacts.map((contact) => contact.chatId));
 
-      const contactIndex = state.contacts.findIndex(
-        (contact) => contact.chatId === chatId,
-      );
+      set({ contacts });
+    },
+    updateLastMessage: (chatId, message) =>
+      set((state) => {
+        const mutableContacts = [...state.contacts];
 
-      mutableContacts[contactIndex].lastMessage = {
-        id: message.id,
-        status: message.status,
-        content: message.content,
-        senderId: message.senderId,
-        timestamp: message.timestamp,
-      };
+        const contactIndex = state.contacts.findIndex(
+          (contact) => contact.chatId === chatId,
+        );
 
-      return { contacts: [...mutableContacts] };
-    }),
-}));
+        mutableContacts[contactIndex].lastMessage = {
+          id: message.id,
+          status: message.status,
+          content: message.content,
+          senderId: message.senderId,
+          timestamp: message.timestamp,
+        };
+
+        return { contacts: [...mutableContacts] };
+      }),
+  };
+});
