@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@custom-react-hooks/use-update-effect": "^1.5.1",
     "@hookform/resolvers": "^5.0.1",
     "@phosphor-icons/react": "^2.1.8",
     "@radix-ui/react-avatar": "^1.1.9",
@@ -42,6 +43,7 @@
     "sonner": "^2.0.3",
     "tailwind-merge": "^3.3.0",
     "tailwindcss": "^4.1.7",
+    "use-is-typing": "^1.0.3",
     "yup": "^1.6.1",
     "zod": "^3.25.17",
     "zustand": "^5.0.4"

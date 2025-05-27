@@ -102,11 +102,20 @@ export const useChatStore = create<ChatState>((set, get) => {
         }
 
         mutableMessages[chatId][date] = [
-          ...mutableMessages[chatId][date],
+          ...state.messages[chatId][date],
           message,
         ];
 
-        return { ...state, messages: mutableMessages };
+        return {
+          ...state,
+          messages: {
+            ...state.messages,
+            [chatId]: {
+              ...mutableMessages[chatId],
+              [date]: [...mutableMessages[chatId][date]],
+            },
+          },
+        };
       }),
     setMessages: (chatId, messages) =>
       set((state) => ({ messages: { ...state.messages, [chatId]: messages } })),

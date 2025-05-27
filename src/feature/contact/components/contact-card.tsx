@@ -13,6 +13,7 @@ type ContactCardProps = {
   active?: boolean;
   unread: number;
   lastMessage: ContactLastMessage | undefined;
+  isTyping: boolean;
 } & ComponentProps<"button">;
 
 export function ContactCard({
@@ -22,6 +23,7 @@ export function ContactCard({
   lastMessage,
   unread,
   onClick,
+  isTyping = false,
   ...props
 }: ContactCardProps) {
   const { user } = useAuthStore();
@@ -70,23 +72,32 @@ export function ContactCard({
           )}
         >
           <ConditionalRenderer shouldRender={lastMessage}>
-            <ConditionalRenderer shouldRender={areYouTheSender}>
-              <ConditionalRenderer shouldRender={isLastMessageSent}>
-                <CheckIcon className="text-gray-500" size={16} />
-              </ConditionalRenderer>
-              <ConditionalRenderer shouldRender={isLastMessageDelivered}>
-                <ChecksIcon className="text-gray-500" size={20} />
-              </ConditionalRenderer>
-              <ConditionalRenderer shouldRender={isLastMessageRead}>
-                <ChecksIcon className="text-sky-500" size={20} />
-              </ConditionalRenderer>
+            <ConditionalRenderer shouldRender={isTyping}>
+              <p className="text-sm text-start col-span-3 text-purple-500">
+                typing...
+              </p>
             </ConditionalRenderer>
-            <ConditionalRenderer shouldRender={areYouTheSender}>
-              <p className="text-sm text-start text-gray-500 truncate">You:</p>
+            <ConditionalRenderer shouldRender={!isTyping}>
+              <ConditionalRenderer shouldRender={areYouTheSender}>
+                <ConditionalRenderer shouldRender={isLastMessageSent}>
+                  <CheckIcon className="text-gray-500" size={16} />
+                </ConditionalRenderer>
+                <ConditionalRenderer shouldRender={isLastMessageDelivered}>
+                  <ChecksIcon className="text-gray-500" size={20} />
+                </ConditionalRenderer>
+                <ConditionalRenderer shouldRender={isLastMessageRead}>
+                  <ChecksIcon className="text-sky-500" size={20} />
+                </ConditionalRenderer>
+              </ConditionalRenderer>
+              <ConditionalRenderer shouldRender={areYouTheSender}>
+                <p className="text-sm text-start text-gray-500 truncate">
+                  You:
+                </p>
+              </ConditionalRenderer>
+              <p className="text-sm text-start text-gray-500 truncate">
+                {lastMessage?.content ?? "..."}
+              </p>
             </ConditionalRenderer>
-            <p className="text-sm text-start text-gray-500 truncate">
-              {lastMessage?.content ?? "..."}
-            </p>
             <ConditionalRenderer shouldRender={unread}>
               <p className="w-[20px] h-[20px] rounded-full bg-gradient-to-r from-purple-500 to-purple-700 text-white text-xs flex justify-center items-center ms-auto">
                 {unread}

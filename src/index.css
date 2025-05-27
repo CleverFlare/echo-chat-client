@@ -6,6 +6,20 @@
 
 @theme {
   --font-display: "Rubik", "sans-serif";
+  --animate-murcery:
+    mercuryTypingAnimation 1.5s infinite ease-in-out, var(--animate-pulse);
+
+  @keyframes mercuryTypingAnimation {
+    0% {
+      transform: translateY(0px);
+    }
+    28% {
+      transform: translateY(-7px);
+    }
+    44% {
+      transform: translateY(0px);
+    }
+  }
 }
 
 @theme inline {

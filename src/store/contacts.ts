@@ -19,6 +19,7 @@ export type Contact = {
   chatId: string;
   unread: number;
   lastMessage?: ContactLastMessage;
+  isTyping: boolean;
 };
 
 export type ContactsState = {
@@ -28,6 +29,7 @@ export type ContactsState = {
   setContacts: (contacts: Contact[]) => void;
   resetUnread: (contactId: string) => void;
   updateLastMessage: (contactId: string, message: Message) => void;
+  updateIsTyping: (contactId: string, isTyping: boolean) => void;
 };
 
 export const useContactsStore = create<ContactsState>((set, get) => {
@@ -35,8 +37,35 @@ export const useContactsStore = create<ContactsState>((set, get) => {
     get().addContact(contact);
   });
 
+  socket.on(
+    "contact-is-typing",
+    ({ id, isTyping }: { id: string; isTyping: boolean }) => {
+      get().updateIsTyping(id, isTyping);
+    },
+  );
+
   return {
     contacts: [],
+    updateIsTyping: (contactId: string, isTyping: boolean) =>
+      set((state) => {
+        const mutableContacts = [...state.contacts];
+
+        const contactIndex = state.contacts.findIndex(
+          (contact) => contact.id === contactId,
+        );
+
+        if (contactIndex === -1) {
+          console.warn(
+            "Unable to find the contact index via the ID",
+            contactId,
+          );
+          return state;
+        }
+
+        mutableContacts[contactIndex].isTyping = isTyping;
+
+        return { ...state, contacts: [...mutableContacts] };
+      }),
     addContact: (contact: Contact) => {
       useChatStore.getState().prepareChatIds([contact.chatId]);
 
@@ -47,7 +76,9 @@ export const useContactsStore = create<ContactsState>((set, get) => {
 
         if (preexistingContact) return state;
 
-        return { contacts: [...state.contacts, contact] };
+        return {
+          contacts: [...state.contacts, { ...contact, isTyping: false }],
+        };
       });
     },
     resetUnread: (contactId) =>
@@ -72,7 +103,9 @@ export const useContactsStore = create<ContactsState>((set, get) => {
         .getState()
         .prepareChatIds(contacts.map((contact) => contact.chatId));
 
-      set({ contacts });
+      set({
+        contacts: contacts.map((contact) => ({ ...contact, isTyping: false })),
+      });
     },
     updateLastMessage: (chatId, message) =>
       set((state) => {
