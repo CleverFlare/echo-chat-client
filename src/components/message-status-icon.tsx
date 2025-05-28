@@ -9,13 +9,13 @@ import {
 } from "@phosphor-icons/react";
 
 export function MessageStatusIcon({
-  state,
+  status,
   size,
   className,
   weight,
   ...props
-}: { state: MessageStatus } & IconProps) {
-  switch (state) {
+}: { status: MessageStatus } & IconProps) {
+  switch (status) {
     case "pending":
       return <ClockIcon size={size ?? 16} {...props} />;
     case "sent":

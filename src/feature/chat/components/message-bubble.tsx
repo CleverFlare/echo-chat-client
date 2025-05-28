@@ -3,7 +3,7 @@ import { cva } from "class-variance-authority";
 import { format } from "date-fns";
 import { type ComponentProps } from "react";
 import ConditionalRenderer from "../../../components/utils/conditional-renderer";
-import { MessageStatusIcon } from "./message-status-icon";
+import { MessageStatusIcon } from "../../../components/message-status-icon";
 import { type MessageStatus } from "@/store/chat";
 
 interface MessageProps extends ComponentProps<"div"> {
@@ -121,7 +121,7 @@ export default function MessageBubble({
             {format(timestamp, "h:m aaa")}
           </p>
           <ConditionalRenderer shouldRender={isOutgoing}>
-            <MessageStatusIcon state={status} />
+            <MessageStatusIcon status={status} />
           </ConditionalRenderer>
         </div>
       </div>

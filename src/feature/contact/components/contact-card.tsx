@@ -3,9 +3,9 @@ import { type ComponentProps } from "react";
 import { Avatar, AvatarImage } from "../../../components/ui/avatar";
 import { formatDistanceToNow } from "date-fns";
 import ConditionalRenderer from "../../../components/utils/conditional-renderer";
-import { CheckIcon, ChecksIcon } from "@phosphor-icons/react";
 import { useAuthStore } from "@/store/auth";
 import type { ContactLastMessage } from "@/store/contacts";
+import { MessageStatusIcon } from "@/components/message-status-icon";
 
 type ContactCardProps = {
   avatarUrl?: string;
@@ -31,10 +31,6 @@ export function ContactCard({
   if (!user) return null;
 
   const areYouTheSender = lastMessage?.senderId === user!.id;
-
-  const isLastMessageSent = lastMessage?.status === "sent";
-  const isLastMessageDelivered = lastMessage?.status === "delivered";
-  const isLastMessageRead = lastMessage?.status === "read";
 
   return (
     <button
@@ -79,15 +75,7 @@ export function ContactCard({
             </ConditionalRenderer>
             <ConditionalRenderer shouldRender={!isTyping}>
               <ConditionalRenderer shouldRender={areYouTheSender}>
-                <ConditionalRenderer shouldRender={isLastMessageSent}>
-                  <CheckIcon className="text-gray-500" size={16} />
-                </ConditionalRenderer>
-                <ConditionalRenderer shouldRender={isLastMessageDelivered}>
-                  <ChecksIcon className="text-gray-500" size={20} />
-                </ConditionalRenderer>
-                <ConditionalRenderer shouldRender={isLastMessageRead}>
-                  <ChecksIcon className="text-sky-500" size={20} />
-                </ConditionalRenderer>
+                <MessageStatusIcon status={lastMessage?.status ?? "pending"} />
               </ConditionalRenderer>
               <ConditionalRenderer shouldRender={areYouTheSender}>
                 <p className="text-sm text-start text-gray-500 truncate">
