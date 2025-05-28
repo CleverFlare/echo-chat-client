@@ -15,7 +15,7 @@ export function useAutoScroll({
   nearBottomOffset = 200,
   onBottomReached = () => null,
   onNearBottom = () => null,
-  newMessagesScrollBehavior,
+  newMessagesScrollBehavior = "smooth",
   scrollToBottomDependencies,
 }: AutoScrollProps) {
   const scrollElementRef = useRef<HTMLDivElement>(null);
@@ -68,7 +68,7 @@ export function useAutoScroll({
   useUpdateEffect(() => {
     if (scrollElementRef.current === null) return;
 
-    if (!isAtBottomRef.current && isUserNearBottomRef.current) {
+    if (isUserNearBottomRef.current) {
       setTimeout(() => {
         if (scrollElementRef.current === null) return;
 
