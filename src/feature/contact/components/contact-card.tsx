@@ -1,6 +1,10 @@
 import { cn } from "@/lib/utils";
 import { type ComponentProps } from "react";
-import { Avatar, AvatarImage } from "../../../components/ui/avatar";
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from "../../../components/ui/avatar";
 import { formatDistanceToNow } from "date-fns";
 import ConditionalRenderer from "../../../components/utils/conditional-renderer";
 import { useAuthStore } from "@/store/auth";
@@ -44,6 +48,7 @@ export function ContactCard({
     >
       <Avatar>
         <AvatarImage src={avatarUrl}></AvatarImage>
+        <AvatarFallback>{name[0].toUpperCase()}</AvatarFallback>
       </Avatar>
       <div className="flex flex-col flex-1">
         <div className="grid grid-cols-[1fr_auto] justify-between w-full gap-2">

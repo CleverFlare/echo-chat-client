@@ -1,5 +1,6 @@
 import { useAuthStore } from "@/store/auth";
 import axios, { AxiosError, HttpStatusCode, type AxiosResponse } from "axios";
+import { redirect } from "@tanstack/react-router";
 
 export const axiosInstance = axios.create({
   baseURL: "/api",
@@ -29,6 +30,7 @@ axiosInstance.interceptors.response.use(
     if (isUnauthenticated) {
       localStorage.removeItem("OutSiteJWT");
       useAuthStore.getState().reset();
+      throw redirect({ to: "/", reloadDocument: true });
     }
 
     throw error;
