@@ -29,7 +29,7 @@ import { logout } from "@/queries/logout";
 import { Loader2 } from "lucide-react";
 import { getProfile } from "@/queries/profile";
 import { Skeleton } from "@/components/ui/skeleton";
-import { EMPTY_AVATAR_IMAGE } from "@/constants";
+import { useProfileStore } from "@/store/profile";
 
 export default function UserCard() {
   const { user, reset, setUser } = useAuthStore();
@@ -61,13 +61,15 @@ export default function UserCard() {
   // eslint-disable-next-line
   const [_, copy] = useCopyToClipboard();
 
+  const setProfile = useProfileStore((state) => state.setProfile);
+
   return (
     <motion.div
       initial="initial"
       whileHover="hovered"
       className="w-full p-3 rounded-xl grid grid-cols-[auto_1fr_auto] gap-2 h-max transition-all bg-muted"
     >
-      <button>
+      <button onClick={() => setProfile(user!.id)}>
         <ConditionalRenderer shouldRender={!isProfilePending}>
           <Avatar>
             <AvatarImage src={user?.avatarUrl ?? ""} />

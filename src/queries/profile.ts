@@ -1,7 +1,7 @@
 import { axiosInstance } from "@/lib/axios";
 import { AxiosError, isAxiosError } from "axios";
 
-export async function getProfile() {
+export async function getProfile(id?: string) {
   try {
     const response = await axiosInstance.get<{
       id: string;
@@ -9,7 +9,10 @@ export async function getProfile() {
       lastName: string;
       username: string;
       avatarUrl: string | null;
-    }>("/profile");
+      email: string;
+      createdAt: string;
+      bio: string;
+    }>(id ? `/profile/${id}` : "/profile");
 
     return response.data;
   } catch (err) {

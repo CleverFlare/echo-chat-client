@@ -6,6 +6,9 @@ export type User = {
   lastName: string;
   username: string;
   avatarUrl?: string | null;
+  email: string;
+  createdAt: string;
+  bio: string;
 };
 
 export type AuthState = {

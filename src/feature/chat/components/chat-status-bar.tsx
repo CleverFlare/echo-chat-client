@@ -1,9 +1,14 @@
-import { Avatar, AvatarImage } from "../../../components/ui/avatar";
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from "../../../components/ui/avatar";
 import { format } from "date-fns";
 import { type ComponentProps } from "react";
 import { useNamedBlocks } from "@/lib/use-named-blocks";
 import { cn } from "@/lib/utils";
 import { type Contact } from "@/store/contacts";
+import { useProfileStore } from "@/store/profile";
 
 interface UserStatusProps {
   contact: Contact;
@@ -30,10 +35,15 @@ export default function ChatStatusBar({
 }
 
 export const UserStatus = ({ contact }: UserStatusProps) => {
+  const { setProfile } = useProfileStore();
   return (
-    <div className="flex gap-2 z-20">
+    <button
+      className="flex gap-2 z-20 text-start"
+      onClick={() => setProfile(contact.id)}
+    >
       <Avatar className="size-[40px]">
         <AvatarImage src={contact.avatarUrl} alt="avatar" />
+        <AvatarFallback>{contact.firstName[0].toUpperCase()}</AvatarFallback>
       </Avatar>
       <div className="flex flex-col justify-center">
         <p className="font-semibold text-sm">
@@ -45,6 +55,6 @@ export const UserStatus = ({ contact }: UserStatusProps) => {
             : "You haven't started chatting yet"}
         </p>
       </div>
-    </div>
+    </button>
   );
 };
