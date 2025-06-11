@@ -57,6 +57,7 @@ export function FilteredContactList({
             onClick={() => {
               setActiveChat(contact.chatId);
             }}
+            isOnline={contact.isOnline}
             isTyping={contact.isTyping}
             lastMessage={contact?.lastMessage}
             avatarUrl={contact.avatarUrl}

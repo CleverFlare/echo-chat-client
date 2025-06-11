@@ -10,6 +10,7 @@ import ConditionalRenderer from "../../../components/utils/conditional-renderer"
 import { useAuthStore } from "@/store/auth";
 import type { ContactLastMessage } from "@/store/contacts";
 import { MessageStatusIcon } from "@/components/message-status-icon";
+import { Badge } from "@/components/ui/badge";
 
 type ContactCardProps = {
   avatarUrl?: string;
@@ -18,6 +19,7 @@ type ContactCardProps = {
   unread: number;
   lastMessage: ContactLastMessage | undefined;
   isTyping: boolean;
+  isOnline: boolean;
 } & ComponentProps<"button">;
 
 export function ContactCard({
@@ -28,6 +30,7 @@ export function ContactCard({
   unread,
   onClick,
   isTyping = false,
+  isOnline = false,
   ...props
 }: ContactCardProps) {
   const { user } = useAuthStore();
@@ -46,10 +49,15 @@ export function ContactCard({
       onClick={onClick}
       {...props}
     >
-      <Avatar>
-        <AvatarImage src={avatarUrl}></AvatarImage>
-        <AvatarFallback>{name[0].toUpperCase()}</AvatarFallback>
-      </Avatar>
+      <div className="relative">
+        <Avatar>
+          <AvatarImage src={avatarUrl}></AvatarImage>
+          <AvatarFallback>{name[0].toUpperCase()}</AvatarFallback>
+        </Avatar>
+        {isOnline && (
+          <Badge className="size-2.5 p-0 rounded-full bg-purple-500 ring-3 ring-white absolute bottom-0.5 right-0.5" />
+        )}
+      </div>
       <div className="flex flex-col flex-1">
         <div className="grid grid-cols-[1fr_auto] justify-between w-full gap-2">
           <p className="font-semibold text-sm text-start truncate">{name}</p>

@@ -20,6 +20,7 @@ export type Contact = {
   unread: number;
   lastMessage?: ContactLastMessage;
   isTyping: boolean;
+  isOnline: boolean;
 };
 
 export type ContactsState = {
@@ -30,6 +31,7 @@ export type ContactsState = {
   resetUnread: (contactId: string) => void;
   updateLastMessage: (contactId: string, message: Message) => void;
   updateIsTyping: (contactId: string, isTyping: boolean) => void;
+  updateIsOnline: (contactId: string, isOnline: boolean) => void;
 };
 
 export const useContactsStore = create<ContactsState>((set, get) => {
@@ -44,7 +46,25 @@ export const useContactsStore = create<ContactsState>((set, get) => {
     },
   );
 
+  socket.on(
+    "online",
+    ({ userId, isOnline }: { userId: string; isOnline: boolean }) => {
+      get().updateIsOnline(userId, isOnline);
+    },
+  );
+
   return {
+    updateIsOnline: (contactId, isOnline) =>
+      set((state) => {
+        const mutableContacts = [...state.contacts];
+        const contactIndex = state.contacts.findIndex(
+          (contact) => contact.id === contactId,
+        );
+
+        mutableContacts[contactIndex].isOnline = isOnline;
+
+        return { ...state, contacts: [...mutableContacts] };
+      }),
     contacts: [],
     updateIsTyping: (contactId: string, isTyping: boolean) =>
       set((state) => {
@@ -104,7 +124,10 @@ export const useContactsStore = create<ContactsState>((set, get) => {
         .prepareChatIds(contacts.map((contact) => contact.chatId));
 
       set({
-        contacts: contacts.map((contact) => ({ ...contact, isTyping: false })),
+        contacts: contacts.map((contact) => ({
+          ...contact,
+          isTyping: false,
+        })),
       });
     },
     updateLastMessage: (chatId, message) =>
