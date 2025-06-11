@@ -2,7 +2,7 @@ import { AnimatePresence, motion } from "motion/react";
 import { ContactCard } from "./contact-card";
 import { EmptyContactsListSearchState } from "./empty-contacts-list-search-state";
 import { type Contact } from "@/store/contacts";
-import { type Message, useChatStore } from "@/store/chat";
+import { useChatStore } from "@/store/chat";
 
 export function FilteredContactList({
   contacts: contactsProp,

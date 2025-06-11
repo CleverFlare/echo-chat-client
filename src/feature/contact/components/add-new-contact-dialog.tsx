@@ -41,8 +41,6 @@ export function AddNewContactDialog() {
     try {
       const contact = await mutateAsync(data.username);
 
-      console.log("CONTACT", contact);
-
       addContact(contact);
       reset();
       setOpen(false);
