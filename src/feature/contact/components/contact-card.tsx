@@ -54,9 +54,12 @@ export function ContactCard({
           <AvatarImage src={avatarUrl}></AvatarImage>
           <AvatarFallback>{name[0].toUpperCase()}</AvatarFallback>
         </Avatar>
-        {isOnline && (
-          <Badge className="size-2.5 p-0 rounded-full bg-purple-500 ring-3 ring-white absolute bottom-0.5 right-0.5" />
-        )}
+        <Badge
+          className={cn(
+            "size-2.5 p-0 rounded-full transition-colors ring-3 ring-white absolute bottom-0.5 right-0.5",
+            isOnline ? "bg-purple-500" : "bg-neutral-300",
+          )}
+        />
       </div>
       <div className="flex flex-col flex-1">
         <div className="grid grid-cols-[1fr_auto] justify-between w-full gap-2">
