@@ -52,7 +52,7 @@ function RouteComponent() {
                 initial={{ width: !isSmall ? 0 : "auto" }}
                 animate={{ width: "auto" }}
               >
-                <div className="w-[350px] py-4 h-full overflow-hidden">
+                <div className="md:w-[350px] w-full py-4 h-full overflow-hidden">
                   <ProfilePanel />
                 </div>
               </motion.div>
