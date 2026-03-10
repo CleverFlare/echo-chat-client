@@ -7,7 +7,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 // Import the generated route tree
 import { routeTree } from "./routeTree.gen";
 import { Toaster } from "./components/ui/sonner";
-import { WarningCircleIcon } from "@phosphor-icons/react";
+import { NowProvider } from "./hooks/use-now";
 
 // Create a new router instance
 const router = createRouter({ routeTree });
@@ -19,25 +19,17 @@ declare module "@tanstack/react-router" {
   }
 }
 
-document.body.className = "flex flex-col w-screen h-[100svh]";
+document.body.className = "dark flex flex-col w-screen h-[100svh]";
 
 const queryClient = new QueryClient();
 
 createRoot(document.body!).render(
   <StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <RouterProvider router={router} />
-      <Toaster
-        position="top-center"
-        toastOptions={{
-          classNames: {
-            error: "!border-destructive",
-          },
-        }}
-        icons={{
-          error: <WarningCircleIcon className="text-destructive" size={20} />,
-        }}
-      />
-    </QueryClientProvider>
+    <NowProvider>
+      <QueryClientProvider client={queryClient}>
+        <RouterProvider router={router} />
+        <Toaster />
+      </QueryClientProvider>
+    </NowProvider>
   </StrictMode>,
 );

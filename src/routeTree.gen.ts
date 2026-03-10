@@ -11,21 +11,24 @@
 // Import Routes
 
 import { Route as rootRoute } from './app/__root'
-import { Route as RegisterImport } from './app/register'
-import { Route as ChatRouteImport } from './app/_chat/route'
+import { Route as LoginImport } from './app/login'
+import { Route as AuthenticatedImport } from './app/_authenticated'
 import { Route as IndexImport } from './app/index'
-import { Route as ChatChatImport } from './app/_chat/chat'
+import { Route as AuthenticatedFriendsImport } from './app/_authenticated/friends'
+import { Route as AuthenticatedFriendRequestsImport } from './app/_authenticated/friend-requests'
+import { Route as AuthenticatedChatsRouteImport } from './app/_authenticated/_chats/route'
+import { Route as AuthenticatedChatsChatsImport } from './app/_authenticated/_chats/chats'
 
 // Create/Update Routes
 
-const RegisterRoute = RegisterImport.update({
-  id: '/register',
-  path: '/register',
+const LoginRoute = LoginImport.update({
+  id: '/login',
+  path: '/login',
   getParentRoute: () => rootRoute,
 } as any)
 
-const ChatRouteRoute = ChatRouteImport.update({
-  id: '/_chat',
+const AuthenticatedRoute = AuthenticatedImport.update({
+  id: '/_authenticated',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -35,10 +38,28 @@ const IndexRoute = IndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const ChatChatRoute = ChatChatImport.update({
-  id: '/chat',
-  path: '/chat',
-  getParentRoute: () => ChatRouteRoute,
+const AuthenticatedFriendsRoute = AuthenticatedFriendsImport.update({
+  id: '/friends',
+  path: '/friends',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+
+const AuthenticatedFriendRequestsRoute =
+  AuthenticatedFriendRequestsImport.update({
+    id: '/friend-requests',
+    path: '/friend-requests',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+
+const AuthenticatedChatsRouteRoute = AuthenticatedChatsRouteImport.update({
+  id: '/_chats',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+
+const AuthenticatedChatsChatsRoute = AuthenticatedChatsChatsImport.update({
+  id: '/chats',
+  path: '/chats',
+  getParentRoute: () => AuthenticatedChatsRouteRoute,
 } as any)
 
 // Populate the FileRoutesByPath interface
@@ -52,85 +73,139 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
-    '/_chat': {
-      id: '/_chat'
+    '/_authenticated': {
+      id: '/_authenticated'
       path: ''
       fullPath: ''
-      preLoaderRoute: typeof ChatRouteImport
+      preLoaderRoute: typeof AuthenticatedImport
       parentRoute: typeof rootRoute
     }
-    '/register': {
-      id: '/register'
-      path: '/register'
-      fullPath: '/register'
-      preLoaderRoute: typeof RegisterImport
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginImport
       parentRoute: typeof rootRoute
     }
-    '/_chat/chat': {
-      id: '/_chat/chat'
-      path: '/chat'
-      fullPath: '/chat'
-      preLoaderRoute: typeof ChatChatImport
-      parentRoute: typeof ChatRouteImport
+    '/_authenticated/_chats': {
+      id: '/_authenticated/_chats'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof AuthenticatedChatsRouteImport
+      parentRoute: typeof AuthenticatedImport
+    }
+    '/_authenticated/friend-requests': {
+      id: '/_authenticated/friend-requests'
+      path: '/friend-requests'
+      fullPath: '/friend-requests'
+      preLoaderRoute: typeof AuthenticatedFriendRequestsImport
+      parentRoute: typeof AuthenticatedImport
+    }
+    '/_authenticated/friends': {
+      id: '/_authenticated/friends'
+      path: '/friends'
+      fullPath: '/friends'
+      preLoaderRoute: typeof AuthenticatedFriendsImport
+      parentRoute: typeof AuthenticatedImport
+    }
+    '/_authenticated/_chats/chats': {
+      id: '/_authenticated/_chats/chats'
+      path: '/chats'
+      fullPath: '/chats'
+      preLoaderRoute: typeof AuthenticatedChatsChatsImport
+      parentRoute: typeof AuthenticatedChatsRouteImport
     }
   }
 }
 
 // Create and export the route tree
 
-interface ChatRouteRouteChildren {
-  ChatChatRoute: typeof ChatChatRoute
+interface AuthenticatedChatsRouteRouteChildren {
+  AuthenticatedChatsChatsRoute: typeof AuthenticatedChatsChatsRoute
 }
 
-const ChatRouteRouteChildren: ChatRouteRouteChildren = {
-  ChatChatRoute: ChatChatRoute,
+const AuthenticatedChatsRouteRouteChildren: AuthenticatedChatsRouteRouteChildren =
+  {
+    AuthenticatedChatsChatsRoute: AuthenticatedChatsChatsRoute,
+  }
+
+const AuthenticatedChatsRouteRouteWithChildren =
+  AuthenticatedChatsRouteRoute._addFileChildren(
+    AuthenticatedChatsRouteRouteChildren,
+  )
+
+interface AuthenticatedRouteChildren {
+  AuthenticatedChatsRouteRoute: typeof AuthenticatedChatsRouteRouteWithChildren
+  AuthenticatedFriendRequestsRoute: typeof AuthenticatedFriendRequestsRoute
+  AuthenticatedFriendsRoute: typeof AuthenticatedFriendsRoute
 }
 
-const ChatRouteRouteWithChildren = ChatRouteRoute._addFileChildren(
-  ChatRouteRouteChildren,
+const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
+  AuthenticatedChatsRouteRoute: AuthenticatedChatsRouteRouteWithChildren,
+  AuthenticatedFriendRequestsRoute: AuthenticatedFriendRequestsRoute,
+  AuthenticatedFriendsRoute: AuthenticatedFriendsRoute,
+}
+
+const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
+  AuthenticatedRouteChildren,
 )
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '': typeof ChatRouteRouteWithChildren
-  '/register': typeof RegisterRoute
-  '/chat': typeof ChatChatRoute
+  '': typeof AuthenticatedChatsRouteRouteWithChildren
+  '/login': typeof LoginRoute
+  '/friend-requests': typeof AuthenticatedFriendRequestsRoute
+  '/friends': typeof AuthenticatedFriendsRoute
+  '/chats': typeof AuthenticatedChatsChatsRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '': typeof ChatRouteRouteWithChildren
-  '/register': typeof RegisterRoute
-  '/chat': typeof ChatChatRoute
+  '': typeof AuthenticatedChatsRouteRouteWithChildren
+  '/login': typeof LoginRoute
+  '/friend-requests': typeof AuthenticatedFriendRequestsRoute
+  '/friends': typeof AuthenticatedFriendsRoute
+  '/chats': typeof AuthenticatedChatsChatsRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
-  '/_chat': typeof ChatRouteRouteWithChildren
-  '/register': typeof RegisterRoute
-  '/_chat/chat': typeof ChatChatRoute
+  '/_authenticated': typeof AuthenticatedRouteWithChildren
+  '/login': typeof LoginRoute
+  '/_authenticated/_chats': typeof AuthenticatedChatsRouteRouteWithChildren
+  '/_authenticated/friend-requests': typeof AuthenticatedFriendRequestsRoute
+  '/_authenticated/friends': typeof AuthenticatedFriendsRoute
+  '/_authenticated/_chats/chats': typeof AuthenticatedChatsChatsRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '' | '/register' | '/chat'
+  fullPaths: '/' | '' | '/login' | '/friend-requests' | '/friends' | '/chats'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '' | '/register' | '/chat'
-  id: '__root__' | '/' | '/_chat' | '/register' | '/_chat/chat'
+  to: '/' | '' | '/login' | '/friend-requests' | '/friends' | '/chats'
+  id:
+    | '__root__'
+    | '/'
+    | '/_authenticated'
+    | '/login'
+    | '/_authenticated/_chats'
+    | '/_authenticated/friend-requests'
+    | '/_authenticated/friends'
+    | '/_authenticated/_chats/chats'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  ChatRouteRoute: typeof ChatRouteRouteWithChildren
-  RegisterRoute: typeof RegisterRoute
+  AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
+  LoginRoute: typeof LoginRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  ChatRouteRoute: ChatRouteRouteWithChildren,
-  RegisterRoute: RegisterRoute,
+  AuthenticatedRoute: AuthenticatedRouteWithChildren,
+  LoginRoute: LoginRoute,
 }
 
 export const routeTree = rootRoute
@@ -144,25 +219,42 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/_chat",
-        "/register"
+        "/_authenticated",
+        "/login"
       ]
     },
     "/": {
       "filePath": "index.tsx"
     },
-    "/_chat": {
-      "filePath": "_chat/route.tsx",
+    "/_authenticated": {
+      "filePath": "_authenticated.tsx",
       "children": [
-        "/_chat/chat"
+        "/_authenticated/_chats",
+        "/_authenticated/friend-requests",
+        "/_authenticated/friends"
       ]
     },
-    "/register": {
-      "filePath": "register.tsx"
+    "/login": {
+      "filePath": "login.tsx"
     },
-    "/_chat/chat": {
-      "filePath": "_chat/chat.tsx",
-      "parent": "/_chat"
+    "/_authenticated/_chats": {
+      "filePath": "_authenticated/_chats/route.tsx",
+      "parent": "/_authenticated",
+      "children": [
+        "/_authenticated/_chats/chats"
+      ]
+    },
+    "/_authenticated/friend-requests": {
+      "filePath": "_authenticated/friend-requests.tsx",
+      "parent": "/_authenticated"
+    },
+    "/_authenticated/friends": {
+      "filePath": "_authenticated/friends.tsx",
+      "parent": "/_authenticated"
+    },
+    "/_authenticated/_chats/chats": {
+      "filePath": "_authenticated/_chats/chats.tsx",
+      "parent": "/_authenticated/_chats"
     }
   }
 }
