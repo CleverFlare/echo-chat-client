@@ -1,8 +1,8 @@
 import { Check } from "lucide-react";
 
-type ReadStatus = "sent" | "received" | "read";
+export type ReceiptStatus = "sent" | "delivered" | "read" | "failed";
 
-export function MessageReadStatus({ status }: { status: ReadStatus }) {
+export function MessageReceiptStatus({ status }: { status: ReceiptStatus }) {
   if (status === "sent") {
     return <Check size={16} className="text-muted-foreground" />;
   }

@@ -13,6 +13,7 @@ import {
 import { navigation as nav } from "@/configs/navigation";
 import { Link, useMatchRoute } from "@tanstack/react-router";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
+import { ThemeButton } from "./theme-button";
 
 export function MainSidebar() {
   const matchRoute = useMatchRoute();
@@ -70,6 +71,7 @@ export function MainSidebar() {
       </SidebarContent>
 
       <SidebarFooter>
+        <ThemeButton />
         {nav.main.footer.map((item) => {
           return (
             <SidebarMenuItem key={item.title}>

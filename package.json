@@ -12,6 +12,7 @@
   "dependencies": {
     "@custom-react-hooks/use-update-effect": "^1.5.1",
     "@hookform/resolvers": "^5.0.1",
+    "@lonik/themer": "^0.5.2",
     "@phosphor-icons/react": "^2.1.8",
     "@radix-ui/react-avatar": "^1.1.9",
     "@radix-ui/react-dialog": "^1.1.13",
