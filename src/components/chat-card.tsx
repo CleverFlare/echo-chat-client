@@ -59,7 +59,7 @@ export function ChatCard({
               : "Weird message format"}
           </p>
           {unreadCount > 0 && (
-            <p className="min-w-5 h-5 rounded-full bg-blue-500 text-xs flex items-center justify-center px-1">
+            <p className="min-w-5 h-5 rounded-full bg-blue-500 text-xs flex items-center justify-center px-1 text-white">
               {unreadCount < 1000 ? unreadCount : "999+"}
             </p>
           )}
