@@ -1,11 +1,11 @@
 import { formatLastMessageDate } from "@/lib/format-last-message-date";
-import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useNow } from "@/hooks/use-now";
-import { Toggle } from "./ui/toggle";
+import { Toggle } from "@/components/ui/toggle";
 import {
   MessageReceiptStatus,
   type ReceiptStatus,
-} from "./message-receipt-status";
+} from "@/components/message-receipt-status";
 
 export function ChatCard({
   firstName = "Muhammad",

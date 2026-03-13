@@ -1,12 +1,12 @@
 import { ChatCard } from "./chat-card";
-import { Input } from "./ui/input";
+import { Input } from "@/components/ui/input";
 import {
   Sidebar,
   SidebarContent,
   SidebarGroup,
   SidebarGroupContent,
   SidebarHeader,
-} from "./ui/sidebar";
+} from "@/components/ui/sidebar";
 
 export function ChatsPanel() {
   return (
