@@ -7,8 +7,10 @@ import {
   SidebarGroupContent,
   SidebarHeader,
 } from "@/components/ui/sidebar";
+import { useChats } from "../stores/chats";
 
-export function ChatsPanel() {
+export function ChatsPanel({ activeChatId }: { activeChatId?: string }) {
+  const chats = useChats((state) => state.chats);
   return (
     <Sidebar collapsible="none" className="w-80 border-r">
       <SidebarHeader>
@@ -26,61 +28,9 @@ export function ChatsPanel() {
         <SidebarGroup>
           <SidebarGroupContent>
             <div className="flex flex-col gap-4">
-              <ChatCard
-                id="1234"
-                firstName="Muhammad"
-                lastName="Maher"
-                avatar="https://api.dicebear.com/9.x/open-peeps/svg?backgroundColor=d1d4f9&seed=Andrea"
-              />
-              <ChatCard
-                id="1234"
-                firstName="Andrea"
-                lastName="Avery"
-                avatar="https://api.dicebear.com/9.x/open-peeps/svg?backgroundColor=d1d4f9&seed=Andrea"
-                unreadCount={1}
-              />
-              <ChatCard
-                id="1234"
-                firstName="Jocelyn"
-                lastName="George"
-                avatar="https://api.dicebear.com/9.x/open-peeps/svg?backgroundColor=d1d4f9&seed=Jocelyn"
-                unreadCount={0}
-              />
-              <ChatCard
-                id="1234"
-                firstName="Leo"
-                lastName="Emery"
-                avatar="https://api.dicebear.com/9.x/open-peeps/svg?backgroundColor=d1d4f9&seed=Leo"
-                unreadCount={2}
-              />
-              <ChatCard
-                id="1234"
-                firstName="Leah"
-                lastName="Brian"
-                avatar="https://api.dicebear.com/9.x/open-peeps/svg?backgroundColor=d1d4f9&seed=Leah"
-                unreadCount={0}
-              />
-              <ChatCard
-                id="1234"
-                firstName="Liam"
-                lastName="Jack"
-                avatar="https://api.dicebear.com/9.x/open-peeps/svg?backgroundColor=d1d4f9&seed=Liam"
-                unreadCount={0}
-              />
-              <ChatCard
-                id="1234"
-                firstName="Eliza"
-                lastName="Amaya"
-                avatar="https://api.dicebear.com/9.x/open-peeps/svg?backgroundColor=d1d4f9&seed=Eliza"
-                unreadCount={0}
-              />
-              <ChatCard
-                id="1234"
-                firstName="Liliana"
-                lastName="Jameson"
-                avatar="https://api.dicebear.com/9.x/open-peeps/svg?backgroundColor=d1d4f9&seed=Amaya"
-                unreadCount={0}
-              />
+              {chats.map((chat) => (
+                <ChatCard {...chat} active={activeChatId === chat.id} />
+              ))}
             </div>
           </SidebarGroupContent>
         </SidebarGroup>

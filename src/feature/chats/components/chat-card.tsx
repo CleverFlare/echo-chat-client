@@ -2,10 +2,9 @@ import { formatLastMessageDate } from "@/lib/format-last-message-date";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useNow } from "@/hooks/use-now";
 import { Toggle } from "@/components/ui/toggle";
-import {
-  MessageReceiptStatus,
-  type ReceiptStatus,
-} from "@/components/message-receipt-status";
+import { MessageReceiptStatus } from "@/components/message-receipt-status";
+import type { LastMessage, UnreadCount } from "../types";
+import { Link } from "@tanstack/react-router";
 
 export function ChatCard({
   firstName = "Muhammad",
@@ -20,121 +19,59 @@ export function ChatCard({
     receipt: "read",
   },
   unreadCount = 100000000,
+  active = false,
+  id,
 }: ChatCardProps) {
   const now = useNow();
   return (
     <Toggle
-      pressed={false}
+      pressed={active}
+      asChild
       className="grid grid-cols-[auto_1fr] gap-2 justify-start h-max px-2 py-2 font-normal text-start"
     >
-      <Avatar>
-        <AvatarImage src={avatar} alt="avatar" />
-        <AvatarFallback>
-          {firstName[0]}
-          {lastName[0]}
-        </AvatarFallback>
-      </Avatar>
-      <div className="grid w-full">
-        <div className="flex gap-2">
-          <h4 className="font-medium">
-            {firstName} {lastName}
-          </h4>
-          <p className="text-xs text-muted-foreground ms-auto">
-            {formatLastMessageDate(lastMessage.sentAt, now)}
-          </p>
-        </div>
-        <div
-          className="grid data-[show-receipt=true]:grid-cols-[auto_1fr_auto] data-[show-receipt=false]:grid-cols-[1fr_auto] gap-1 items-center"
-          data-show-receipt={lastMessage.isMine}
-        >
-          {lastMessage.isMine && lastMessage.receipt && (
-            <MessageReceiptStatus status={lastMessage.receipt} />
-          )}
-          <p className="truncate">
-            {lastMessage.isMine && (
-              <span className="text-muted-foreground">Me: </span>
-            )}
-            {lastMessage.type === "text"
-              ? lastMessage.body
-              : "Weird message format"}
-          </p>
-          {unreadCount > 0 && (
-            <p className="min-w-5 h-5 rounded-full bg-blue-500 text-xs flex items-center justify-center px-1 text-white">
-              {unreadCount < 1000 ? unreadCount : "999+"}
+      <Link to="/chats/$id" params={{ id }}>
+        <Avatar>
+          <AvatarImage src={avatar} alt="avatar" />
+          <AvatarFallback>
+            {firstName[0]}
+            {lastName[0]}
+          </AvatarFallback>
+        </Avatar>
+        <div className="grid w-full">
+          <div className="flex gap-2">
+            <h4 className="font-medium">
+              {firstName} {lastName}
+            </h4>
+            <p className="text-xs text-muted-foreground ms-auto">
+              {formatLastMessageDate(lastMessage.sentAt, now)}
             </p>
-          )}
+          </div>
+          <div
+            className="grid data-[show-receipt=true]:grid-cols-[auto_1fr_auto] data-[show-receipt=false]:grid-cols-[1fr_auto] gap-1 items-center"
+            data-show-receipt={lastMessage.isMine}
+          >
+            {lastMessage.isMine && lastMessage.receipt && (
+              <MessageReceiptStatus status={lastMessage.receipt} />
+            )}
+            <p className="truncate">
+              {lastMessage.isMine && (
+                <span className="text-muted-foreground">Me: </span>
+              )}
+              {lastMessage.type === "text"
+                ? lastMessage.body
+                : "Weird message format"}
+            </p>
+            {unreadCount > 0 && (
+              <p className="min-w-5 h-5 rounded-full bg-blue-500 text-xs flex items-center justify-center px-1 text-white">
+                {unreadCount < 1000 ? unreadCount : "999+"}
+              </p>
+            )}
+          </div>
         </div>
-      </div>
+      </Link>
     </Toggle>
   );
 }
-
-// ---- Primitives & enums ----
-
-type MediaMessageType =
-  | "image"
-  | "video"
-  | "audio"
-  | "file"
-  | "sticker"
-  | "gif";
-
-type SpecialMessageType =
-  | "link"
-  | "reaction"
-  | "poll"
-  | "location"
-  | "deleted"
-  | "missed_call"
-  | "voice_note";
-
-// ---- Last message shape ----
-
-type BaseLastMessage = {
-  id: string;
-  sentAt: Date; // raw Date; formatting ("now", "yesterday", etc.) is UI logic
-  isMine: boolean; // drives "Me:" prefix and receipt display
-  receipt?: ReceiptStatus; // only meaningful when isMine === true
-};
-
-type TextLastMessage = BaseLastMessage & {
-  type: "text";
-  body: string;
-};
-
-type MediaLastMessage = BaseLastMessage & {
-  type: MediaMessageType;
-  caption?: string; // e.g. shown as "📷 Photo" or the caption itself
-};
-
-type LinkLastMessage = BaseLastMessage & {
-  type: "link";
-  url: string;
-  previewTitle?: string;
-};
-
-type ReactionLastMessage = BaseLastMessage & {
-  type: "reaction";
-  emoji: string;
-  reactedToSnippet?: string; // e.g. "Reacted 👍 to "sounds good""
-};
-
-type SpecialLastMessage = BaseLastMessage & {
-  type: Exclude<SpecialMessageType, "link" | "reaction">;
-  label?: string; // human-readable fallback e.g. "📍 Location", "You missed a call"
-};
-
-type LastMessage =
-  | TextLastMessage
-  | MediaLastMessage
-  | LinkLastMessage
-  | ReactionLastMessage
-  | SpecialLastMessage;
-
-// ---- Unread badge shape ----
-
-// Raw number — the "999+" capping logic lives in the component, not in props
-type UnreadCount = number;
 
 // ---- Root ChatCard props ----
 
@@ -151,6 +88,8 @@ type ChatCardProps = {
 
   // Unread — undefined means "no badge", 0 also suppresses the badge
   unreadCount?: UnreadCount;
+
+  active?: boolean;
 
   // Interaction
   isSelected?: boolean;
