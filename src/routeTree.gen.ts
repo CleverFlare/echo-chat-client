@@ -18,6 +18,7 @@ import { Route as AuthenticatedFriendsImport } from './app/_authenticated/friend
 import { Route as AuthenticatedFriendRequestsImport } from './app/_authenticated/friend-requests'
 import { Route as AuthenticatedChatsRouteImport } from './app/_authenticated/_chats/route'
 import { Route as AuthenticatedChatsChatsImport } from './app/_authenticated/_chats/chats'
+import { Route as AuthenticatedChatsChatsIndexImport } from './app/_authenticated/_chats/chats.index'
 import { Route as AuthenticatedChatsChatsIdImport } from './app/_authenticated/_chats/chats.$id'
 
 // Create/Update Routes
@@ -62,6 +63,13 @@ const AuthenticatedChatsChatsRoute = AuthenticatedChatsChatsImport.update({
   path: '/chats',
   getParentRoute: () => AuthenticatedChatsRouteRoute,
 } as any)
+
+const AuthenticatedChatsChatsIndexRoute =
+  AuthenticatedChatsChatsIndexImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => AuthenticatedChatsChatsRoute,
+  } as any)
 
 const AuthenticatedChatsChatsIdRoute = AuthenticatedChatsChatsIdImport.update({
   id: '/$id',
@@ -129,6 +137,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedChatsChatsIdImport
       parentRoute: typeof AuthenticatedChatsChatsImport
     }
+    '/_authenticated/_chats/chats/': {
+      id: '/_authenticated/_chats/chats/'
+      path: '/'
+      fullPath: '/chats/'
+      preLoaderRoute: typeof AuthenticatedChatsChatsIndexImport
+      parentRoute: typeof AuthenticatedChatsChatsImport
+    }
   }
 }
 
@@ -136,11 +151,13 @@ declare module '@tanstack/react-router' {
 
 interface AuthenticatedChatsChatsRouteChildren {
   AuthenticatedChatsChatsIdRoute: typeof AuthenticatedChatsChatsIdRoute
+  AuthenticatedChatsChatsIndexRoute: typeof AuthenticatedChatsChatsIndexRoute
 }
 
 const AuthenticatedChatsChatsRouteChildren: AuthenticatedChatsChatsRouteChildren =
   {
     AuthenticatedChatsChatsIdRoute: AuthenticatedChatsChatsIdRoute,
+    AuthenticatedChatsChatsIndexRoute: AuthenticatedChatsChatsIndexRoute,
   }
 
 const AuthenticatedChatsChatsRouteWithChildren =
@@ -186,6 +203,7 @@ export interface FileRoutesByFullPath {
   '/friends': typeof AuthenticatedFriendsRoute
   '/chats': typeof AuthenticatedChatsChatsRouteWithChildren
   '/chats/$id': typeof AuthenticatedChatsChatsIdRoute
+  '/chats/': typeof AuthenticatedChatsChatsIndexRoute
 }
 
 export interface FileRoutesByTo {
@@ -194,8 +212,8 @@ export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/friend-requests': typeof AuthenticatedFriendRequestsRoute
   '/friends': typeof AuthenticatedFriendsRoute
-  '/chats': typeof AuthenticatedChatsChatsRouteWithChildren
   '/chats/$id': typeof AuthenticatedChatsChatsIdRoute
+  '/chats': typeof AuthenticatedChatsChatsIndexRoute
 }
 
 export interface FileRoutesById {
@@ -208,6 +226,7 @@ export interface FileRoutesById {
   '/_authenticated/friends': typeof AuthenticatedFriendsRoute
   '/_authenticated/_chats/chats': typeof AuthenticatedChatsChatsRouteWithChildren
   '/_authenticated/_chats/chats/$id': typeof AuthenticatedChatsChatsIdRoute
+  '/_authenticated/_chats/chats/': typeof AuthenticatedChatsChatsIndexRoute
 }
 
 export interface FileRouteTypes {
@@ -220,6 +239,7 @@ export interface FileRouteTypes {
     | '/friends'
     | '/chats'
     | '/chats/$id'
+    | '/chats/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -227,8 +247,8 @@ export interface FileRouteTypes {
     | '/login'
     | '/friend-requests'
     | '/friends'
-    | '/chats'
     | '/chats/$id'
+    | '/chats'
   id:
     | '__root__'
     | '/'
@@ -239,6 +259,7 @@ export interface FileRouteTypes {
     | '/_authenticated/friends'
     | '/_authenticated/_chats/chats'
     | '/_authenticated/_chats/chats/$id'
+    | '/_authenticated/_chats/chats/'
   fileRoutesById: FileRoutesById
 }
 
@@ -302,11 +323,16 @@ export const routeTree = rootRoute
       "filePath": "_authenticated/_chats/chats.tsx",
       "parent": "/_authenticated/_chats",
       "children": [
-        "/_authenticated/_chats/chats/$id"
+        "/_authenticated/_chats/chats/$id",
+        "/_authenticated/_chats/chats/"
       ]
     },
     "/_authenticated/_chats/chats/$id": {
       "filePath": "_authenticated/_chats/chats.$id.tsx",
+      "parent": "/_authenticated/_chats/chats"
+    },
+    "/_authenticated/_chats/chats/": {
+      "filePath": "_authenticated/_chats/chats.index.tsx",
       "parent": "/_authenticated/_chats/chats"
     }
   }

@@ -8,7 +8,7 @@ export const Route = createFileRoute("/_authenticated/_chats")({
 function RouteComponent() {
   const { id } = useParams({ strict: false });
   return (
-    <div className="flex">
+    <div className="flex flex-1">
       <ChatsPanel activeChatId={id} />
       <Outlet />
     </div>

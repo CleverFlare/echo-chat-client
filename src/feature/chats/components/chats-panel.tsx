@@ -28,7 +28,7 @@ export function ChatsPanel({ activeChatId }: { activeChatId?: string }) {
         <SidebarGroup>
           <SidebarGroupContent>
             <div className="flex flex-col gap-4">
-              {chats.map((chat) => (
+              {Object.values(chats).map((chat) => (
                 <ChatCard {...chat} active={activeChatId === chat.id} />
               ))}
             </div>

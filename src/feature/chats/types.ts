@@ -66,3 +66,5 @@ export type LastMessage =
 
 // Raw number — the "999+" capping logic lives in the component, not in props
 export type UnreadCount = number;
+
+export type Presence = "online" | "offline";
