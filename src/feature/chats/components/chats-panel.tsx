@@ -1,5 +1,4 @@
 import { ChatCard } from "./chat-card";
-import { Input } from "@/components/ui/input";
 import {
   Sidebar,
   SidebarContent,
@@ -8,9 +7,12 @@ import {
   SidebarHeader,
 } from "@/components/ui/sidebar";
 import { useChats } from "../stores/chats";
+import { SearchInput } from "./search-input";
+import { useState } from "react";
 
 export function ChatsPanel({ activeChatId }: { activeChatId?: string }) {
   const chats = useChats((state) => state.chats);
+  const [searchState, setSearchState] = useState<string>("");
   return (
     <Sidebar collapsible="none" className="w-80 border-r">
       <SidebarHeader>
@@ -18,7 +20,7 @@ export function ChatsPanel({ activeChatId }: { activeChatId?: string }) {
           <SidebarGroupContent>
             <div className="flex flex-col gap-2">
               <h2 className="text-2xl">Chats</h2>
-              <Input placeholder="Search..." />
+              <SearchInput value={searchState} onChange={setSearchState} />
             </div>
           </SidebarGroupContent>
         </SidebarGroup>
@@ -28,9 +30,22 @@ export function ChatsPanel({ activeChatId }: { activeChatId?: string }) {
         <SidebarGroup>
           <SidebarGroupContent>
             <div className="flex flex-col gap-4">
-              {Object.values(chats).map((chat) => (
-                <ChatCard {...chat} active={activeChatId === chat.id} />
-              ))}
+              {Object.values(chats)
+                .filter(
+                  (chat) =>
+                    chat.firstName.startsWith(searchState) ||
+                    chat.lastName.startsWith(searchState) ||
+                    `${chat.firstName} ${chat.lastName}`.startsWith(
+                      searchState,
+                    ),
+                )
+                .map((chat) => (
+                  <ChatCard
+                    key={chat.id}
+                    {...chat}
+                    active={activeChatId === chat.id}
+                  />
+                ))}
             </div>
           </SidebarGroupContent>
         </SidebarGroup>

@@ -1,6 +1,6 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import type { ReactNode } from "react";
+import { useEffect, type ReactNode } from "react";
 import { useChats } from "../stores/chats";
 
 export function ChatWindow({
@@ -12,6 +12,15 @@ export function ChatWindow({
 }) {
   const chats = useChats((state) => state.chats);
   const chat = chats[activeChatId];
+
+  const resetUnread = useChats((state) => state.resentUnread);
+
+  useEffect(
+    () => resetUnread(activeChatId),
+    // eslint-disable-next-line
+    [activeChatId],
+  );
+
   return (
     <div className="flex flex-col">
       <div className="p-2 grid grid-cols-[1fr_auto] border-b">

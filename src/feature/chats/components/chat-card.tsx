@@ -10,6 +10,7 @@ import { Toggle } from "@/components/ui/toggle";
 import { MessageReceiptStatus } from "@/components/message-receipt-status";
 import type { LastMessage, Presence, UnreadCount } from "../types";
 import { Link } from "@tanstack/react-router";
+import { cn } from "@/lib/utils";
 
 export function ChatCard({
   firstName = "Muhammad",
@@ -42,7 +43,11 @@ export function ChatCard({
               {lastName[0]}
             </AvatarFallback>
             <AvatarBadge
-              className="bg-neutral-600 data-[presence=online]:bg-green-500 transition-colors"
+              className={cn(
+                "dark:bg-neutral-600 bg-neutral-400",
+                "data-[presence=online]:bg-green-500 data-[presence=online]:dark:bg-green-500",
+                "transition-colors",
+              )}
               data-presence={presence}
             />
           </Avatar>

@@ -25,10 +25,14 @@ export type ChatsState<
   chats: Chats; // Using objects instead of arrays for instant access via ID
 };
 
-export type ChatsStore = ChatsState;
+export type ChatsModifiers = {
+  resentUnread: (chatId: string) => void;
+};
+
+export type ChatsStore = ChatsState & ChatsModifiers;
 
 export const useChats = create<ChatsStore>()(
-  immer<ChatsStore>(() => ({
+  immer<ChatsStore>((set) => ({
     chats: {
       ["chat-001"]: {
         id: "chat-001",
@@ -102,6 +106,11 @@ export const useChats = create<ChatsStore>()(
         unreadCount: 0,
         presence: "offline",
       },
+    },
+    resentUnread(chatId: string) {
+      set((state) => {
+        state.chats[chatId].unreadCount = 0;
+      });
     },
   })),
 );
