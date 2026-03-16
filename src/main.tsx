@@ -1,7 +1,7 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
-import { RouterProvider, createRouter } from "@tanstack/react-router";
+import { createRouter, RouterProvider } from "@tanstack/react-router";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ThemeProvider } from "@lonik/themer";
 
@@ -23,16 +23,21 @@ declare module "@tanstack/react-router" {
 document.body.className = "flex flex-col w-screen h-[100svh]";
 
 const queryClient = new QueryClient();
+// Render the app
+const rootElement = document.getElementById("root")!;
 
-createRoot(document.body!).render(
-  <StrictMode>
-    <ThemeProvider themes={["light", "dark"]}>
-      <NowProvider>
-        <QueryClientProvider client={queryClient}>
-          <RouterProvider router={router} />
-          <Toaster />
-        </QueryClientProvider>
-      </NowProvider>
-    </ThemeProvider>
-  </StrictMode>,
-);
+if (!rootElement.innerHTML) {
+  const root = createRoot(rootElement);
+  root.render(
+    <StrictMode>
+      <ThemeProvider themes={["light", "dark"]}>
+        <NowProvider>
+          <QueryClientProvider client={queryClient}>
+            <RouterProvider router={router} />
+            <Toaster />
+          </QueryClientProvider>
+        </NowProvider>
+      </ThemeProvider>
+    </StrictMode>,
+  );
+}
