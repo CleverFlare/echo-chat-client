@@ -1,4 +1,11 @@
-import { MessageCircle, Settings, UserRoundPlus, Users } from "lucide-react";
+import {
+  Key,
+  MessageCircle,
+  Settings,
+  User,
+  UserRoundPlus,
+  Users,
+} from "lucide-react";
 
 export const navigation = {
   main: {
@@ -28,4 +35,16 @@ export const navigation = {
       },
     ],
   },
+  settings: [
+    {
+      title: "Profile",
+      icon: User,
+      to: "/settings/profile",
+    },
+    {
+      title: "Privacy",
+      icon: Key,
+      to: "/settings/privacy",
+    },
+  ],
 };

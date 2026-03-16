@@ -16,8 +16,11 @@ import { Route as AuthenticatedImport } from './app/_authenticated'
 import { Route as IndexImport } from './app/index'
 import { Route as AuthenticatedFriendsImport } from './app/_authenticated/friends'
 import { Route as AuthenticatedFriendRequestsImport } from './app/_authenticated/friend-requests'
+import { Route as AuthenticatedSettingsRouteImport } from './app/_authenticated/_settings/route'
 import { Route as AuthenticatedChatsRouteImport } from './app/_authenticated/_chats/route'
+import { Route as AuthenticatedSettingsSettingsImport } from './app/_authenticated/_settings/settings'
 import { Route as AuthenticatedChatsChatsImport } from './app/_authenticated/_chats/chats'
+import { Route as AuthenticatedSettingsSettingsIndexImport } from './app/_authenticated/_settings/settings.index'
 import { Route as AuthenticatedChatsChatsIndexImport } from './app/_authenticated/_chats/chats.index'
 import { Route as AuthenticatedChatsChatsIdImport } from './app/_authenticated/_chats/chats.$id'
 
@@ -53,16 +56,37 @@ const AuthenticatedFriendRequestsRoute =
     getParentRoute: () => AuthenticatedRoute,
   } as any)
 
+const AuthenticatedSettingsRouteRoute = AuthenticatedSettingsRouteImport.update(
+  {
+    id: '/_settings',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any,
+)
+
 const AuthenticatedChatsRouteRoute = AuthenticatedChatsRouteImport.update({
   id: '/_chats',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+
+const AuthenticatedSettingsSettingsRoute =
+  AuthenticatedSettingsSettingsImport.update({
+    id: '/settings',
+    path: '/settings',
+    getParentRoute: () => AuthenticatedSettingsRouteRoute,
+  } as any)
 
 const AuthenticatedChatsChatsRoute = AuthenticatedChatsChatsImport.update({
   id: '/chats',
   path: '/chats',
   getParentRoute: () => AuthenticatedChatsRouteRoute,
 } as any)
+
+const AuthenticatedSettingsSettingsIndexRoute =
+  AuthenticatedSettingsSettingsIndexImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => AuthenticatedSettingsSettingsRoute,
+  } as any)
 
 const AuthenticatedChatsChatsIndexRoute =
   AuthenticatedChatsChatsIndexImport.update({
@@ -109,6 +133,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedChatsRouteImport
       parentRoute: typeof AuthenticatedImport
     }
+    '/_authenticated/_settings': {
+      id: '/_authenticated/_settings'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof AuthenticatedSettingsRouteImport
+      parentRoute: typeof AuthenticatedImport
+    }
     '/_authenticated/friend-requests': {
       id: '/_authenticated/friend-requests'
       path: '/friend-requests'
@@ -130,6 +161,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedChatsChatsImport
       parentRoute: typeof AuthenticatedChatsRouteImport
     }
+    '/_authenticated/_settings/settings': {
+      id: '/_authenticated/_settings/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof AuthenticatedSettingsSettingsImport
+      parentRoute: typeof AuthenticatedSettingsRouteImport
+    }
     '/_authenticated/_chats/chats/$id': {
       id: '/_authenticated/_chats/chats/$id'
       path: '/$id'
@@ -143,6 +181,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/chats/'
       preLoaderRoute: typeof AuthenticatedChatsChatsIndexImport
       parentRoute: typeof AuthenticatedChatsChatsImport
+    }
+    '/_authenticated/_settings/settings/': {
+      id: '/_authenticated/_settings/settings/'
+      path: '/'
+      fullPath: '/settings/'
+      preLoaderRoute: typeof AuthenticatedSettingsSettingsIndexImport
+      parentRoute: typeof AuthenticatedSettingsSettingsImport
     }
   }
 }
@@ -179,14 +224,46 @@ const AuthenticatedChatsRouteRouteWithChildren =
     AuthenticatedChatsRouteRouteChildren,
   )
 
+interface AuthenticatedSettingsSettingsRouteChildren {
+  AuthenticatedSettingsSettingsIndexRoute: typeof AuthenticatedSettingsSettingsIndexRoute
+}
+
+const AuthenticatedSettingsSettingsRouteChildren: AuthenticatedSettingsSettingsRouteChildren =
+  {
+    AuthenticatedSettingsSettingsIndexRoute:
+      AuthenticatedSettingsSettingsIndexRoute,
+  }
+
+const AuthenticatedSettingsSettingsRouteWithChildren =
+  AuthenticatedSettingsSettingsRoute._addFileChildren(
+    AuthenticatedSettingsSettingsRouteChildren,
+  )
+
+interface AuthenticatedSettingsRouteRouteChildren {
+  AuthenticatedSettingsSettingsRoute: typeof AuthenticatedSettingsSettingsRouteWithChildren
+}
+
+const AuthenticatedSettingsRouteRouteChildren: AuthenticatedSettingsRouteRouteChildren =
+  {
+    AuthenticatedSettingsSettingsRoute:
+      AuthenticatedSettingsSettingsRouteWithChildren,
+  }
+
+const AuthenticatedSettingsRouteRouteWithChildren =
+  AuthenticatedSettingsRouteRoute._addFileChildren(
+    AuthenticatedSettingsRouteRouteChildren,
+  )
+
 interface AuthenticatedRouteChildren {
   AuthenticatedChatsRouteRoute: typeof AuthenticatedChatsRouteRouteWithChildren
+  AuthenticatedSettingsRouteRoute: typeof AuthenticatedSettingsRouteRouteWithChildren
   AuthenticatedFriendRequestsRoute: typeof AuthenticatedFriendRequestsRoute
   AuthenticatedFriendsRoute: typeof AuthenticatedFriendsRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedChatsRouteRoute: AuthenticatedChatsRouteRouteWithChildren,
+  AuthenticatedSettingsRouteRoute: AuthenticatedSettingsRouteRouteWithChildren,
   AuthenticatedFriendRequestsRoute: AuthenticatedFriendRequestsRoute,
   AuthenticatedFriendsRoute: AuthenticatedFriendsRoute,
 }
@@ -197,23 +274,26 @@ const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '': typeof AuthenticatedChatsRouteRouteWithChildren
+  '': typeof AuthenticatedSettingsRouteRouteWithChildren
   '/login': typeof LoginRoute
   '/friend-requests': typeof AuthenticatedFriendRequestsRoute
   '/friends': typeof AuthenticatedFriendsRoute
   '/chats': typeof AuthenticatedChatsChatsRouteWithChildren
+  '/settings': typeof AuthenticatedSettingsSettingsRouteWithChildren
   '/chats/$id': typeof AuthenticatedChatsChatsIdRoute
   '/chats/': typeof AuthenticatedChatsChatsIndexRoute
+  '/settings/': typeof AuthenticatedSettingsSettingsIndexRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '': typeof AuthenticatedChatsRouteRouteWithChildren
+  '': typeof AuthenticatedSettingsRouteRouteWithChildren
   '/login': typeof LoginRoute
   '/friend-requests': typeof AuthenticatedFriendRequestsRoute
   '/friends': typeof AuthenticatedFriendsRoute
   '/chats/$id': typeof AuthenticatedChatsChatsIdRoute
   '/chats': typeof AuthenticatedChatsChatsIndexRoute
+  '/settings': typeof AuthenticatedSettingsSettingsIndexRoute
 }
 
 export interface FileRoutesById {
@@ -222,11 +302,14 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/login': typeof LoginRoute
   '/_authenticated/_chats': typeof AuthenticatedChatsRouteRouteWithChildren
+  '/_authenticated/_settings': typeof AuthenticatedSettingsRouteRouteWithChildren
   '/_authenticated/friend-requests': typeof AuthenticatedFriendRequestsRoute
   '/_authenticated/friends': typeof AuthenticatedFriendsRoute
   '/_authenticated/_chats/chats': typeof AuthenticatedChatsChatsRouteWithChildren
+  '/_authenticated/_settings/settings': typeof AuthenticatedSettingsSettingsRouteWithChildren
   '/_authenticated/_chats/chats/$id': typeof AuthenticatedChatsChatsIdRoute
   '/_authenticated/_chats/chats/': typeof AuthenticatedChatsChatsIndexRoute
+  '/_authenticated/_settings/settings/': typeof AuthenticatedSettingsSettingsIndexRoute
 }
 
 export interface FileRouteTypes {
@@ -238,8 +321,10 @@ export interface FileRouteTypes {
     | '/friend-requests'
     | '/friends'
     | '/chats'
+    | '/settings'
     | '/chats/$id'
     | '/chats/'
+    | '/settings/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -249,17 +334,21 @@ export interface FileRouteTypes {
     | '/friends'
     | '/chats/$id'
     | '/chats'
+    | '/settings'
   id:
     | '__root__'
     | '/'
     | '/_authenticated'
     | '/login'
     | '/_authenticated/_chats'
+    | '/_authenticated/_settings'
     | '/_authenticated/friend-requests'
     | '/_authenticated/friends'
     | '/_authenticated/_chats/chats'
+    | '/_authenticated/_settings/settings'
     | '/_authenticated/_chats/chats/$id'
     | '/_authenticated/_chats/chats/'
+    | '/_authenticated/_settings/settings/'
   fileRoutesById: FileRoutesById
 }
 
@@ -297,6 +386,7 @@ export const routeTree = rootRoute
       "filePath": "_authenticated.tsx",
       "children": [
         "/_authenticated/_chats",
+        "/_authenticated/_settings",
         "/_authenticated/friend-requests",
         "/_authenticated/friends"
       ]
@@ -309,6 +399,13 @@ export const routeTree = rootRoute
       "parent": "/_authenticated",
       "children": [
         "/_authenticated/_chats/chats"
+      ]
+    },
+    "/_authenticated/_settings": {
+      "filePath": "_authenticated/_settings/route.tsx",
+      "parent": "/_authenticated",
+      "children": [
+        "/_authenticated/_settings/settings"
       ]
     },
     "/_authenticated/friend-requests": {
@@ -327,6 +424,13 @@ export const routeTree = rootRoute
         "/_authenticated/_chats/chats/"
       ]
     },
+    "/_authenticated/_settings/settings": {
+      "filePath": "_authenticated/_settings/settings.tsx",
+      "parent": "/_authenticated/_settings",
+      "children": [
+        "/_authenticated/_settings/settings/"
+      ]
+    },
     "/_authenticated/_chats/chats/$id": {
       "filePath": "_authenticated/_chats/chats.$id.tsx",
       "parent": "/_authenticated/_chats/chats"
@@ -334,6 +438,10 @@ export const routeTree = rootRoute
     "/_authenticated/_chats/chats/": {
       "filePath": "_authenticated/_chats/chats.index.tsx",
       "parent": "/_authenticated/_chats/chats"
+    },
+    "/_authenticated/_settings/settings/": {
+      "filePath": "_authenticated/_settings/settings.index.tsx",
+      "parent": "/_authenticated/_settings/settings"
     }
   }
 }

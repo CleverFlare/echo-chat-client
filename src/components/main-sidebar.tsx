@@ -84,7 +84,7 @@ export function MainSidebar() {
                   children: item.title,
                   hidden: false,
                 }}
-                isActive={!!matchRoute({ to: item.to })}
+                isActive={!!matchRoute({ to: item.to, fuzzy: true })}
                 className="px-2.5 md:px-2"
                 render={(props) => (
                   <Link to={item.to} {...props}>
