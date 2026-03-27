@@ -2,19 +2,19 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 import path from "path";
-import { TanStackRouterVite } from "@tanstack/router-plugin/vite";
-// import { readFileSync } from "fs";
+import { tanstackRouter } from "@tanstack/router-plugin/vite";
 
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [
-    TanStackRouterVite({
+    tailwindcss(),
+    tanstackRouter({
       target: "react",
       autoCodeSplitting: true,
       routesDirectory: "src/app",
+      generatedRouteTree: "src/routeTree.gen.ts", // explicit, matches your import
     }),
     react(),
-    tailwindcss(),
   ],
   resolve: {
     alias: {

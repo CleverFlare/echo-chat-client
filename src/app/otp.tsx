@@ -1,6 +1,6 @@
 import { OtpPage } from "@/feature/auth/components/otp-page";
 import { createFileRoute } from "@tanstack/react-router";
-import { z } from "zod/v4";
+import { z } from "zod";
 
 export const Route = createFileRoute("/otp")({
   component: RouteComponent,

@@ -12,8 +12,6 @@ export const Route = createFileRoute("/_authenticated")({
 
     const isExpired = isSessionExpired(session.session);
 
-    console.log("Expires At", session.session);
-
     if (isExpired) throw redirect({ to: "/login" });
   },
   onError: () => {

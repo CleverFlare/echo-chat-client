@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useForm } from "@tanstack/react-form";
-import { z } from "zod/v4";
+import { z } from "zod";
 import { sendPhoneOtp } from "../lib/use-phone-sign-in";
 import { sendEmailOtp } from "../lib/use-email-sign-in";
 import { useRouter } from "@tanstack/react-router";

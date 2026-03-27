@@ -1,5 +1,5 @@
 import { useForm } from "@tanstack/react-form";
-import { z } from "zod/v4";
+import { z } from "zod";
 import { verifyPhoneOtp } from "../lib/use-phone-sign-in";
 import { verifyEmailOtp } from "../lib/use-email-sign-in";
 import { signUpWithPhone } from "../lib/use-phone-sign-up";

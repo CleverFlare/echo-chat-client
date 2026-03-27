@@ -1,6 +1,6 @@
-import { createFileRoute, redirect } from "@tanstack/react-router";
 import { authClient } from "@/lib/auth-client";
 import { isSessionExpired } from "@/lib/is-expired-session";
+import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/")({
   beforeLoad: async () => {
@@ -19,4 +19,9 @@ export const Route = createFileRoute("/")({
   onError: () => {
     throw redirect({ to: "/login" });
   },
+  component: RouteComponent,
 });
+
+function RouteComponent() {
+  return <Outlet />;
+}

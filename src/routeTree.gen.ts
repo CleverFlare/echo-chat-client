@@ -8,219 +8,290 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
-// Import Routes
+import { Route as rootRouteImport } from './app/__root'
+import { Route as RegisterRouteImport } from './app/register'
+import { Route as OtpRouteImport } from './app/otp'
+import { Route as LoginRouteImport } from './app/login'
+import { Route as AuthenticatedRouteRouteImport } from './app/_authenticated/route'
+import { Route as IndexRouteImport } from './app/index'
+import { Route as AuthenticatedFriendsRouteImport } from './app/_authenticated/friends'
+import { Route as AuthenticatedFriendRequestsRouteImport } from './app/_authenticated/friend-requests'
+import { Route as AuthenticatedSettingsRouteRouteImport } from './app/_authenticated/_settings/route'
+import { Route as AuthenticatedChatsRouteRouteImport } from './app/_authenticated/_chats/route'
+import { Route as AuthenticatedSettingsSettingsRouteImport } from './app/_authenticated/_settings/settings'
+import { Route as AuthenticatedChatsChatsRouteImport } from './app/_authenticated/_chats/chats'
+import { Route as AuthenticatedSettingsSettingsIndexRouteImport } from './app/_authenticated/_settings/settings.index'
+import { Route as AuthenticatedChatsChatsIndexRouteImport } from './app/_authenticated/_chats/chats.index'
+import { Route as AuthenticatedChatsChatsIdRouteImport } from './app/_authenticated/_chats/chats.$id'
 
-import { Route as rootRoute } from './app/__root'
-import { Route as RegisterImport } from './app/register'
-import { Route as OtpImport } from './app/otp'
-import { Route as LoginImport } from './app/login'
-import { Route as AuthenticatedImport } from './app/_authenticated'
-import { Route as IndexImport } from './app/index'
-import { Route as AuthenticatedFriendsImport } from './app/_authenticated/friends'
-import { Route as AuthenticatedFriendRequestsImport } from './app/_authenticated/friend-requests'
-import { Route as AuthenticatedSettingsRouteImport } from './app/_authenticated/_settings/route'
-import { Route as AuthenticatedChatsRouteImport } from './app/_authenticated/_chats/route'
-import { Route as AuthenticatedSettingsSettingsImport } from './app/_authenticated/_settings/settings'
-import { Route as AuthenticatedChatsChatsImport } from './app/_authenticated/_chats/chats'
-import { Route as AuthenticatedSettingsSettingsIndexImport } from './app/_authenticated/_settings/settings.index'
-import { Route as AuthenticatedChatsChatsIndexImport } from './app/_authenticated/_chats/chats.index'
-import { Route as AuthenticatedChatsChatsIdImport } from './app/_authenticated/_chats/chats.$id'
-
-// Create/Update Routes
-
-const RegisterRoute = RegisterImport.update({
+const RegisterRoute = RegisterRouteImport.update({
   id: '/register',
   path: '/register',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => rootRouteImport,
 } as any)
-
-const OtpRoute = OtpImport.update({
+const OtpRoute = OtpRouteImport.update({
   id: '/otp',
   path: '/otp',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => rootRouteImport,
 } as any)
-
-const LoginRoute = LoginImport.update({
+const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => rootRouteImport,
 } as any)
-
-const AuthenticatedRoute = AuthenticatedImport.update({
+const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
   id: '/_authenticated',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => rootRouteImport,
 } as any)
-
-const IndexRoute = IndexImport.update({
+const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => rootRouteImport,
 } as any)
-
-const AuthenticatedFriendsRoute = AuthenticatedFriendsImport.update({
+const AuthenticatedFriendsRoute = AuthenticatedFriendsRouteImport.update({
   id: '/friends',
   path: '/friends',
-  getParentRoute: () => AuthenticatedRoute,
+  getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
-
 const AuthenticatedFriendRequestsRoute =
-  AuthenticatedFriendRequestsImport.update({
+  AuthenticatedFriendRequestsRouteImport.update({
     id: '/friend-requests',
     path: '/friend-requests',
-    getParentRoute: () => AuthenticatedRoute,
+    getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
-
-const AuthenticatedSettingsRouteRoute = AuthenticatedSettingsRouteImport.update(
-  {
+const AuthenticatedSettingsRouteRoute =
+  AuthenticatedSettingsRouteRouteImport.update({
     id: '/_settings',
-    getParentRoute: () => AuthenticatedRoute,
-  } as any,
-)
-
-const AuthenticatedChatsRouteRoute = AuthenticatedChatsRouteImport.update({
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedChatsRouteRoute = AuthenticatedChatsRouteRouteImport.update({
   id: '/_chats',
-  getParentRoute: () => AuthenticatedRoute,
+  getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
-
 const AuthenticatedSettingsSettingsRoute =
-  AuthenticatedSettingsSettingsImport.update({
+  AuthenticatedSettingsSettingsRouteImport.update({
     id: '/settings',
     path: '/settings',
     getParentRoute: () => AuthenticatedSettingsRouteRoute,
   } as any)
-
-const AuthenticatedChatsChatsRoute = AuthenticatedChatsChatsImport.update({
+const AuthenticatedChatsChatsRoute = AuthenticatedChatsChatsRouteImport.update({
   id: '/chats',
   path: '/chats',
   getParentRoute: () => AuthenticatedChatsRouteRoute,
 } as any)
-
 const AuthenticatedSettingsSettingsIndexRoute =
-  AuthenticatedSettingsSettingsIndexImport.update({
+  AuthenticatedSettingsSettingsIndexRouteImport.update({
     id: '/',
     path: '/',
     getParentRoute: () => AuthenticatedSettingsSettingsRoute,
   } as any)
-
 const AuthenticatedChatsChatsIndexRoute =
-  AuthenticatedChatsChatsIndexImport.update({
+  AuthenticatedChatsChatsIndexRouteImport.update({
     id: '/',
     path: '/',
     getParentRoute: () => AuthenticatedChatsChatsRoute,
   } as any)
+const AuthenticatedChatsChatsIdRoute =
+  AuthenticatedChatsChatsIdRouteImport.update({
+    id: '/$id',
+    path: '/$id',
+    getParentRoute: () => AuthenticatedChatsChatsRoute,
+  } as any)
 
-const AuthenticatedChatsChatsIdRoute = AuthenticatedChatsChatsIdImport.update({
-  id: '/$id',
-  path: '/$id',
-  getParentRoute: () => AuthenticatedChatsChatsRoute,
-} as any)
-
-// Populate the FileRoutesByPath interface
+export interface FileRoutesByFullPath {
+  '/': typeof IndexRoute
+  '/login': typeof LoginRoute
+  '/otp': typeof OtpRoute
+  '/register': typeof RegisterRoute
+  '/friend-requests': typeof AuthenticatedFriendRequestsRoute
+  '/friends': typeof AuthenticatedFriendsRoute
+  '/chats': typeof AuthenticatedChatsChatsRouteWithChildren
+  '/settings': typeof AuthenticatedSettingsSettingsRouteWithChildren
+  '/chats/$id': typeof AuthenticatedChatsChatsIdRoute
+  '/chats/': typeof AuthenticatedChatsChatsIndexRoute
+  '/settings/': typeof AuthenticatedSettingsSettingsIndexRoute
+}
+export interface FileRoutesByTo {
+  '/': typeof IndexRoute
+  '/login': typeof LoginRoute
+  '/otp': typeof OtpRoute
+  '/register': typeof RegisterRoute
+  '/friend-requests': typeof AuthenticatedFriendRequestsRoute
+  '/friends': typeof AuthenticatedFriendsRoute
+  '/chats/$id': typeof AuthenticatedChatsChatsIdRoute
+  '/chats': typeof AuthenticatedChatsChatsIndexRoute
+  '/settings': typeof AuthenticatedSettingsSettingsIndexRoute
+}
+export interface FileRoutesById {
+  __root__: typeof rootRouteImport
+  '/': typeof IndexRoute
+  '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
+  '/login': typeof LoginRoute
+  '/otp': typeof OtpRoute
+  '/register': typeof RegisterRoute
+  '/_authenticated/_chats': typeof AuthenticatedChatsRouteRouteWithChildren
+  '/_authenticated/_settings': typeof AuthenticatedSettingsRouteRouteWithChildren
+  '/_authenticated/friend-requests': typeof AuthenticatedFriendRequestsRoute
+  '/_authenticated/friends': typeof AuthenticatedFriendsRoute
+  '/_authenticated/_chats/chats': typeof AuthenticatedChatsChatsRouteWithChildren
+  '/_authenticated/_settings/settings': typeof AuthenticatedSettingsSettingsRouteWithChildren
+  '/_authenticated/_chats/chats/$id': typeof AuthenticatedChatsChatsIdRoute
+  '/_authenticated/_chats/chats/': typeof AuthenticatedChatsChatsIndexRoute
+  '/_authenticated/_settings/settings/': typeof AuthenticatedSettingsSettingsIndexRoute
+}
+export interface FileRouteTypes {
+  fileRoutesByFullPath: FileRoutesByFullPath
+  fullPaths:
+    | '/'
+    | '/login'
+    | '/otp'
+    | '/register'
+    | '/friend-requests'
+    | '/friends'
+    | '/chats'
+    | '/settings'
+    | '/chats/$id'
+    | '/chats/'
+    | '/settings/'
+  fileRoutesByTo: FileRoutesByTo
+  to:
+    | '/'
+    | '/login'
+    | '/otp'
+    | '/register'
+    | '/friend-requests'
+    | '/friends'
+    | '/chats/$id'
+    | '/chats'
+    | '/settings'
+  id:
+    | '__root__'
+    | '/'
+    | '/_authenticated'
+    | '/login'
+    | '/otp'
+    | '/register'
+    | '/_authenticated/_chats'
+    | '/_authenticated/_settings'
+    | '/_authenticated/friend-requests'
+    | '/_authenticated/friends'
+    | '/_authenticated/_chats/chats'
+    | '/_authenticated/_settings/settings'
+    | '/_authenticated/_chats/chats/$id'
+    | '/_authenticated/_chats/chats/'
+    | '/_authenticated/_settings/settings/'
+  fileRoutesById: FileRoutesById
+}
+export interface RootRouteChildren {
+  IndexRoute: typeof IndexRoute
+  AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
+  LoginRoute: typeof LoginRoute
+  OtpRoute: typeof OtpRoute
+  RegisterRoute: typeof RegisterRoute
+}
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexImport
-      parentRoute: typeof rootRoute
-    }
-    '/_authenticated': {
-      id: '/_authenticated'
-      path: ''
-      fullPath: ''
-      preLoaderRoute: typeof AuthenticatedImport
-      parentRoute: typeof rootRoute
-    }
-    '/login': {
-      id: '/login'
-      path: '/login'
-      fullPath: '/login'
-      preLoaderRoute: typeof LoginImport
-      parentRoute: typeof rootRoute
+    '/register': {
+      id: '/register'
+      path: '/register'
+      fullPath: '/register'
+      preLoaderRoute: typeof RegisterRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/otp': {
       id: '/otp'
       path: '/otp'
       fullPath: '/otp'
-      preLoaderRoute: typeof OtpImport
-      parentRoute: typeof rootRoute
+      preLoaderRoute: typeof OtpRouteImport
+      parentRoute: typeof rootRouteImport
     }
-    '/register': {
-      id: '/register'
-      path: '/register'
-      fullPath: '/register'
-      preLoaderRoute: typeof RegisterImport
-      parentRoute: typeof rootRoute
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
     }
-    '/_authenticated/_chats': {
-      id: '/_authenticated/_chats'
+    '/_authenticated': {
+      id: '/_authenticated'
       path: ''
-      fullPath: ''
-      preLoaderRoute: typeof AuthenticatedChatsRouteImport
-      parentRoute: typeof AuthenticatedImport
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteRouteImport
+      parentRoute: typeof rootRouteImport
     }
-    '/_authenticated/_settings': {
-      id: '/_authenticated/_settings'
-      path: ''
-      fullPath: ''
-      preLoaderRoute: typeof AuthenticatedSettingsRouteImport
-      parentRoute: typeof AuthenticatedImport
-    }
-    '/_authenticated/friend-requests': {
-      id: '/_authenticated/friend-requests'
-      path: '/friend-requests'
-      fullPath: '/friend-requests'
-      preLoaderRoute: typeof AuthenticatedFriendRequestsImport
-      parentRoute: typeof AuthenticatedImport
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/_authenticated/friends': {
       id: '/_authenticated/friends'
       path: '/friends'
       fullPath: '/friends'
-      preLoaderRoute: typeof AuthenticatedFriendsImport
-      parentRoute: typeof AuthenticatedImport
+      preLoaderRoute: typeof AuthenticatedFriendsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/_authenticated/_chats/chats': {
-      id: '/_authenticated/_chats/chats'
-      path: '/chats'
-      fullPath: '/chats'
-      preLoaderRoute: typeof AuthenticatedChatsChatsImport
-      parentRoute: typeof AuthenticatedChatsRouteImport
+    '/_authenticated/friend-requests': {
+      id: '/_authenticated/friend-requests'
+      path: '/friend-requests'
+      fullPath: '/friend-requests'
+      preLoaderRoute: typeof AuthenticatedFriendRequestsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/_settings': {
+      id: '/_authenticated/_settings'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedSettingsRouteRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/_chats': {
+      id: '/_authenticated/_chats'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedChatsRouteRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/_settings/settings': {
       id: '/_authenticated/_settings/settings'
       path: '/settings'
       fullPath: '/settings'
-      preLoaderRoute: typeof AuthenticatedSettingsSettingsImport
-      parentRoute: typeof AuthenticatedSettingsRouteImport
+      preLoaderRoute: typeof AuthenticatedSettingsSettingsRouteImport
+      parentRoute: typeof AuthenticatedSettingsRouteRoute
     }
-    '/_authenticated/_chats/chats/$id': {
-      id: '/_authenticated/_chats/chats/$id'
-      path: '/$id'
-      fullPath: '/chats/$id'
-      preLoaderRoute: typeof AuthenticatedChatsChatsIdImport
-      parentRoute: typeof AuthenticatedChatsChatsImport
-    }
-    '/_authenticated/_chats/chats/': {
-      id: '/_authenticated/_chats/chats/'
-      path: '/'
-      fullPath: '/chats/'
-      preLoaderRoute: typeof AuthenticatedChatsChatsIndexImport
-      parentRoute: typeof AuthenticatedChatsChatsImport
+    '/_authenticated/_chats/chats': {
+      id: '/_authenticated/_chats/chats'
+      path: '/chats'
+      fullPath: '/chats'
+      preLoaderRoute: typeof AuthenticatedChatsChatsRouteImport
+      parentRoute: typeof AuthenticatedChatsRouteRoute
     }
     '/_authenticated/_settings/settings/': {
       id: '/_authenticated/_settings/settings/'
       path: '/'
       fullPath: '/settings/'
-      preLoaderRoute: typeof AuthenticatedSettingsSettingsIndexImport
-      parentRoute: typeof AuthenticatedSettingsSettingsImport
+      preLoaderRoute: typeof AuthenticatedSettingsSettingsIndexRouteImport
+      parentRoute: typeof AuthenticatedSettingsSettingsRoute
+    }
+    '/_authenticated/_chats/chats/': {
+      id: '/_authenticated/_chats/chats/'
+      path: '/'
+      fullPath: '/chats/'
+      preLoaderRoute: typeof AuthenticatedChatsChatsIndexRouteImport
+      parentRoute: typeof AuthenticatedChatsChatsRoute
+    }
+    '/_authenticated/_chats/chats/$id': {
+      id: '/_authenticated/_chats/chats/$id'
+      path: '/$id'
+      fullPath: '/chats/$id'
+      preLoaderRoute: typeof AuthenticatedChatsChatsIdRouteImport
+      parentRoute: typeof AuthenticatedChatsChatsRoute
     }
   }
 }
-
-// Create and export the route tree
 
 interface AuthenticatedChatsChatsRouteChildren {
   AuthenticatedChatsChatsIdRoute: typeof AuthenticatedChatsChatsIdRoute
@@ -282,219 +353,30 @@ const AuthenticatedSettingsRouteRouteWithChildren =
     AuthenticatedSettingsRouteRouteChildren,
   )
 
-interface AuthenticatedRouteChildren {
+interface AuthenticatedRouteRouteChildren {
   AuthenticatedChatsRouteRoute: typeof AuthenticatedChatsRouteRouteWithChildren
   AuthenticatedSettingsRouteRoute: typeof AuthenticatedSettingsRouteRouteWithChildren
   AuthenticatedFriendRequestsRoute: typeof AuthenticatedFriendRequestsRoute
   AuthenticatedFriendsRoute: typeof AuthenticatedFriendsRoute
 }
 
-const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
+const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedChatsRouteRoute: AuthenticatedChatsRouteRouteWithChildren,
   AuthenticatedSettingsRouteRoute: AuthenticatedSettingsRouteRouteWithChildren,
   AuthenticatedFriendRequestsRoute: AuthenticatedFriendRequestsRoute,
   AuthenticatedFriendsRoute: AuthenticatedFriendsRoute,
 }
 
-const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
-  AuthenticatedRouteChildren,
-)
-
-export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
-  '': typeof AuthenticatedSettingsRouteRouteWithChildren
-  '/login': typeof LoginRoute
-  '/otp': typeof OtpRoute
-  '/register': typeof RegisterRoute
-  '/friend-requests': typeof AuthenticatedFriendRequestsRoute
-  '/friends': typeof AuthenticatedFriendsRoute
-  '/chats': typeof AuthenticatedChatsChatsRouteWithChildren
-  '/settings': typeof AuthenticatedSettingsSettingsRouteWithChildren
-  '/chats/$id': typeof AuthenticatedChatsChatsIdRoute
-  '/chats/': typeof AuthenticatedChatsChatsIndexRoute
-  '/settings/': typeof AuthenticatedSettingsSettingsIndexRoute
-}
-
-export interface FileRoutesByTo {
-  '/': typeof IndexRoute
-  '': typeof AuthenticatedSettingsRouteRouteWithChildren
-  '/login': typeof LoginRoute
-  '/otp': typeof OtpRoute
-  '/register': typeof RegisterRoute
-  '/friend-requests': typeof AuthenticatedFriendRequestsRoute
-  '/friends': typeof AuthenticatedFriendsRoute
-  '/chats/$id': typeof AuthenticatedChatsChatsIdRoute
-  '/chats': typeof AuthenticatedChatsChatsIndexRoute
-  '/settings': typeof AuthenticatedSettingsSettingsIndexRoute
-}
-
-export interface FileRoutesById {
-  __root__: typeof rootRoute
-  '/': typeof IndexRoute
-  '/_authenticated': typeof AuthenticatedRouteWithChildren
-  '/login': typeof LoginRoute
-  '/otp': typeof OtpRoute
-  '/register': typeof RegisterRoute
-  '/_authenticated/_chats': typeof AuthenticatedChatsRouteRouteWithChildren
-  '/_authenticated/_settings': typeof AuthenticatedSettingsRouteRouteWithChildren
-  '/_authenticated/friend-requests': typeof AuthenticatedFriendRequestsRoute
-  '/_authenticated/friends': typeof AuthenticatedFriendsRoute
-  '/_authenticated/_chats/chats': typeof AuthenticatedChatsChatsRouteWithChildren
-  '/_authenticated/_settings/settings': typeof AuthenticatedSettingsSettingsRouteWithChildren
-  '/_authenticated/_chats/chats/$id': typeof AuthenticatedChatsChatsIdRoute
-  '/_authenticated/_chats/chats/': typeof AuthenticatedChatsChatsIndexRoute
-  '/_authenticated/_settings/settings/': typeof AuthenticatedSettingsSettingsIndexRoute
-}
-
-export interface FileRouteTypes {
-  fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths:
-    | '/'
-    | ''
-    | '/login'
-    | '/otp'
-    | '/register'
-    | '/friend-requests'
-    | '/friends'
-    | '/chats'
-    | '/settings'
-    | '/chats/$id'
-    | '/chats/'
-    | '/settings/'
-  fileRoutesByTo: FileRoutesByTo
-  to:
-    | '/'
-    | ''
-    | '/login'
-    | '/otp'
-    | '/register'
-    | '/friend-requests'
-    | '/friends'
-    | '/chats/$id'
-    | '/chats'
-    | '/settings'
-  id:
-    | '__root__'
-    | '/'
-    | '/_authenticated'
-    | '/login'
-    | '/otp'
-    | '/register'
-    | '/_authenticated/_chats'
-    | '/_authenticated/_settings'
-    | '/_authenticated/friend-requests'
-    | '/_authenticated/friends'
-    | '/_authenticated/_chats/chats'
-    | '/_authenticated/_settings/settings'
-    | '/_authenticated/_chats/chats/$id'
-    | '/_authenticated/_chats/chats/'
-    | '/_authenticated/_settings/settings/'
-  fileRoutesById: FileRoutesById
-}
-
-export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
-  AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
-  LoginRoute: typeof LoginRoute
-  OtpRoute: typeof OtpRoute
-  RegisterRoute: typeof RegisterRoute
-}
+const AuthenticatedRouteRouteWithChildren =
+  AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  AuthenticatedRoute: AuthenticatedRouteWithChildren,
+  AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   LoginRoute: LoginRoute,
   OtpRoute: OtpRoute,
   RegisterRoute: RegisterRoute,
 }
-
-export const routeTree = rootRoute
+export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-/* ROUTE_MANIFEST_START
-{
-  "routes": {
-    "__root__": {
-      "filePath": "__root.tsx",
-      "children": [
-        "/",
-        "/_authenticated",
-        "/login",
-        "/otp",
-        "/register"
-      ]
-    },
-    "/": {
-      "filePath": "index.tsx"
-    },
-    "/_authenticated": {
-      "filePath": "_authenticated.tsx",
-      "children": [
-        "/_authenticated/_chats",
-        "/_authenticated/_settings",
-        "/_authenticated/friend-requests",
-        "/_authenticated/friends"
-      ]
-    },
-    "/login": {
-      "filePath": "login.tsx"
-    },
-    "/otp": {
-      "filePath": "otp.tsx"
-    },
-    "/register": {
-      "filePath": "register.tsx"
-    },
-    "/_authenticated/_chats": {
-      "filePath": "_authenticated/_chats/route.tsx",
-      "parent": "/_authenticated",
-      "children": [
-        "/_authenticated/_chats/chats"
-      ]
-    },
-    "/_authenticated/_settings": {
-      "filePath": "_authenticated/_settings/route.tsx",
-      "parent": "/_authenticated",
-      "children": [
-        "/_authenticated/_settings/settings"
-      ]
-    },
-    "/_authenticated/friend-requests": {
-      "filePath": "_authenticated/friend-requests.tsx",
-      "parent": "/_authenticated"
-    },
-    "/_authenticated/friends": {
-      "filePath": "_authenticated/friends.tsx",
-      "parent": "/_authenticated"
-    },
-    "/_authenticated/_chats/chats": {
-      "filePath": "_authenticated/_chats/chats.tsx",
-      "parent": "/_authenticated/_chats",
-      "children": [
-        "/_authenticated/_chats/chats/$id",
-        "/_authenticated/_chats/chats/"
-      ]
-    },
-    "/_authenticated/_settings/settings": {
-      "filePath": "_authenticated/_settings/settings.tsx",
-      "parent": "/_authenticated/_settings",
-      "children": [
-        "/_authenticated/_settings/settings/"
-      ]
-    },
-    "/_authenticated/_chats/chats/$id": {
-      "filePath": "_authenticated/_chats/chats.$id.tsx",
-      "parent": "/_authenticated/_chats/chats"
-    },
-    "/_authenticated/_chats/chats/": {
-      "filePath": "_authenticated/_chats/chats.index.tsx",
-      "parent": "/_authenticated/_chats/chats"
-    },
-    "/_authenticated/_settings/settings/": {
-      "filePath": "_authenticated/_settings/settings.index.tsx",
-      "parent": "/_authenticated/_settings/settings"
-    }
-  }
-}
-ROUTE_MANIFEST_END */
