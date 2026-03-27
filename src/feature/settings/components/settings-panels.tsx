@@ -9,12 +9,15 @@ import {
   SidebarMenuButton,
 } from "@/components/ui/sidebar";
 import { navigation } from "@/configs/navigation";
-import { Link, useMatchRoute } from "@tanstack/react-router";
+import { Link, useMatchRoute, useRouter } from "@tanstack/react-router";
 import { ProfileToggle } from "./profile-toggle";
-import { LogOut } from "lucide-react";
+import { LogOut, Trash } from "lucide-react";
+import { authClient } from "@/lib/auth-client";
+import { toast } from "sonner";
 
 export function SettingsPanel() {
   const match = useMatchRoute();
+  const router = useRouter();
   return (
     <Sidebar collapsible="none" className="w-80 border-r">
       <SidebarHeader>
@@ -60,13 +63,27 @@ export function SettingsPanel() {
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenuButton
-              render={(props) => (
-                <Link to="/login" {...props}>
-                  <LogOut />
-                  Sign Out
-                </Link>
-              )}
-            />
+              onClick={async () => {
+                try {
+                  await authClient.deleteUser();
+                  router.navigate({ to: "/" });
+                } catch (error) {
+                  toast.error(error as string);
+                }
+              }}
+            >
+              <Trash />
+              Delete Account
+            </SidebarMenuButton>
+            <SidebarMenuButton
+              onClick={async () => {
+                await authClient.signOut();
+                router.navigate({ to: "/" });
+              }}
+            >
+              <LogOut />
+              Sign Out
+            </SidebarMenuButton>
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarFooter>

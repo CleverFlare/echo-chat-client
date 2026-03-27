@@ -11,6 +11,8 @@
 // Import Routes
 
 import { Route as rootRoute } from './app/__root'
+import { Route as RegisterImport } from './app/register'
+import { Route as OtpImport } from './app/otp'
 import { Route as LoginImport } from './app/login'
 import { Route as AuthenticatedImport } from './app/_authenticated'
 import { Route as IndexImport } from './app/index'
@@ -25,6 +27,18 @@ import { Route as AuthenticatedChatsChatsIndexImport } from './app/_authenticate
 import { Route as AuthenticatedChatsChatsIdImport } from './app/_authenticated/_chats/chats.$id'
 
 // Create/Update Routes
+
+const RegisterRoute = RegisterImport.update({
+  id: '/register',
+  path: '/register',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const OtpRoute = OtpImport.update({
+  id: '/otp',
+  path: '/otp',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const LoginRoute = LoginImport.update({
   id: '/login',
@@ -124,6 +138,20 @@ declare module '@tanstack/react-router' {
       path: '/login'
       fullPath: '/login'
       preLoaderRoute: typeof LoginImport
+      parentRoute: typeof rootRoute
+    }
+    '/otp': {
+      id: '/otp'
+      path: '/otp'
+      fullPath: '/otp'
+      preLoaderRoute: typeof OtpImport
+      parentRoute: typeof rootRoute
+    }
+    '/register': {
+      id: '/register'
+      path: '/register'
+      fullPath: '/register'
+      preLoaderRoute: typeof RegisterImport
       parentRoute: typeof rootRoute
     }
     '/_authenticated/_chats': {
@@ -276,6 +304,8 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '': typeof AuthenticatedSettingsRouteRouteWithChildren
   '/login': typeof LoginRoute
+  '/otp': typeof OtpRoute
+  '/register': typeof RegisterRoute
   '/friend-requests': typeof AuthenticatedFriendRequestsRoute
   '/friends': typeof AuthenticatedFriendsRoute
   '/chats': typeof AuthenticatedChatsChatsRouteWithChildren
@@ -289,6 +319,8 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '': typeof AuthenticatedSettingsRouteRouteWithChildren
   '/login': typeof LoginRoute
+  '/otp': typeof OtpRoute
+  '/register': typeof RegisterRoute
   '/friend-requests': typeof AuthenticatedFriendRequestsRoute
   '/friends': typeof AuthenticatedFriendsRoute
   '/chats/$id': typeof AuthenticatedChatsChatsIdRoute
@@ -301,6 +333,8 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/login': typeof LoginRoute
+  '/otp': typeof OtpRoute
+  '/register': typeof RegisterRoute
   '/_authenticated/_chats': typeof AuthenticatedChatsRouteRouteWithChildren
   '/_authenticated/_settings': typeof AuthenticatedSettingsRouteRouteWithChildren
   '/_authenticated/friend-requests': typeof AuthenticatedFriendRequestsRoute
@@ -318,6 +352,8 @@ export interface FileRouteTypes {
     | '/'
     | ''
     | '/login'
+    | '/otp'
+    | '/register'
     | '/friend-requests'
     | '/friends'
     | '/chats'
@@ -330,6 +366,8 @@ export interface FileRouteTypes {
     | '/'
     | ''
     | '/login'
+    | '/otp'
+    | '/register'
     | '/friend-requests'
     | '/friends'
     | '/chats/$id'
@@ -340,6 +378,8 @@ export interface FileRouteTypes {
     | '/'
     | '/_authenticated'
     | '/login'
+    | '/otp'
+    | '/register'
     | '/_authenticated/_chats'
     | '/_authenticated/_settings'
     | '/_authenticated/friend-requests'
@@ -356,12 +396,16 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
   LoginRoute: typeof LoginRoute
+  OtpRoute: typeof OtpRoute
+  RegisterRoute: typeof RegisterRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRoute: AuthenticatedRouteWithChildren,
   LoginRoute: LoginRoute,
+  OtpRoute: OtpRoute,
+  RegisterRoute: RegisterRoute,
 }
 
 export const routeTree = rootRoute
@@ -376,7 +420,9 @@ export const routeTree = rootRoute
       "children": [
         "/",
         "/_authenticated",
-        "/login"
+        "/login",
+        "/otp",
+        "/register"
       ]
     },
     "/": {
@@ -393,6 +439,12 @@ export const routeTree = rootRoute
     },
     "/login": {
       "filePath": "login.tsx"
+    },
+    "/otp": {
+      "filePath": "otp.tsx"
+    },
+    "/register": {
+      "filePath": "register.tsx"
     },
     "/_authenticated/_chats": {
       "filePath": "_authenticated/_chats/route.tsx",

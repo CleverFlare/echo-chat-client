@@ -14,9 +14,11 @@ import { navigation as nav } from "@/configs/navigation";
 import { Link, useMatchRoute } from "@tanstack/react-router";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { ThemeButton } from "./theme-button";
+import { authClient } from "@/lib/auth-client";
 
 export function MainSidebar() {
   const matchRoute = useMatchRoute();
+  const { data: session } = authClient.useSession();
 
   return (
     <Sidebar
@@ -102,10 +104,7 @@ export function MainSidebar() {
             role="button"
             aria-description="profile button"
           >
-            <AvatarImage
-              src="https://api.dicebear.com/9.x/open-peeps/svg?backgroundColor=d1d4f9&seed=Aiden"
-              className="rounded-lg"
-            />
+            <AvatarImage src={session?.user?.avatar} className="rounded-lg" />
             <AvatarFallback>MH</AvatarFallback>
           </Avatar>
         </Link>
