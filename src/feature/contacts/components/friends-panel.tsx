@@ -44,7 +44,7 @@ export function FriendsPanel({
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupContent>
-            <div className="flex flex-col gap-1">
+            <div className="flex flex-col gap-4">
               {filtered.length > 0 ? (
                 filtered.map((friend) => (
                   <FriendCard

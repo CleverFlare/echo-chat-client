@@ -14,7 +14,7 @@ import { Route as OtpRouteImport } from './app/otp'
 import { Route as LoginRouteImport } from './app/login'
 import { Route as AuthenticatedRouteRouteImport } from './app/_authenticated/route'
 import { Route as IndexRouteImport } from './app/index'
-import { Route as AuthenticatedFriendRequestsRouteImport } from './app/_authenticated/friend-requests'
+import { Route as AuthenticatedFriendRequestsRouteRouteImport } from './app/_authenticated/friend-requests/route'
 import { Route as AuthenticatedSettingsRouteRouteImport } from './app/_authenticated/_settings/route'
 import { Route as AuthenticatedFriendsRouteRouteImport } from './app/_authenticated/_friends/route'
 import { Route as AuthenticatedChatsRouteRouteImport } from './app/_authenticated/_chats/route'
@@ -50,8 +50,8 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AuthenticatedFriendRequestsRoute =
-  AuthenticatedFriendRequestsRouteImport.update({
+const AuthenticatedFriendRequestsRouteRoute =
+  AuthenticatedFriendRequestsRouteRouteImport.update({
     id: '/friend-requests',
     path: '/friend-requests',
     getParentRoute: () => AuthenticatedRouteRoute,
@@ -117,7 +117,7 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/otp': typeof OtpRoute
   '/register': typeof RegisterRoute
-  '/friend-requests': typeof AuthenticatedFriendRequestsRoute
+  '/friend-requests': typeof AuthenticatedFriendRequestsRouteRoute
   '/chats': typeof AuthenticatedChatsChatsRouteWithChildren
   '/friends': typeof AuthenticatedFriendsFriendsRouteWithChildren
   '/settings': typeof AuthenticatedSettingsSettingsRouteWithChildren
@@ -131,7 +131,7 @@ export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/otp': typeof OtpRoute
   '/register': typeof RegisterRoute
-  '/friend-requests': typeof AuthenticatedFriendRequestsRoute
+  '/friend-requests': typeof AuthenticatedFriendRequestsRouteRoute
   '/chats/$id': typeof AuthenticatedChatsChatsIdRoute
   '/chats': typeof AuthenticatedChatsChatsIndexRoute
   '/friends': typeof AuthenticatedFriendsFriendsIndexRoute
@@ -147,7 +147,7 @@ export interface FileRoutesById {
   '/_authenticated/_chats': typeof AuthenticatedChatsRouteRouteWithChildren
   '/_authenticated/_friends': typeof AuthenticatedFriendsRouteRouteWithChildren
   '/_authenticated/_settings': typeof AuthenticatedSettingsRouteRouteWithChildren
-  '/_authenticated/friend-requests': typeof AuthenticatedFriendRequestsRoute
+  '/_authenticated/friend-requests': typeof AuthenticatedFriendRequestsRouteRoute
   '/_authenticated/_chats/chats': typeof AuthenticatedChatsChatsRouteWithChildren
   '/_authenticated/_friends/friends': typeof AuthenticatedFriendsFriendsRouteWithChildren
   '/_authenticated/_settings/settings': typeof AuthenticatedSettingsSettingsRouteWithChildren
@@ -251,7 +251,7 @@ declare module '@tanstack/react-router' {
       id: '/_authenticated/friend-requests'
       path: '/friend-requests'
       fullPath: '/friend-requests'
-      preLoaderRoute: typeof AuthenticatedFriendRequestsRouteImport
+      preLoaderRoute: typeof AuthenticatedFriendRequestsRouteRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/_settings': {
@@ -421,14 +421,14 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedChatsRouteRoute: typeof AuthenticatedChatsRouteRouteWithChildren
   AuthenticatedFriendsRouteRoute: typeof AuthenticatedFriendsRouteRouteWithChildren
   AuthenticatedSettingsRouteRoute: typeof AuthenticatedSettingsRouteRouteWithChildren
-  AuthenticatedFriendRequestsRoute: typeof AuthenticatedFriendRequestsRoute
+  AuthenticatedFriendRequestsRouteRoute: typeof AuthenticatedFriendRequestsRouteRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedChatsRouteRoute: AuthenticatedChatsRouteRouteWithChildren,
   AuthenticatedFriendsRouteRoute: AuthenticatedFriendsRouteRouteWithChildren,
   AuthenticatedSettingsRouteRoute: AuthenticatedSettingsRouteRouteWithChildren,
-  AuthenticatedFriendRequestsRoute: AuthenticatedFriendRequestsRoute,
+  AuthenticatedFriendRequestsRouteRoute: AuthenticatedFriendRequestsRouteRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
