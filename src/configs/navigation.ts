@@ -4,7 +4,7 @@ import {
   Settings,
   User,
   UserRoundPlus,
-  Users,
+  UsersRound,
 } from "lucide-react";
 
 export const navigation = {
@@ -17,7 +17,7 @@ export const navigation = {
       },
       {
         title: "Friends",
-        icon: Users,
+        icon: UsersRound,
         to: "/friends",
       },
       {

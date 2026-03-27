@@ -104,7 +104,10 @@ export function MainSidebar() {
             role="button"
             aria-description="profile button"
           >
-            <AvatarImage src={session?.user?.avatar} className="rounded-lg" />
+            <AvatarImage
+              src={(session?.user as { avatar?: string })?.avatar}
+              className="rounded-lg"
+            />
             <AvatarFallback>MH</AvatarFallback>
           </Avatar>
         </Link>

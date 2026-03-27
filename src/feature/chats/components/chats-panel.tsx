@@ -7,7 +7,7 @@ import {
   SidebarHeader,
 } from "@/components/ui/sidebar";
 import { useChats } from "../stores/chats";
-import { SearchInput } from "./search-input";
+import { SearchInput } from "../../../components/search-input";
 import { useState } from "react";
 
 export function ChatsPanel({ activeChatId }: { activeChatId?: string }) {

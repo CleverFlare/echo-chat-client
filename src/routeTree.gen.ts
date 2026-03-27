@@ -14,13 +14,15 @@ import { Route as OtpRouteImport } from './app/otp'
 import { Route as LoginRouteImport } from './app/login'
 import { Route as AuthenticatedRouteRouteImport } from './app/_authenticated/route'
 import { Route as IndexRouteImport } from './app/index'
-import { Route as AuthenticatedFriendsRouteImport } from './app/_authenticated/friends'
 import { Route as AuthenticatedFriendRequestsRouteImport } from './app/_authenticated/friend-requests'
 import { Route as AuthenticatedSettingsRouteRouteImport } from './app/_authenticated/_settings/route'
+import { Route as AuthenticatedFriendsRouteRouteImport } from './app/_authenticated/_friends/route'
 import { Route as AuthenticatedChatsRouteRouteImport } from './app/_authenticated/_chats/route'
 import { Route as AuthenticatedSettingsSettingsRouteImport } from './app/_authenticated/_settings/settings'
+import { Route as AuthenticatedFriendsFriendsRouteImport } from './app/_authenticated/_friends/friends'
 import { Route as AuthenticatedChatsChatsRouteImport } from './app/_authenticated/_chats/chats'
 import { Route as AuthenticatedSettingsSettingsIndexRouteImport } from './app/_authenticated/_settings/settings.index'
+import { Route as AuthenticatedFriendsFriendsIndexRouteImport } from './app/_authenticated/_friends/friends.index'
 import { Route as AuthenticatedChatsChatsIndexRouteImport } from './app/_authenticated/_chats/chats.index'
 import { Route as AuthenticatedChatsChatsIdRouteImport } from './app/_authenticated/_chats/chats.$id'
 
@@ -48,11 +50,6 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AuthenticatedFriendsRoute = AuthenticatedFriendsRouteImport.update({
-  id: '/friends',
-  path: '/friends',
-  getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
 const AuthenticatedFriendRequestsRoute =
   AuthenticatedFriendRequestsRouteImport.update({
     id: '/friend-requests',
@@ -62,6 +59,11 @@ const AuthenticatedFriendRequestsRoute =
 const AuthenticatedSettingsRouteRoute =
   AuthenticatedSettingsRouteRouteImport.update({
     id: '/_settings',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedFriendsRouteRoute =
+  AuthenticatedFriendsRouteRouteImport.update({
+    id: '/_friends',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
 const AuthenticatedChatsRouteRoute = AuthenticatedChatsRouteRouteImport.update({
@@ -74,6 +76,12 @@ const AuthenticatedSettingsSettingsRoute =
     path: '/settings',
     getParentRoute: () => AuthenticatedSettingsRouteRoute,
   } as any)
+const AuthenticatedFriendsFriendsRoute =
+  AuthenticatedFriendsFriendsRouteImport.update({
+    id: '/friends',
+    path: '/friends',
+    getParentRoute: () => AuthenticatedFriendsRouteRoute,
+  } as any)
 const AuthenticatedChatsChatsRoute = AuthenticatedChatsChatsRouteImport.update({
   id: '/chats',
   path: '/chats',
@@ -84,6 +92,12 @@ const AuthenticatedSettingsSettingsIndexRoute =
     id: '/',
     path: '/',
     getParentRoute: () => AuthenticatedSettingsSettingsRoute,
+  } as any)
+const AuthenticatedFriendsFriendsIndexRoute =
+  AuthenticatedFriendsFriendsIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => AuthenticatedFriendsFriendsRoute,
   } as any)
 const AuthenticatedChatsChatsIndexRoute =
   AuthenticatedChatsChatsIndexRouteImport.update({
@@ -104,11 +118,12 @@ export interface FileRoutesByFullPath {
   '/otp': typeof OtpRoute
   '/register': typeof RegisterRoute
   '/friend-requests': typeof AuthenticatedFriendRequestsRoute
-  '/friends': typeof AuthenticatedFriendsRoute
   '/chats': typeof AuthenticatedChatsChatsRouteWithChildren
+  '/friends': typeof AuthenticatedFriendsFriendsRouteWithChildren
   '/settings': typeof AuthenticatedSettingsSettingsRouteWithChildren
   '/chats/$id': typeof AuthenticatedChatsChatsIdRoute
   '/chats/': typeof AuthenticatedChatsChatsIndexRoute
+  '/friends/': typeof AuthenticatedFriendsFriendsIndexRoute
   '/settings/': typeof AuthenticatedSettingsSettingsIndexRoute
 }
 export interface FileRoutesByTo {
@@ -117,9 +132,9 @@ export interface FileRoutesByTo {
   '/otp': typeof OtpRoute
   '/register': typeof RegisterRoute
   '/friend-requests': typeof AuthenticatedFriendRequestsRoute
-  '/friends': typeof AuthenticatedFriendsRoute
   '/chats/$id': typeof AuthenticatedChatsChatsIdRoute
   '/chats': typeof AuthenticatedChatsChatsIndexRoute
+  '/friends': typeof AuthenticatedFriendsFriendsIndexRoute
   '/settings': typeof AuthenticatedSettingsSettingsIndexRoute
 }
 export interface FileRoutesById {
@@ -130,13 +145,15 @@ export interface FileRoutesById {
   '/otp': typeof OtpRoute
   '/register': typeof RegisterRoute
   '/_authenticated/_chats': typeof AuthenticatedChatsRouteRouteWithChildren
+  '/_authenticated/_friends': typeof AuthenticatedFriendsRouteRouteWithChildren
   '/_authenticated/_settings': typeof AuthenticatedSettingsRouteRouteWithChildren
   '/_authenticated/friend-requests': typeof AuthenticatedFriendRequestsRoute
-  '/_authenticated/friends': typeof AuthenticatedFriendsRoute
   '/_authenticated/_chats/chats': typeof AuthenticatedChatsChatsRouteWithChildren
+  '/_authenticated/_friends/friends': typeof AuthenticatedFriendsFriendsRouteWithChildren
   '/_authenticated/_settings/settings': typeof AuthenticatedSettingsSettingsRouteWithChildren
   '/_authenticated/_chats/chats/$id': typeof AuthenticatedChatsChatsIdRoute
   '/_authenticated/_chats/chats/': typeof AuthenticatedChatsChatsIndexRoute
+  '/_authenticated/_friends/friends/': typeof AuthenticatedFriendsFriendsIndexRoute
   '/_authenticated/_settings/settings/': typeof AuthenticatedSettingsSettingsIndexRoute
 }
 export interface FileRouteTypes {
@@ -147,11 +164,12 @@ export interface FileRouteTypes {
     | '/otp'
     | '/register'
     | '/friend-requests'
-    | '/friends'
     | '/chats'
+    | '/friends'
     | '/settings'
     | '/chats/$id'
     | '/chats/'
+    | '/friends/'
     | '/settings/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -160,9 +178,9 @@ export interface FileRouteTypes {
     | '/otp'
     | '/register'
     | '/friend-requests'
-    | '/friends'
     | '/chats/$id'
     | '/chats'
+    | '/friends'
     | '/settings'
   id:
     | '__root__'
@@ -172,13 +190,15 @@ export interface FileRouteTypes {
     | '/otp'
     | '/register'
     | '/_authenticated/_chats'
+    | '/_authenticated/_friends'
     | '/_authenticated/_settings'
     | '/_authenticated/friend-requests'
-    | '/_authenticated/friends'
     | '/_authenticated/_chats/chats'
+    | '/_authenticated/_friends/friends'
     | '/_authenticated/_settings/settings'
     | '/_authenticated/_chats/chats/$id'
     | '/_authenticated/_chats/chats/'
+    | '/_authenticated/_friends/friends/'
     | '/_authenticated/_settings/settings/'
   fileRoutesById: FileRoutesById
 }
@@ -227,13 +247,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_authenticated/friends': {
-      id: '/_authenticated/friends'
-      path: '/friends'
-      fullPath: '/friends'
-      preLoaderRoute: typeof AuthenticatedFriendsRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
     '/_authenticated/friend-requests': {
       id: '/_authenticated/friend-requests'
       path: '/friend-requests'
@@ -246,6 +259,13 @@ declare module '@tanstack/react-router' {
       path: ''
       fullPath: '/'
       preLoaderRoute: typeof AuthenticatedSettingsRouteRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/_friends': {
+      id: '/_authenticated/_friends'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedFriendsRouteRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/_chats': {
@@ -262,6 +282,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedSettingsSettingsRouteImport
       parentRoute: typeof AuthenticatedSettingsRouteRoute
     }
+    '/_authenticated/_friends/friends': {
+      id: '/_authenticated/_friends/friends'
+      path: '/friends'
+      fullPath: '/friends'
+      preLoaderRoute: typeof AuthenticatedFriendsFriendsRouteImport
+      parentRoute: typeof AuthenticatedFriendsRouteRoute
+    }
     '/_authenticated/_chats/chats': {
       id: '/_authenticated/_chats/chats'
       path: '/chats'
@@ -275,6 +302,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/settings/'
       preLoaderRoute: typeof AuthenticatedSettingsSettingsIndexRouteImport
       parentRoute: typeof AuthenticatedSettingsSettingsRoute
+    }
+    '/_authenticated/_friends/friends/': {
+      id: '/_authenticated/_friends/friends/'
+      path: '/'
+      fullPath: '/friends/'
+      preLoaderRoute: typeof AuthenticatedFriendsFriendsIndexRouteImport
+      parentRoute: typeof AuthenticatedFriendsFriendsRoute
     }
     '/_authenticated/_chats/chats/': {
       id: '/_authenticated/_chats/chats/'
@@ -323,6 +357,36 @@ const AuthenticatedChatsRouteRouteWithChildren =
     AuthenticatedChatsRouteRouteChildren,
   )
 
+interface AuthenticatedFriendsFriendsRouteChildren {
+  AuthenticatedFriendsFriendsIndexRoute: typeof AuthenticatedFriendsFriendsIndexRoute
+}
+
+const AuthenticatedFriendsFriendsRouteChildren: AuthenticatedFriendsFriendsRouteChildren =
+  {
+    AuthenticatedFriendsFriendsIndexRoute:
+      AuthenticatedFriendsFriendsIndexRoute,
+  }
+
+const AuthenticatedFriendsFriendsRouteWithChildren =
+  AuthenticatedFriendsFriendsRoute._addFileChildren(
+    AuthenticatedFriendsFriendsRouteChildren,
+  )
+
+interface AuthenticatedFriendsRouteRouteChildren {
+  AuthenticatedFriendsFriendsRoute: typeof AuthenticatedFriendsFriendsRouteWithChildren
+}
+
+const AuthenticatedFriendsRouteRouteChildren: AuthenticatedFriendsRouteRouteChildren =
+  {
+    AuthenticatedFriendsFriendsRoute:
+      AuthenticatedFriendsFriendsRouteWithChildren,
+  }
+
+const AuthenticatedFriendsRouteRouteWithChildren =
+  AuthenticatedFriendsRouteRoute._addFileChildren(
+    AuthenticatedFriendsRouteRouteChildren,
+  )
+
 interface AuthenticatedSettingsSettingsRouteChildren {
   AuthenticatedSettingsSettingsIndexRoute: typeof AuthenticatedSettingsSettingsIndexRoute
 }
@@ -355,16 +419,16 @@ const AuthenticatedSettingsRouteRouteWithChildren =
 
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedChatsRouteRoute: typeof AuthenticatedChatsRouteRouteWithChildren
+  AuthenticatedFriendsRouteRoute: typeof AuthenticatedFriendsRouteRouteWithChildren
   AuthenticatedSettingsRouteRoute: typeof AuthenticatedSettingsRouteRouteWithChildren
   AuthenticatedFriendRequestsRoute: typeof AuthenticatedFriendRequestsRoute
-  AuthenticatedFriendsRoute: typeof AuthenticatedFriendsRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedChatsRouteRoute: AuthenticatedChatsRouteRouteWithChildren,
+  AuthenticatedFriendsRouteRoute: AuthenticatedFriendsRouteRouteWithChildren,
   AuthenticatedSettingsRouteRoute: AuthenticatedSettingsRouteRouteWithChildren,
   AuthenticatedFriendRequestsRoute: AuthenticatedFriendRequestsRoute,
-  AuthenticatedFriendsRoute: AuthenticatedFriendsRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
