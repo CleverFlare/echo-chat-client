@@ -5,7 +5,8 @@ import {
   AvatarFallback,
   AvatarImage,
 } from "@/components/ui/avatar";
-import { useNow } from "@/hooks/use-now";
+import { useLiveTimestamp } from "@/hooks/use-live-timestamp";
+import { useRef } from "react";
 import { Toggle } from "@/components/ui/toggle";
 import { MessageReceiptStatus } from "@/components/message-receipt-status";
 import type { LastMessage, Presence, UnreadCount } from "../types";
@@ -29,7 +30,11 @@ export function ChatCard({
   id,
   presence,
 }: ChatCardProps) {
-  const now = useNow();
+  const timeRef = useRef<HTMLParagraphElement>(null);
+  useLiveTimestamp((now) => {
+    if (timeRef.current)
+      timeRef.current.textContent = formatLastMessageDate(lastMessage.sentAt, now);
+  });
   return (
     <Toggle
       pressed={active}
@@ -56,8 +61,8 @@ export function ChatCard({
               <h4 className="font-medium">
                 {firstName} {lastName}
               </h4>
-              <p className="text-xs text-muted-foreground ms-auto">
-                {formatLastMessageDate(lastMessage.sentAt, now)}
+              <p ref={timeRef} className="text-xs text-muted-foreground ms-auto">
+                {formatLastMessageDate(lastMessage.sentAt, new Date())}
               </p>
             </div>
             <div

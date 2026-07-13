@@ -7,7 +7,6 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 // Import the generated route tree
 import { routeTree } from "./routeTree.gen";
 import { Toaster } from "./components/ui/sonner";
-import { NowProvider } from "./hooks/use-now";
 import { ThemeProvider } from "next-themes";
 
 // Create a new router instance
@@ -34,12 +33,10 @@ const root = createRoot(document.getElementById("root")!);
 root.render(
   <StrictMode>
     <ThemeProvider defaultTheme="dark" enableSystem attribute="class">
-      <NowProvider>
-        <QueryClientProvider client={queryClient}>
-          <RouterProvider router={router} />
-          <Toaster />
-        </QueryClientProvider>
-      </NowProvider>
+      <QueryClientProvider client={queryClient}>
+        <RouterProvider router={router} />
+        <Toaster />
+      </QueryClientProvider>
     </ThemeProvider>
   </StrictMode>,
 );
