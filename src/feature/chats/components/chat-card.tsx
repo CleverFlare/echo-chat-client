@@ -33,12 +33,15 @@ export function ChatCard({
   const timeRef = useRef<HTMLParagraphElement>(null);
   useLiveTimestamp((now) => {
     if (timeRef.current)
-      timeRef.current.textContent = formatLastMessageDate(lastMessage.sentAt, now);
+      timeRef.current.textContent = formatLastMessageDate(
+        lastMessage.sentAt,
+        now,
+      );
   });
   return (
     <Toggle
       pressed={active}
-      className="grid grid-cols-[auto_1fr] gap-2 justify-start h-max px-2 py-2 font-normal text-start"
+      className="grid grid-cols-[auto_1fr] gap-2 justify-start h-max px-3 py-3 font-normal text-start"
       render={(props) => (
         <Link to="/chats/$id" params={{ id }} {...props}>
           <Avatar>
@@ -61,7 +64,10 @@ export function ChatCard({
               <h4 className="font-medium">
                 {firstName} {lastName}
               </h4>
-              <p ref={timeRef} className="text-xs text-muted-foreground ms-auto">
+              <p
+                ref={timeRef}
+                className="text-xs text-muted-foreground ms-auto"
+              >
                 {formatLastMessageDate(lastMessage.sentAt, new Date())}
               </p>
             </div>
