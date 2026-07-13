@@ -4,7 +4,6 @@ import {
   Settings,
   User,
   UserRoundPlus,
-  UsersRound,
 } from "lucide-react";
 
 export const navigation = {
@@ -14,11 +13,6 @@ export const navigation = {
         title: "Chats",
         icon: MessageCircle,
         to: "/chats",
-      },
-      {
-        title: "Friends",
-        icon: UsersRound,
-        to: "/friends",
       },
       {
         title: "Friend Requests",

@@ -55,14 +55,14 @@ export function AddFriendDialog() {
     >
       <DialogTrigger
         render={(props) => (
-          <Button variant="ghost" size="icon" {...props}>
+          <Button variant="secondary" size="icon" {...props}>
             <UserPlusIcon className="size-4" />
             <span className="sr-only">Add a friend</span>
           </Button>
         )}
       />
 
-      <DialogContent>
+      <DialogContent className="bg-sidebar">
         <DialogHeader>
           <DialogTitle>Add a Friend</DialogTitle>
           <DialogDescription>

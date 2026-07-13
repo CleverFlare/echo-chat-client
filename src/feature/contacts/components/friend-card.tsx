@@ -7,7 +7,6 @@ import {
 import { cn } from "@/lib/utils";
 import type { Friend } from "../types";
 import { Link } from "@tanstack/react-router";
-import { Button } from "@/components/ui/button";
 import { Toggle } from "@/components/ui/toggle";
 
 type FriendCardProps = Friend & {
@@ -21,7 +20,6 @@ export function FriendCard({
   avatar,
   handle,
   presence,
-  bio,
   chatId,
   onClick,
 }: FriendCardProps) {
@@ -46,18 +44,11 @@ export function FriendCard({
               data-presence={presence}
             />
           </Avatar>
-          <div className="grid min-w-0">
-            <div className="flex items-center gap-2">
-              <h4 className="font-medium truncate">
-                {firstName} {lastName}
-              </h4>
-              <p className="text-xs text-muted-foreground ms-auto shrink-0">
-                @{handle}
-              </p>
-            </div>
-            {bio && (
-              <p className="text-sm text-muted-foreground truncate">{bio}</p>
-            )}
+          <div className="flex items-center gap-2 min-w-0">
+            <h4 className="font-medium truncate">
+              {firstName} {lastName}
+            </h4>
+            <p className="text-xs text-muted-foreground shrink-0">@{handle}</p>
           </div>
         </Link>
       )}
