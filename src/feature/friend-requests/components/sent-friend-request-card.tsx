@@ -1,5 +1,11 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { X } from "lucide-react";
 import type { SentFriendRequest } from "../types";
 
 type SentFriendRequestCardProps = SentFriendRequest & {
@@ -32,9 +38,20 @@ export function SentFriendRequestCard({
         </h4>
         <p className="text-xs text-muted-foreground">@{receiverHandle}</p>
       </div>
-      <Button size="sm" variant="secondary" onClick={() => onCancel(id)}>
-        Cancel
-      </Button>
+      <Tooltip>
+        <TooltipTrigger
+          render={
+            <Button
+              size="icon"
+              variant="secondary"
+              onClick={() => onCancel(id)}
+            >
+              <X className="size-4" />
+            </Button>
+          }
+        ></TooltipTrigger>
+        <TooltipContent>Cancel request</TooltipContent>
+      </Tooltip>
     </div>
   );
 }
