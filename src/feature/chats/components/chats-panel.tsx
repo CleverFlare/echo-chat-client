@@ -29,7 +29,7 @@ export function ChatsPanel({ activeChatId }: { activeChatId?: string }) {
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupContent>
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-3">
               {Object.values(chats)
                 .filter(
                   (chat) =>
